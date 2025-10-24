@@ -107,7 +107,7 @@ const Hero = () => {
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src="/api/placeholder/600/400"
+                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop"
                 alt="Students learning together"
                 className="w-full h-auto object-cover"
               />
@@ -123,7 +123,7 @@ const Hero = () => {
             >
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 font-bold">✓</span>
+                  <span className="text-green-600 font-bold text-xl">✓</span>
                 </div>
                 <div>
                   <div className="font-semibold text-gray-900">5,000+</div>
@@ -142,7 +142,7 @@ const Hero = () => {
             >
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-bold">📚</span>
+                  <span className="text-blue-600 font-bold text-xl">📚</span>
                 </div>
                 <div>
                   <div className="font-semibold text-gray-900">95%</div>

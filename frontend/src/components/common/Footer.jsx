@@ -5,27 +5,37 @@ import {
   FaTwitter,
   FaInstagram,
   FaLinkedin,
-  FaYoutube,
   FaEnvelope,
   FaPhone,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import {
-  SOCIAL_LINKS,
-  CONTACT_INFO,
-  NAVIGATION_LINKS,
-} from "../../utils/constants";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const socialIcons = {
-    facebook: FaFacebook,
-    twitter: FaTwitter,
-    instagram: FaInstagram,
-    linkedin: FaLinkedin,
-    youtube: FaYoutube,
-  };
+  const socialLinks = [
+    { icon: FaFacebook, url: "https://facebook.com", name: "Facebook" },
+    { icon: FaTwitter, url: "https://twitter.com", name: "Twitter" },
+    { icon: FaInstagram, url: "https://instagram.com", name: "Instagram" },
+    { icon: FaLinkedin, url: "https://linkedin.com", name: "LinkedIn" },
+  ];
+
+  const quickLinks = [
+    { name: "Home", href: "/" },
+    { name: "About Us", href: "/about" },
+    { name: "Programs", href: "/programs" },
+    { name: "Events", href: "/events" },
+    { name: "Contact", href: "/contact" },
+    { name: "Donate", href: "/donate" },
+  ];
+
+  const programs = [
+    { name: "Online Academy", href: "/programs/online-academy" },
+    { name: "Project Salaam", href: "/programs/project-salaam" },
+    { name: "Project Journalism", href: "/programs/journalism" },
+    { name: "Volunteer", href: "/volunteer" },
+    { name: "Scholarships", href: "/scholarship" },
+  ];
 
   return (
     <footer className="bg-navy-900 text-white">
@@ -50,16 +60,17 @@ const Footer = () => {
               at a time.
             </p>
             <div className="flex space-x-4">
-              {Object.entries(SOCIAL_LINKS).map(([platform, url]) => {
-                const Icon = socialIcons[platform];
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
                 return (
                   <motion.a
-                    key={platform}
-                    href={url}
+                    key={social.name}
+                    href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1 }}
                     className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-500 transition-colors duration-200"
+                    aria-label={social.name}
                   >
                     <Icon size={18} />
                   </motion.a>
@@ -78,7 +89,7 @@ const Footer = () => {
           >
             <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2">
-              {NAVIGATION_LINKS.slice(0, 6).map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
@@ -101,46 +112,16 @@ const Footer = () => {
           >
             <h3 className="text-lg font-semibold">Programs</h3>
             <ul className="space-y-2">
-              <li>
-                <a
-                  href="/programs/online-academy"
-                  className="text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  Online Academy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/programs/project-salaam"
-                  className="text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  Project Salaam
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/programs/journalism"
-                  className="text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  Project Journalism
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/volunteer"
-                  className="text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  Become a Volunteer
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/scholarship"
-                  className="text-gray-300 hover:text-white transition-colors duration-200"
-                >
-                  Scholarships
-                </a>
-              </li>
+              {programs.map((program) => (
+                <li key={program.name}>
+                  <a
+                    href={program.href}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    {program.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </motion.div>
 
@@ -157,19 +138,21 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <FaEnvelope className="text-primary-500 mt-1" size={16} />
                 <div>
-                  <p className="text-gray-300">{CONTACT_INFO.email}</p>
+                  <p className="text-gray-300">info@education.org</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <FaPhone className="text-primary-500 mt-1" size={16} />
                 <div>
-                  <p className="text-gray-300">{CONTACT_INFO.phone}</p>
+                  <p className="text-gray-300">+1 (555) 123-4567</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <FaMapMarkerAlt className="text-primary-500 mt-1" size={16} />
                 <div>
-                  <p className="text-gray-300">{CONTACT_INFO.address}</p>
+                  <p className="text-gray-300">
+                    123 Education St, Learning City, LC 12345
+                  </p>
                 </div>
               </div>
             </div>

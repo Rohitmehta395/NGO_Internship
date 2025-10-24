@@ -14,14 +14,15 @@ const Button = ({
   ...props
 }) => {
   const baseClasses =
-    "btn inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+    "btn inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
-    primary: "btn-primary",
-    secondary: "btn-secondary",
-    outline: "btn-outline",
-    white: "btn-white",
-    ghost: "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
+    primary: "btn-primary focus:ring-primary-500",
+    secondary: "btn-secondary focus:ring-secondary-500",
+    outline: "btn-outline focus:ring-primary-500",
+    white: "btn-white focus:ring-gray-500",
+    ghost:
+      "text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:ring-gray-500",
   };
 
   const sizes = {
@@ -34,8 +35,8 @@ const Button = ({
 
   return (
     <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
+      whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
+      whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
       className={classes}
       disabled={disabled || loading}
       onClick={onClick}
@@ -43,7 +44,9 @@ const Button = ({
       {...props}
     >
       {loading && <div className="loading-spinner w-4 h-4 mr-2" />}
-      {icon && !loading && <span className="mr-2">{icon}</span>}
+      {icon && !loading && (
+        <span className="mr-2 flex items-center">{icon}</span>
+      )}
       {children}
     </motion.button>
   );

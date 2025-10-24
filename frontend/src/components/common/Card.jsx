@@ -6,6 +6,7 @@ const Card = ({
   className = "",
   hover = true,
   padding = "p-6",
+  onClick,
   ...props
 }) => {
   const baseClasses = `card ${padding} ${className}`;
@@ -18,6 +19,7 @@ const Card = ({
       whileHover={hover ? { y: -5 } : {}}
       transition={{ duration: 0.3 }}
       className={baseClasses}
+      onClick={onClick}
       {...props}
     >
       {children}
