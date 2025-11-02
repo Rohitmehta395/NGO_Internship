@@ -1,180 +1,98 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { FaPlay, FaArrowRight } from "react-icons/fa";
-import Button from "../common/Button";
+import { ArrowRight } from "lucide-react";
+import DonationButton from "../common/DonationButton";
 
-const Hero = () => {
-  const scrollToPrograms = () => {
-    document.getElementById("programs")?.scrollIntoView({ behavior: "smooth" });
-  };
+// This component defines the custom clip path.
+// It's invisible but provides the 'id' for the style.
+const SvgClipPath = () => (
+  <svg width="0" height="0" className="!absolute!">
+    <defs>
+      <clipPath id="hero-curve" clipPathUnits="objectBoundingBox">
+        {/* This path defines the "S" curve.
+          M 0.1,0 (Start 10% in from left, at the top)
+          L 1,0   (Line to top-right)
+          L 1,1   (Line to bottom-right)
+          L 0.1,1 (Line to 10% in from left, at the bottom)
+          C 0.2,0.75 0.2,0.25 0.1,0 (Curve back to start)
+        */}
+        <path d="M 0.1,0 L 1,0 L 1,1 L 0.1,1 C 0.2,0.75 0.2,0.25 0.1,0 Z" />
+      </clipPath>
+    </defs>
+  </svg>
+);
 
+const HeroSection = () => {
   return (
-    <section className="hero-gradient min-h-screen flex items-center relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary-500 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="container-custom relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-white space-y-6"
-          >
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-            >
-              Education is the most powerful{" "}
-              <span className="gradient-text">weapon</span>, you can use to
-              change <span className="gradient-text">the world</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-xl text-gray-300 leading-relaxed max-w-2xl"
-            >
-              - Nelson Mandela
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="text-lg text-gray-300 leading-relaxed max-w-2xl"
-            >
-              Join our mission to provide quality education to underserved
-              communities around the world. Together, we can break the cycle of
-              poverty through innovative learning solutions.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Button
-                variant="primary"
-                size="lg"
-                icon={<FaArrowRight />}
-                onClick={scrollToPrograms}
+    <>
+      {/* This renders the SVG clip-path definition */}
+      <SvgClipPath />
+      {/* Main container is relative, full blue.
+        The layout is now controlled with absolute positioning for the image.
+      */}
+      <div className="relative! flex! flex-col! lg:flex-row! min-h-screen! font-sans! bg-[#0a2540]! overflow-hidden!">
+        {/* Left Side: Content */}
+        <div className="w-full! lg:w-1/2! text-white! flex! items-center! justify-center! p-8! lg:p-16! z-10!">
+          <div className="max-w-lg">
+            <span className="text-orange-500! text-xl! font-semibold! tracking-wider! flex! items-center! gap-2!">
+              {/* Heart Icon */}
+              <svg
+                className="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                Our Programs
-              </Button>
+                <path
+                  fillRule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+              Empowering Lives Through Education
+            </span>
+            {/* Updated quote to match image */}
+            <h1 className="text-2xl! lg:text-3xl! font-bold! my-6! leading-tight! text-white!">
+              Education is the most powerful weapon, you can use to change the
+              world{" "}
+              <span className="font-light! italic!">– Nelson Mandela</span>
+            </h1>
+            {/* Updated button style */}
+            <DonationButton />
+          </div>
+        </div>
 
-              <Button variant="white" size="lg" icon={<FaPlay />}>
-                Watch Stories
-              </Button>
-            </motion.div>
+        {/* Right Side: Image */}
+        <div
+          className="w-full! lg:w-1/2! h-64! lg:h-full! lg:absolute! lg:top-0! lg:right-0!"
+          // Apply the clip-path by referencing its ID
+          style={{ clipPath: "url(#hero-curve)" }}
+        >
+          <img
+            src="/herosectionimage.jpg"
+            alt="Children studying"
+            className="w-full! h-full! object-cover!"
+            onError={(e) => {
+              e.currentTarget.src =
+                "https://placehold.co/800x600/cccccc/999999?text=Hero+Image";
+              e.currentTarget.onerror = null;
+            }}
+          />
+        </div>
 
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-700"
-            >
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary-400">10K+</div>
-                <div className="text-sm text-gray-400">Students Reached</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary-400">50+</div>
-                <div className="text-sm text-gray-400">Programs</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary-400">25+</div>
-                <div className="text-sm text-gray-400">Countries</div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="relative"
-          >
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop"
-                alt="Students learning together"
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
-
-            {/* Floating Cards */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-              className="absolute -top-6 -left-6 bg-white rounded-xl p-4 shadow-xl"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 font-bold text-xl">✓</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">5,000+</div>
-                  <div className="text-sm text-gray-600">
-                    Certificates Issued
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.4, duration: 0.6 }}
-              className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-xl"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-xl">📚</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">95%</div>
-                  <div className="text-sm text-gray-600">Success Rate</div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+        {/* Faded hands overlay */}
+        <div className="absolute! bottom-0! left-0! w-full! lg:w-1/2! h-1/2! z-0!">
+          <img
+            // Replace this with your own hands graphic
+            src="/hands.png"
+            alt=""
+            className="w-full! object-contain! object-bottom! opacity-10!"
+            onError={(e) => {
+              // Hide if the placeholder fails
+              e.currentTarget.style.display = "none";
+            }}
+          />
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
-        >
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-3 bg-white/60 rounded-full mt-2"
-          />
-        </motion.div>
-      </motion.div>
-    </section>
+    </>
   );
 };
 
-export default Hero;
+export default HeroSection;

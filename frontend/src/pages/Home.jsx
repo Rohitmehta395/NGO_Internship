@@ -17,11 +17,11 @@ const Home = () => {
     >
       <Hero />
       <Programs />
-      <EducationForAll />
+      {/* <EducationForAll />
       <FlagshipPrograms />
       <VolunteerSection />
       <ChangeWorld />
-      <Newsletter />
+      <Newsletter /> */}
     </motion.div>
   );
 };

@@ -1,138 +1,117 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { useState } from "react";
+import VolunteerButton from "./VolunteerButton";
+import logo from "../../../public/Logo.png";
 
-const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Programs", href: "/programs" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+  const navItems = [
+    "Home",
+    "Our Programs",
+    "Sulabh App",
+    "Events",
+    "About Us",
+    "Contact Us",
+    "Donate",
+    "More",
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-lg py-2" : "bg-transparent py-4"
-      }`}
-    >
-      <div className="container-custom">
-        <div className="flex items-center justify-between">
+    <header className="bg-orange-400! sticky! top-0! z-50! shadow-sm!">
+      {/* Main Header Container */}
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 !mx-10 sm:mx-8 lg:mx-12">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4 lg:gap-8">
           {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-2"
-          >
-            <div className="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">E</span>
-            </div>
-            <span
-              className={`font-bold text-xl ${
-                scrolled ? "text-gray-900" : "text-white"
-              }`}
-            >
-              Education
-            </span>
-          </motion.div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link, index) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`font-medium transition-colors duration-200 ${
-                  scrolled
-                    ? "text-gray-700 hover:text-primary-500"
-                    : "text-white hover:text-primary-300"
-                }`}
-              >
-                {link.name}
-              </a>
-            ))}
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
-            <button
-              className={`px-4 py-2 rounded-lg font-medium transition ${
-                scrolled
-                  ? "text-gray-700 hover:bg-gray-100"
-                  : "text-white hover:bg-white/10"
-              }`}
-            >
-              Login
-            </button>
-            <button className="px-6 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition">
-              Volunteer
-            </button>
+          <div className="shrink-0">
+            <img
+              src={logo}
+              alt="Logo"
+              className="h-14 w-14 sm:h-16 sm:w-16 lg:h-[70px] lg:w-[70px] rounded-full object-cover border-2 sm:border-4 border-white shadow-md"
+            />
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Desktop & Tablet Navigation - Shows on tablets (768px+) and larger */}
+          <nav className="hidden lg:flex items-center justify-center flex-1">
+            <div className="flex items-center gap-6 xl:gap-8">
+              {navItems.map((item, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className="text-white text-[14px] xl:text-[16px] 2xl:text-[17px] font-medium hover:text-orange-100 transition-colors whitespace-nowrap"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+          </nav>
+
+          {/* Volunteer Button - Shows on tablets and larger */}
+          <div className="hidden lg:flex shrink-0">
+            <VolunteerButton onClick={() => console.log("Volunteer clicked")} />
+          </div>
+
+          {/* Mobile Menu Button - Only shows on phones (< 1024px) */}
           <button
-            onClick={toggleMenu}
-            className={`md:hidden p-2 rounded-lg transition-colors duration-200 ${
-              scrolled
-                ? "text-gray-700 hover:bg-gray-100"
-                : "text-white hover:bg-white/10"
-            }`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden text-white p-2 hover:bg-orange-600 rounded-lg transition-colors"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
-            {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="sm:w-7 sm:h-7"
+            >
+              {isMenuOpen ? (
+                <>
+                  <path d="M18 6L6 18" />
+                  <path d="M6 6l12 12" />
+                </>
+              ) : (
+                <>
+                  <path d="M3 12h18" />
+                  <path d="M3 6h18" />
+                  <path d="M3 18h18" />
+                </>
+              )}
+            </svg>
           </button>
         </div>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white rounded-lg shadow-lg mt-4 overflow-hidden"
-            >
-              <nav className="py-4">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="block px-6 py-3 text-gray-700 hover:text-primary-500 hover:bg-gray-50 transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.name}
-                  </a>
-                ))}
-                <div className="px-6 py-3 border-t border-gray-100 mt-4 space-y-3">
-                  <button className="w-full px-4 py-2 border border-primary-500 text-primary-500 rounded-lg font-medium hover:bg-primary-50 transition">
-                    Login
-                  </button>
-                  <button className="w-full px-4 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition">
-                    Volunteer
-                  </button>
-                </div>
-              </nav>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
+
+      {/* Mobile Menu - Only shows on phones (< 1024px) */}
+      {isMenuOpen && (
+        <div className="lg:hidden bg-orange-400 border-t border-orange-300 shadow-inner">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
+            <nav className="flex flex-col gap-1 py-3">
+              {navItems.map((item, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className="text-white text-sm sm:text-base font-medium hover:bg-orange-500 active:bg-orange-600 transition-colors px-3 py-2.5 rounded"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item}
+                </a>
+              ))}
+              <div className="pt-2 px-3">
+                <VolunteerButton
+                  onClick={() => {
+                    console.log("Volunteer clicked");
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full justify-center"
+                />
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
-};
-
-export default Header;
+}
