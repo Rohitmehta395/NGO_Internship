@@ -1,207 +1,162 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronDown, FaHeart, FaUsers, FaGlobe } from "react-icons/fa";
-import Card from "../common/Card";
-import Button from "../common/Button";
-import { ANIMATION_VARIANTS } from "../../utils/constants";
+import { Heart, ChevronDown, ChevronRight } from "lucide-react";
+import volunteerBackgroundImage from "../../assets/volunteer.webp";
 
-const VolunteerSection = () => {
-  const [expandedFaq, setExpandedFaq] = useState(null);
+export default function VolunteerComponent() {
+  const [expandedSection, setExpandedSection] = useState("");
 
-  const faqs = [
-    {
-      id: 1,
-      question: "Why We Need You Become a Volunteer",
-      answer:
-        "Our volunteers are the backbone of our mission. We need passionate individuals who believe in the power of education to change lives. Your skills, time, and dedication help us reach more communities and create lasting impact.",
-      details: [
-        "Help bridge the education gap in underserved communities",
-        "Share your expertise and skills with eager learners",
-        "Be part of a global movement for educational equity",
-        "Gain valuable experience while making a difference",
-      ],
-    },
-    {
-      id: 2,
-      question: "Be Part of a Community",
-      answer:
-        "Join a vibrant community of like-minded individuals from around the world. Our volunteer network spans continents, cultures, and disciplines, united by a common goal of improving education access.",
-      details: [
-        "Connect with volunteers from 50+ countries",
-        "Participate in monthly virtual meetups and events",
-        "Access exclusive training and development programs",
-        "Build lifelong friendships and professional networks",
-      ],
-    },
-  ];
-
-  const volunteerStats = [
-    { icon: FaUsers, number: "2,500+", label: "Active Volunteers" },
-    { icon: FaGlobe, number: "45+", label: "Countries" },
-    { icon: FaHeart, number: "50K+", label: "Hours Contributed" },
-  ];
-
-  const toggleFaq = (id) => {
-    setExpandedFaq(expandedFaq === id ? null : id);
+  const toggleSection = (section) => {
+    setExpandedSection(expandedSection === section ? null : section);
   };
 
   return (
-    <section className="section-padding section-bg">
-      <div className="container-custom">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Left Side - Image and Stats */}
-          <motion.div
-            variants={ANIMATION_VARIANTS.fadeInLeft}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
+        <div className="grid md:grid-cols-2 gap-0">
+          {/* Left side - Image */}
+          <div className="relative p-8 md:p-12 flex items-center justify-center">
             <div className="relative">
-              <img
-                src="/api/placeholder/500/400"
-                alt="Volunteers teaching children"
-                className="w-full rounded-2xl shadow-xl object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-2xl"></div>
-
-              {/* Floating volunteer card */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-                className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-xl"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                    <FaHeart className="text-primary-600" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900">Thank You!</div>
-                    <div className="text-sm text-gray-600">
-                      From our students
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-2xl transform rotate-2"></div>
+              <div className="relative bg-white p-2 rounded-2xl">
+                <img
+                  src={volunteerBackgroundImage}
+                  alt="Young volunteers in front of educational board"
+                  className="rounded-xl w-full h-auto object-cover"
+                />
+              </div>
             </div>
+          </div>
 
-            {/* Volunteer Stats */}
-            <div className="grid grid-cols-3 gap-6">
-              {volunteerStats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <stat.icon className="text-primary-600" />
-                  </div>
-                  <div className="font-bold text-2xl text-gray-900 mb-1">
-                    {stat.number}
-                  </div>
-                  <div className="text-sm text-gray-600">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Right Side - FAQ and CTA */}
-          <motion.div
-            variants={ANIMATION_VARIANTS.fadeInRight}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Ready to Make a Difference?
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Join our community of passionate volunteers and help us
-                transform lives through education. Every contribution matters,
-                no matter how big or small.
+          {/* Right side - Content */}
+          <div className="p-8 md:p-12 flex flex-col justify-center">
+            {/* Header */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-orange-500 mb-3">
+                <Heart className="w-6 h-6 fill-current" />
+                <span className="font-semibold text-lg">Join us</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
+                Why We Need You Become a Volunteer
+              </h1>
+              <p className="text-gray-700 text-lg leading-relaxed">
+                We need more Volunteers like these inspiring youngsters — eager
+                to create real change in the world!
+                <br />
+                <span className="font-semibold">
+                  Young, Driven & Making a Difference!
+                </span>
               </p>
             </div>
 
-            {/* FAQ Section */}
+            {/* Expandable Sections */}
             <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <motion.div
-                  key={faq.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
+              {/* Recognition and Fulfillment */}
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => toggleSection("recognition")}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
                 >
-                  <Card className="overflow-hidden">
-                    <button
-                      onClick={() => toggleFaq(faq.id)}
-                      className="w-full text-left flex items-center justify-between p-6 hover:bg-gray-50 transition-colors"
-                    >
-                      <h3 className="font-semibold text-gray-900 pr-4">
-                        {faq.question}
-                      </h3>
-                      <motion.div
-                        animate={{ rotate: expandedFaq === faq.id ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <FaChevronDown className="text-gray-400" />
-                      </motion.div>
-                    </button>
+                  <span
+                    className={`text-xl font-semibold ${
+                      expandedSection === "recognition"
+                        ? "text-orange-500"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    Recognition and Fulfillment
+                  </span>
 
-                    <AnimatePresence>
-                      {expandedFaq === faq.id && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 pb-6 space-y-4">
-                            <p className="text-gray-600 leading-relaxed">
-                              {faq.answer}
-                            </p>
-                            <ul className="space-y-2">
-                              {faq.details.map((detail, detailIndex) => (
-                                <li
-                                  key={detailIndex}
-                                  className="flex items-start text-sm text-gray-600"
-                                >
-                                  <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                                  {detail}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+                  <ChevronDown
+                    className={`w-6 h-6 transition-transform ${
+                      expandedSection === "recognition"
+                        ? "transform rotate-180 text-orange-500"
+                        : ""
+                    }`}
+                  />
+                </button>
+                {expandedSection === "recognition" && (
+                  <div className="px-5 pb-5 pt-2">
+                    <p className="text-gray-700 leading-relaxed">
+                      We need more passionate change makers like them - young
+                      minds ready to roll up their sleeves and shape a more
+                      inclusive, empowered future for education in India.
+                    </p>
+                  </div>
+                )}
+              </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="primary" size="lg" className="flex-1">
-                Become a Volunteer
-              </Button>
-              <Button variant="outline" size="lg" className="flex-1">
-                Learn More
-              </Button>
+              {/* Why Join Us as a Volunteer */}
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => toggleSection("why-join")}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span
+                    className={`text-xl font-semibold ${
+                      expandedSection === "why-join"
+                        ? "text-orange-500"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    Why Join Us as a Volunteer?
+                  </span>
+                  <ChevronDown
+                    className={`w-6 h-6 transition-transform ${
+                      expandedSection === "why-join"
+                        ? "transform rotate-180 text-orange-500"
+                        : ""
+                    }`}
+                  />
+                </button>
+                {expandedSection === "why-join" && (
+                  <div className="px-5 pb-5 pt-2">
+                    <p className="text-gray-700 leading-relaxed">
+                      Make a tangible impact on education, develop leadership
+                      skills, connect with like-minded changemakers, and be part
+                      of a movement that's transforming communities across
+                      India.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Be Part of a Community */}
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => toggleSection("community")}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span
+                    className={`text-xl font-semibold ${
+                      expandedSection === "community"
+                        ? "text-orange-500"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    Be Part of a Community
+                  </span>
+                  <ChevronDown
+                    className={`w-6 h-6 transition-transform ${
+                      expandedSection === "community"
+                        ? "transform rotate-180 text-orange-500"
+                        : ""
+                    }`}
+                  />
+                </button>
+                {expandedSection === "community" && (
+                  <div className="px-5 pb-5 pt-2">
+                    <p className="text-gray-700 leading-relaxed">
+                      Join a vibrant network of volunteers who share your
+                      passion for education and social change. Together, we
+                      create lasting impact and support each other's growth.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default VolunteerSection;
+}

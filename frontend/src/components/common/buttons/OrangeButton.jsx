@@ -1,4 +1,4 @@
-export default function DonationButton({ onClick, className = "" }) {
+export default function OrangeButton({ onClick, className = "", work }) {
   return (
     <button
       onClick={onClick}
@@ -21,7 +21,7 @@ export default function DonationButton({ onClick, className = "" }) {
         </svg>
       </div>
       <span className="text-white! font-semibold! text-base! whitespace-nowrap!">
-        Make Donation
+        {work}
       </span>
     </button>
   );

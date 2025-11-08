@@ -5,8 +5,6 @@ import Programs from "../components/sections/Programs";
 import EducationForAll from "../components/sections/EducationForAll";
 import FlagshipPrograms from "../components/sections/FlagshipPrograms";
 import VolunteerSection from "../components/sections/VolunteerSection";
-import ChangeWorld from "../components/sections/ChangeWorld";
-import Newsletter from "../components/sections/Newsletter";
 
 const Home = () => {
   return (
@@ -17,11 +15,11 @@ const Home = () => {
     >
       <Hero />
       <Programs />
-      {/* <EducationForAll />
+      <EducationForAll />
       <FlagshipPrograms />
       <VolunteerSection />
-      <ChangeWorld />
-      <Newsletter /> */}
+      {/* <ChangeWorld /> */}
+      {/* <Newsletter /> */}
     </motion.div>
   );
 };

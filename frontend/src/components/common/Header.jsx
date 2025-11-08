@@ -1,6 +1,6 @@
 import { useState } from "react";
-import VolunteerButton from "./VolunteerButton";
-import logo from "../../../public/Logo.png";
+import logo from "/Logo.png";
+import VolunteerButton from "./buttons/WhiteButton";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,9 +17,9 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-orange-400! sticky! top-0! z-50! shadow-sm!">
+    <header className="bg-orange-400 sticky top-0 z-50 shadow-sm">
       {/* Main Header Container */}
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 !mx-10 sm:mx-8 lg:mx-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-4 lg:gap-8">
           {/* Logo */}
           <div className="shrink-0">
@@ -27,10 +27,15 @@ export default function Header() {
               src={logo}
               alt="Logo"
               className="h-14 w-14 sm:h-16 sm:w-16 lg:h-[70px] lg:w-[70px] rounded-full object-cover border-2 sm:border-4 border-white shadow-md"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://placehold.co/70x70/ffffff/0a2540?text=Logo";
+                e.currentTarget.onerror = null;
+              }}
             />
           </div>
 
-          {/* Desktop & Tablet Navigation - Shows on tablets (768px+) and larger */}
+          {/* Desktop & Tablet Navigation */}
           <nav className="hidden lg:flex items-center justify-center flex-1">
             <div className="flex items-center gap-6 xl:gap-8">
               {navItems.map((item, index) => (
@@ -45,12 +50,12 @@ export default function Header() {
             </div>
           </nav>
 
-          {/* Volunteer Button - Shows on tablets and larger */}
+          {/* Volunteer Button (Desktop only) */}
           <div className="hidden lg:flex shrink-0">
-            <VolunteerButton onClick={() => console.log("Volunteer clicked")} />
+            <VolunteerButton work="Volunteer" />
           </div>
 
-          {/* Mobile Menu Button - Only shows on phones (< 1024px) */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden text-white p-2 hover:bg-orange-600 rounded-lg transition-colors"
@@ -84,7 +89,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu - Only shows on phones (< 1024px) */}
+      {/* Mobile Navigation Menu */}
       {isMenuOpen && (
         <div className="lg:hidden bg-orange-400 border-t border-orange-300 shadow-inner">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
