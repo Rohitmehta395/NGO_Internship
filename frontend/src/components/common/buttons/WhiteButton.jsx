@@ -1,7 +1,23 @@
-export default function WhiteButton({ onClick, className, work }) {
+import { useNavigate } from "react-router-dom";
+
+export default function WhiteButton({ path, className = "", work }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (!path) return;
+
+    if (path.startsWith("http")) {
+      // External link → open in new tab
+      window.open(path, "_blank");
+    } else {
+      // Internal navigation → use React Router
+      navigate(path);
+    }
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       className={`inline-flex items-center gap-2.5 px-5 py-2.5 bg-white cursor-pointer rounded-full hover:opacity-90 transition-opacity shadow-sm ${className}`}
     >
       <svg

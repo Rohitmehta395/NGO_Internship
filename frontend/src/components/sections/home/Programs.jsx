@@ -1,7 +1,7 @@
 import React from "react";
 import { BookOpen, Users, Lightbulb, MoreHorizontal } from "lucide-react";
 
-function ProjectCard({ icon: Icon, title, description }) {
+function ProjectCard({ icon: Icon, title, description, href }) {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col items-center min-h-[380px]">
       <div className="bg-[#0a2540] text-white w-20 h-20 rounded-full flex items-center justify-center mb-6">
@@ -17,7 +17,7 @@ function ProjectCard({ icon: Icon, title, description }) {
       </p>
 
       <a
-        href="#"
+        href={href}
         className="text-blue-600 text-sm font-bold tracking-wider hover:text-blue-800 transition uppercase"
       >
         More
@@ -33,24 +33,28 @@ export default function Programs() {
       description:
         "Online 'Spoken English' Courses for teachers and students from rural government schools.",
       icon: BookOpen,
+      href: "/programs",
     },
     {
       title: "PROJECT SULABH",
       description:
         "Financial Literacy Workshops through storytelling, drama competitions, and quizzes for rural school students.",
       icon: Users,
+      href: "/programs",
     },
     {
       title: "PROJECT JNANASHALA",
       description:
         "Setting up Libraries in rural community centres and rural Government Schools.",
       icon: Lightbulb,
+      href: "/programs",
     },
     {
       title: "OTHERS",
       description:
         "Other programs like School Sapling Project and Financial Inclusion.",
       icon: MoreHorizontal,
+      href: "/programs",
     },
   ];
 
@@ -68,6 +72,7 @@ export default function Programs() {
               icon={project.icon}
               title={project.title}
               description={project.description}
+              href={project.href}
             />
           ))}
         </div>

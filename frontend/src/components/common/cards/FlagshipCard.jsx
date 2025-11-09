@@ -20,6 +20,7 @@ export default function FlagshipCard({ image, title, date, location }) {
         </p>
         <WhiteButton
           work="Explore More"
+          path="/programs"
           className="border border-orange-700 hover:bg-orange-200"
         />
       </div>

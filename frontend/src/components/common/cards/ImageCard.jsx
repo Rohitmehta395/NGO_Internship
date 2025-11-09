@@ -50,7 +50,7 @@ const ImageCard = () => {
             animationDuration: cardData.length * 3000 + "ms",
           }}
         >
-          <div className="flex gap-6">
+          <div className="flex gap-6 mb-10">
             {[...cardData, ...cardData].map((card, index) => (
               <div
                 key={index}

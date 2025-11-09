@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Heart, ChevronDown, ChevronRight } from "lucide-react";
-import volunteerBackgroundImage from "../../assets/volunteer.webp";
+import volunteerBackgroundImage from "../../../assets/volunteer.webp";
 
 export default function VolunteerComponent() {
   const [expandedSection, setExpandedSection] = useState("");

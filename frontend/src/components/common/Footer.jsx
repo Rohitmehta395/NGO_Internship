@@ -7,8 +7,11 @@ import {
   FaLinkedinIn,
   FaYoutube,
   FaChevronRight,
+  FaAddressBook,
+  FaAddressCard,
 } from "react-icons/fa";
 import logo from "/Logo.png";
+import { MapPinHouse } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -171,11 +174,12 @@ const Footer = () => {
                   info@sharadatrust.org
                 </a>
                 {/* <a
-                  href="tel:+919019911804"
+                  href=""
                   className="flex items-center gap-2 text-gray-300 hover:text-orange-400 transition"
                 >
-                  <FaPhoneAlt className="w-4 h-4 text-white" />
-                  +91 9019911804
+                  <MapPinHouse className="w-5 h-5 text-white" />
+                  Sowmya Springs, Dewan Madhava Rao Road, Basavanagudi,
+                  Bengaluru, Karnataka, India
                 </a> */}
                 <div className="flex mt-3">
                   <input

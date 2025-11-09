@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import DonationButton from "../common/buttons/OrangeButton";
+import DonationButton from "../../common/buttons/OrangeButton";
 
 // Invisible SVG defining the clip path for the hero section
 const SvgClipPath = () => (
@@ -46,7 +46,7 @@ const HeroSection = () => {
               world <span className="font-light italic">– Nelson Mandela</span>
             </h1>
 
-            <DonationButton work="Make Donation" />
+            <DonationButton work="Make Donation"/>
           </div>
         </div>
 

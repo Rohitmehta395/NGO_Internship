@@ -1,9 +1,9 @@
 import React from "react";
-import image1 from "../../assets/sulabhapp.webp"; // your image
-import OrangeButton from "../common/buttons/OrangeButton";
-import FlagshipCard from "../common/cards/FlagshipCard";
-import CircleStat from "../common/cards/CircleStat";
+import image1 from "../../../assets/sulabhapp.webp"; // your image
+import CircleStat from "../../common/cards/CircleStat";
 import { DollarSign, Gift, User, Users } from "lucide-react";
+import OrangeButton from "../../common/buttons/OrangeButton";
+import FlagshipCard from "../../common/cards/FlagshipCard";
 
 export default function FlagshipPrograms() {
   const stats = [
@@ -54,7 +54,7 @@ export default function FlagshipPrograms() {
               <span className="text-[#E57C23] text-2xl">♡</span>
               Know More About Our Flagship Programs
             </h2>
-            <OrangeButton work="Explore More" />
+            <OrangeButton work="Explore More" path="/programs" />
           </div>
         </div>
 
