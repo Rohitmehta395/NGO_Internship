@@ -17,6 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/events" element={<Event />} />
+            <Route path="/testimonials" element={<Testimonial />} />
           </Routes>
         </Layout>
 
@@ -34,7 +36,6 @@ function App() {
         />
       </div>
     </Router>
-   
   );
 }
 
