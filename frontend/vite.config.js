@@ -8,6 +8,10 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    allowedHosts: [
+      // Add your ngrok domain here (copy it exactly from ngrok output)
+      "renunciative-lynell-scapulohumeral.ngrok-free.dev",
+    ],
     proxy: {
       "/api": {
         target: "http://localhost:5000",

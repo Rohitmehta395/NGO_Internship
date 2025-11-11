@@ -2,12 +2,13 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Event from "./pages/Event";
+import Testimonial from "./pages/Testimonial";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
-import Donation from "./pages/Donation";
-import ContactUs from "./pages/ContactUs";
-import Sulabh from "./pages/Sulabh";
+import About from "./pages/About";
+import Partners from "./pages/Partners";
 
 function App() {
   return (
@@ -16,9 +17,9 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/donate" element={<Donation />} />
-            <Route path="/about-us" element={<ContactUs />} />
-            <Route path="/sulabh" element={<Sulabh />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/events" element={<Event />} />
+            <Route path="/testimonials" element={<Testimonial />} />
           </Routes>
         </Layout>
 
