@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown, FaHeart, FaUsers, FaGlobe } from "react-icons/fa";
-import Card from "../common/Card";
-import Button from "../common/Button";
-import { ANIMATION_VARIANTS } from "../../utils/constants";
+import Card from "../../common/Card";
+import Button from "../../common/Button";
+import { ANIMATION_VARIANTS } from "../../../utils/constants";
 
 const VolunteerSection = () => {
   const [expandedFaq, setExpandedFaq] = useState(null);

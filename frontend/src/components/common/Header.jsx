@@ -1,19 +1,20 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import VolunteerButton from "./VolunteerButton";
 import logo from "../../../public/Logo.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems = [
-    "Home",
-    "Our Programs",
-    "Sulabh App",
-    "Events",
-    "About Us",
-    "Contact Us",
-    "Donate",
-    "More",
+  const navLinks = [
+    { label: "Home", to: "/" },
+    { label: "Our Programs", to: "/programs" },
+    { label: "Sulabh App", to: "/sulabh" },
+    // { label: "Events", to: "/events" }, // Uncomment and implement if needed
+    { label: "About Us", to: "/about-us" },
+    { label: "Contact Us", to: "/contact-us" },
+    { label: "Donate", to: "/donate" },
+    // { label: "More", to: "/more" }, // Uncomment and implement if needed
   ];
 
   return (
@@ -33,14 +34,14 @@ export default function Header() {
           {/* Desktop & Tablet Navigation - Shows on tablets (768px+) and larger */}
           <nav className="hidden lg:flex items-center justify-center flex-1">
             <div className="flex items-center gap-6 xl:gap-8">
-              {navItems.map((item, index) => (
-                <a
+              {navLinks.map((link, index) => (
+                <Link
                   key={index}
-                  href="#"
+                  to={link.to}
                   className="text-white text-[14px] xl:text-[16px] 2xl:text-[17px] font-medium hover:text-orange-100 transition-colors whitespace-nowrap"
                 >
-                  {item}
-                </a>
+                  {link.label}
+                </Link>
               ))}
             </div>
           </nav>

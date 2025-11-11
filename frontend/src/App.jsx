@@ -5,6 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
+import Donation from "./pages/Donation";
+import ContactUs from "./pages/ContactUs";
+import Sulabh from "./pages/Sulabh";
 
 function App() {
   return (
@@ -13,6 +16,9 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/donate" element={<Donation />} />
+            <Route path="/about-us" element={<ContactUs />} />
+            <Route path="/sulabh" element={<Sulabh />} />
           </Routes>
         </Layout>
 

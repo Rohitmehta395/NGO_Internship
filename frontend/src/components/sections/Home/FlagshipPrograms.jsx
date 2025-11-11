@@ -1,9 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaUsers, FaClock, FaAward } from "react-icons/fa";
-import Card from "../common/Card";
-import Button from "../common/Button";
-import { ANIMATION_VARIANTS } from "../../utils/constants";
+import Card from "../../common/Card";
+import Button from "../../common/Button";
+import { ANIMATION_VARIANTS } from "../../../utils/constants";
 
 const FlagshipPrograms = () => {
   const flagshipPrograms = [

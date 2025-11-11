@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaEnvelope, FaArrowRight } from "react-icons/fa";
-import Button from "../common/Button";
-import Card from "../common/Card";
-import { ANIMATION_VARIANTS } from "../../utils/constants";
+import Button from "../../common/Button";
+import Card from "../../common/Card";
+import { ANIMATION_VARIANTS } from "../../../utils/constants";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");

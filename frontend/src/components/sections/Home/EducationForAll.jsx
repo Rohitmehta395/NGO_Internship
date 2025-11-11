@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
-import Button from "../common/Button";
-import { ANIMATION_VARIANTS } from "../../utils/constants";
+import Button from "../../common/Button";
+import { ANIMATION_VARIANTS } from "../../../utils/constants";
 
 const EducationForAll = () => {
   const galleryImages = [

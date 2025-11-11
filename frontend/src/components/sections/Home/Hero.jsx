@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import DonationButton from "../common/DonationButton";
+import DonationButton from "../../common/DonationButton";
 
 // This component defines the custom clip path.
 // It's invisible but provides the 'id' for the style.

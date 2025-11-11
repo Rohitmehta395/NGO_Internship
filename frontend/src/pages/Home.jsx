@@ -1,12 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Hero from "../components/sections/Hero";
-import Programs from "../components/sections/Programs";
-import EducationForAll from "../components/sections/EducationForAll";
-import FlagshipPrograms from "../components/sections/FlagshipPrograms";
-import VolunteerSection from "../components/sections/VolunteerSection";
-import ChangeWorld from "../components/sections/ChangeWorld";
-import Newsletter from "../components/sections/Newsletter";
+import Hero from "../components/sections/Home/Hero";
+import EducationForAll from "../components/sections/Home/EducationForAll";
+import FlagshipPrograms from "../components/sections/Home/FlagshipPrograms";
+import VolunteerSection from "../components/sections/Home/VolunteerSection";
+import ChangeWorld from "../components/sections/Home/ChangeWorld";
+import Newsletter from "../components/sections/Home/Newsletter";
 
 const Home = () => {
   return (
@@ -16,7 +15,6 @@ const Home = () => {
       transition={{ duration: 0.5 }}
     >
       <Hero />
-      <Programs />
       {/* <EducationForAll />
       <FlagshipPrograms />
       <VolunteerSection />
