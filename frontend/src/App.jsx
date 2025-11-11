@@ -8,6 +8,7 @@ import Testimonial from "./pages/Testimonial";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Partners from "./pages/Partners";
 
 function App() {
   return (
