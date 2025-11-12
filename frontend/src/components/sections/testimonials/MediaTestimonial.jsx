@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../../styles/MediaTestimonial.css";
+import "../../../styles/MediaTestimonial.css";
 
 const mediaItems = [
   {

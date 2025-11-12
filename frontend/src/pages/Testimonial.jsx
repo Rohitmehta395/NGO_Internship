@@ -1,7 +1,7 @@
-import TestimonialHero from "../components/sections/TestimonialHero";
-import VideoTestimonials from "../components/sections/VideoTestimonial";
-import MediaTestimonial from "../components/sections/MediaTestimonial";
-import ScreenshotCarousel from "../components/sections/ScreenshotCaraousel";    
+import TestimonialHero from "../components/sections/testimonials/TestimonialHero";
+import VideoTestimonials from "../components/sections/testimonials/VideoTestimonial";
+import MediaTestimonial from "../components/sections/testimonials/MediaTestimonial";
+import ScreenshotCarousel from "../components/sections/testimonials/ScreenshotCaraousel";    
 
 const Testimonial = () => {
   return (

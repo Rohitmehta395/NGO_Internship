@@ -7,71 +7,16 @@ import {
   FaLinkedinIn,
   FaYoutube,
   FaChevronRight,
-  FaAddressBook,
-  FaAddressCard,
 } from "react-icons/fa";
 import logo from "/Logo.png";
-import { MapPinHouse } from "lucide-react";
 
 const Footer = () => {
   return (
     <footer className="bg-[#0a2540] text-white">
-      {/* 🔸 Top Contact Banner */}
-      <div className="bg-orange-400 text-black">
-        <div className="max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-20 mb-12">
-          <div className="flex flex-wrap items-center justify-center gap-24">
-            {/* Address */}
-            <div className="flex items-center gap-3">
-              <FaMapMarkerAlt className="w-8 h-8 text-white shrink-0" />
-              <div>
-                <h3 className="font-bold text-lg mb-1 text-white">Address:</h3>
-                <p className="text-sm text-white">
-                  Sowmya Springs, Dewan Madhava Rao Road,
-                  <br />
-                  Basavanagudi, Bengaluru, Karnataka, India
-                </p>
-              </div>
-            </div>
-
-            {/* Email */}
-            <div className="flex items-center gap-3">
-              <FaEnvelope className="w-8 h-8 text-white shrink-0" />
-              <div>
-                <h3 className="font-bold text-lg mb-1 text-white">
-                  Send Email:
-                </h3>
-                <a
-                  href="mailto:info@sharadatrust.org"
-                  className="text-sm hover:underline text-white"
-                >
-                  info@sharadatrust.org
-                </a>
-              </div>
-            </div>
-
-            {/* Phone (optional)
-            <div className="flex items-center gap-3">
-              <FaPhoneAlt className="w-8 h-8 text-white shrink-0" />
-              <div>
-                <h3 className="font-bold text-lg mb-1 text-white">
-                  Call Emergency:
-                </h3>
-                <a
-                  href="tel:+919019911804"
-                  className="text-sm hover:underline text-white"
-                >
-                  +91 9019911804
-                </a>
-              </div>
-            </div> */}
-          </div>
-        </div>
-      </div>
-
       {/* 🔸 Main Footer Content */}
-      <div className="py-6 px-6 sm:px-10 lg:px-20">
+      <div className="py-10 px-6 sm:px-10 lg:px-20">
         <div className="max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {/* Logo and Tagline */}
             <div className="flex flex-col items-start">
               <div className="mb-4">
@@ -86,7 +31,7 @@ const Footer = () => {
                   }}
                 />
               </div>
-              <h3 className="text-gray-300 text-xl font-semibold mb-4 text-orange-400">
+              <h3 className="text-gray-300 text-xl font-semibold mb-4">
                 Empowering Lives Through
                 <br />
                 Education <span className="text-pink-400">❤️</span>
@@ -113,10 +58,10 @@ const Footer = () => {
               </h3>
               <ul className="mt-1 space-y-1">
                 {[
+                  "Our Programs",
+                  "Sulabh App",
+                  "Events",
                   "About Us",
-                  "Our Services",
-                  "Our Blogs",
-                  "FAQs",
                   "Contact Us",
                 ].map((link, i) => (
                   <li key={i}>
@@ -160,28 +105,33 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Contact Form */}
+            {/* Contact Us */}
             <div>
               <h3 className="text-xl text-white font-bold mb-4 border-b-2 border-orange-400 pb-2 inline-block">
                 Contact Us
               </h3>
-              <div className="space-y-2 mt-2">
+
+              <div className="space-y-3 mt-3">
+                {/* Address */}
+                <div className="flex items-start gap-3">
+                  <FaMapMarkerAlt className="w-5 h-5 text-white mt-1" />
+                  <p className="text-gray-300 text-xs">
+                    Sowmya Springs, Dewan Madhava Rao Road, <br />
+                    Basavanagudi, Bengaluru, Karnataka, India
+                  </p>
+                </div>
+
+                {/* Email */}
                 <a
                   href="mailto:info@sharadatrust.org"
-                  className="flex items-center gap-2 text-gray-300 hover:text-orange-400 transition"
+                  className="flex items-center gap-3 text-gray-300 hover:text-orange-400 transition"
                 >
-                  <FaEnvelope className="w-4 h-4 text-white" />
+                  <FaEnvelope className="w-5 h-5 text-white" />
                   info@sharadatrust.org
                 </a>
-                {/* <a
-                  href=""
-                  className="flex items-center gap-2 text-gray-300 hover:text-orange-400 transition"
-                >
-                  <MapPinHouse className="w-5 h-5 text-white" />
-                  Sowmya Springs, Dewan Madhava Rao Road, Basavanagudi,
-                  Bengaluru, Karnataka, India
-                </a> */}
-                <div className="flex mt-3">
+
+                {/* Optional: subscription field */}
+                <div className="flex mt-4">
                   <input
                     type="email"
                     placeholder="Your Email Address"
@@ -199,19 +149,17 @@ const Footer = () => {
 
       {/* 🔸 Bottom Copyright */}
       <div className="bg-orange-400 py-4 px-6 sm:px-10 lg:px-20">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="flex flex-wrap justify-between items-center gap-4">
-            <p className="text-white text-sm">
-              © 2025 Sharada Educational Trust. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a href="#" className="text-white hover:underline text-sm">
-                Terms & Conditions
-              </a>
-              <a href="#" className="text-white hover:underline text-sm">
-                Privacy Policy
-              </a>
-            </div>
+        <div className="max-w-[1600px] mx-auto flex flex-wrap justify-between items-center gap-4">
+          <p className="text-white text-sm">
+            © 2025 Sharada Educational Trust. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <a href="#" className="text-white hover:underline text-sm">
+              Terms & Conditions
+            </a>
+            <a href="#" className="text-white hover:underline text-sm">
+              Privacy Policy
+            </a>
           </div>
         </div>
       </div>

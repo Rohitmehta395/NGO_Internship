@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/OurPartners.css";
+import "../../../styles/OurPartners.css";
 
 const OurPartners = () => {
   const partners = [
@@ -50,7 +50,11 @@ const OurPartners = () => {
             className={`partner-slide ${index === current ? "active" : ""}`}
           >
             <div className="partner-card">
-              <img src={partner.img} alt={partner.name} className="partner-img" />
+              <img
+                src={partner.img}
+                alt={partner.name}
+                className="partner-img"
+              />
               <div className="partner-text">
                 <h3>{partner.name}</h3>
                 <p>{partner.desc}</p>

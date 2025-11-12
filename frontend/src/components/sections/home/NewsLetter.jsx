@@ -117,10 +117,7 @@ export default function NewsLetter() {
             }}
           >
             {blogs.map((blog) => (
-              <div
-                key={blog.id}
-                className="w-full md:w-1/2 flex-shrink-0 px-3 mb-8"
-              >
+              <div key={blog.id} className="w-full md:w-1/2 flex-shrink-0 px-3">
                 <ArticleCard
                   date={blog.date}
                   month={blog.month}

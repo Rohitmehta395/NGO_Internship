@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Event from "./pages/Event";
-import Testimonial from "./pages/Testimonial";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Partners from "./pages/Partners";
+import Testimonial from "./pages/Testimonial";
 
 function App() {
   return (
@@ -17,7 +17,10 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/events" element={<Event />} />
             <Route path="/about" element={<About />} />
+            <Route path="/partners" element={<Partners />} />
+            <Route path="/testimonials" element={<Testimonial />} />
           </Routes>
         </Layout>
 
@@ -35,7 +38,6 @@ function App() {
         />
       </div>
     </Router>
-   
   );
 }
 

@@ -1,12 +1,11 @@
-import EventCard from "../components/sections/EventsCard";
-import EventHero from "../components/sections/EventsHero";
-import EventsList from "../components/sections/EventsList";
+import EventsHero from "../components/sections/events/EventsHero";
+import EventsList from "../components/sections/events/EventsList";
 
 const Event = () => {
   return (
     <>
-    <EventHero />
-    <EventsList /> 
+    <EventsHero />
+    <EventsList />
     </> 
   );
 }

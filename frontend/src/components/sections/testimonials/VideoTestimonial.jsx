@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../../styles/VideoTestimonial.css";
+import "../../../styles/VideoTestimonial.css";
 
 const VideoTestimonials = () => {
   const [expanded, setExpanded] = useState(null);

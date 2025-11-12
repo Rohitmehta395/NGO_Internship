@@ -1,4 +1,4 @@
-import "../../styles/EventCard.css";
+import "../../../styles/EventCard.css";
 
 const EventCard = ({ image, title, description, date, month, venue, onReadMore }) => {
   return (
@@ -6,7 +6,7 @@ const EventCard = ({ image, title, description, date, month, venue, onReadMore }
       <img src={image} alt={title} className="event-img" />
       <div className="event-content">
         <h3 className="event-title">{title}</h3>
-        <p className="event-date">
+        <p className="event-date"> 
           {date} {month}
         </p>
         <p className="event-venue">{venue}</p>

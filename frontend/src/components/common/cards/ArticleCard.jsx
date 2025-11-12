@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Heart, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react";
 
 const ArticleCard = ({ date, month, image, author, title, onReadMore }) => {
   return (

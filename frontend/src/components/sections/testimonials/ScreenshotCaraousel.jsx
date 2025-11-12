@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import "../../styles/ScreenshotCaraousel.css";
+import "../../../styles/ScreenshotCaraousel.css";
 
 const ScreenshotCarousel = () => {
   const carouselRef = useRef(null);

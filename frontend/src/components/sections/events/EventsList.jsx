@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import EventCard from "./EventsCard";
-import "../../styles/EventList.css";
+import "../../../styles/EventList.css";
 
 const EventsList = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -160,4 +160,5 @@ const EventsList = () => {
   );
 };
 
-export default EventsList;
+export default EventsList
+;
