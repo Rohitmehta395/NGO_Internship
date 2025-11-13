@@ -1,10 +1,12 @@
+import DiyaImage from "../../../assets/diya.png"
+
 const Hero = () => {
   return (
     <section
       className="relative flex items-center justify-start w-full h-[824px] px-6 sm:px-12 lg:px-[135px]"
       style={{
         background:
-          "linear-gradient(270deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 79.2%), url('https://api.builder.io/api/v1/image/assets/TEMP/7789cd64deff8bc4697666b253d15f6d3beab7c0?width=2880') center/cover no-repeat",
+          `linear-gradient(270deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 79.2%), url(${DiyaImage}) center/cover no-repeat`,
       }}
     >
       <div className="max-w-[700px] text-left flex flex-col gap-10 mb-40">

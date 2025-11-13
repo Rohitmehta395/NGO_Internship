@@ -1,4 +1,4 @@
-import sulabhMission from "../../../../public/sulabhMission.png";
+import sulabhApp from "../../../assets/sulabhapp.webp"
 
 const Mission = () => {
   return (
@@ -56,7 +56,7 @@ const Mission = () => {
           >
             <div className="relative w-full aspect-[480/500] rounded-[20px] overflow-hidden group cursor-pointer">
               <img
-                src={sulabhMission}
+                src={sulabhApp}
                 alt="Sulabh App demonstration"
                 className="w-full h-full object-cover brightness-[1.05]"
               />
@@ -81,3 +81,4 @@ const Mission = () => {
 };
 
 export default Mission;
+
