@@ -41,6 +41,7 @@ import Navyashree from "../assets/AboutUsPics/Volunteer_Images/Navyashree.webp";
 import Manjunath from "../assets/AboutUsPics/Volunteer_Images/ManjunathBhaskar.webp";
 import Sukeerthi from "../assets/AboutUsPics/Volunteer_Images/SukeerthiManohar.webp";
 import Pravalika from "../assets/AboutUsPics/Volunteer_Images/PravalikaPramod.webp";
+import Arvind from "../components/sections/about/Arvind";
 
 const About = () => {
   const trusteesData = [
@@ -181,6 +182,7 @@ const About = () => {
         volunteers={volunteersData}
         backgroundImage={VolunteerBgImage}
       />
+      <Arvind />
     </>
   );
 };

@@ -20,7 +20,7 @@ export default function PatronCard({ image, name, link, isCircular = false }) {
       </div>
 
       {/* Know More Link */}
-      <div className="px-6 pb-6">
+      {/* <div className="px-6 pb-6">
         <a
           href={link || "#"}
           target="_blank"
@@ -29,7 +29,7 @@ export default function PatronCard({ image, name, link, isCircular = false }) {
         >
           Know More
         </a>
-      </div>
+      </div> */}
     </div>
   );
 }
