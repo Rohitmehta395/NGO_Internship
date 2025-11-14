@@ -10,7 +10,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden -mt-[80px]">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center scale-105 blur-[1px] brightness-[0.9]"

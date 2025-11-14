@@ -7,14 +7,14 @@ export default function AllPrograms() {
       title: "Sharada Academy",
       description: "A structured learning initiative that supports after-school academics, spoken English, and life-skills training for rural students and teachers.",
       image: "https://api.builder.io/api/v1/image/assets/TEMP/1bbb09463828926f6b010dd177a295d16c862d83?width=832",
-      route: "programs/sharada-academy"
+      route: "/programs/sharada-academy"
     },
     {
       id: 2,
       title: "Project Sulabh",
       description: "An ed-tech and community empowerment programme: online spoken English and soft-skills courses for rural teachers and under-privileged students, delivered via the Sulabh learning app.",
       image: "https://api.builder.io/api/v1/image/assets/TEMP/806fd369b9ef4655f05c989af33b7a34b2620f8a?width=832",
-      route: "programs/sharada-academy"
+      route: "/programs/project-sulabh"
     },
     {
       id: 3,
@@ -28,12 +28,12 @@ export default function AllPrograms() {
       title: "Others",
       description: "Initiatives including the School Sapling Project and Financial Inclusion, focused on environmental awareness and basic financial literacy.",
       image: "https://api.builder.io/api/v1/image/assets/TEMP/11b1a46a0749630374fa2ff412483125e236902d?width=832",
-      route: "programs/sharada-academy"
+      route: "/programs/others"
     },
   ];
 
   return (
-    <div className="flex flex-col items-center py-12 px-4 sm:py-16 sm:px-6 lg:py-[120px] lg:px-[72px] bg-white">
+    <div className="flex flex-col items-center py-12 px-4 sm:py-16 sm:px-6 lg:py-[120px] lg:px-[72px] bg-white" id="next-section">
       <div className="w-full max-w-[1296px]">
         <div className="flex justify-center items-start mb-10 sm:mb-12 lg:mb-[60px]">
           <h1 className="text-3xl sm:text-4xl lg:text-[50px] font-bold leading-none text-black" style={{ fontFamily: 'Teachers, -apple-system, Roboto, Helvetica, sans-serif' }}>
