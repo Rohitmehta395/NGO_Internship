@@ -1,3 +1,5 @@
+import AdvisoryCard from "../../common/cards/AdvisoryCard";
+
 export default function AdvisoryBoard({ members, backgroundImage }) {
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -30,48 +32,12 @@ export default function AdvisoryBoard({ members, backgroundImage }) {
           {/* Members Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
             {members.map((member, index) => (
-              <div
+              <AdvisoryCard
                 key={index}
-                className="bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-              >
-                {/* Image Container */}
-                <div className="p-4 pb-6">
-                  <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover grayscale"
-                    />
-                  </div>
-                </div>
-
-                {/* Name Badge with Arrow */}
-                <a
-                  href={member.link || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block bg-black text-white hover:bg-gray-800 transition-colors"
-                >
-                  <div className="px-4 py-4 flex items-center justify-between">
-                    <span className="text-base md:text-lg font-medium text-center flex-1">
-                      {member.name}
-                    </span>
-                    <svg
-                      className="w-5 h-5 flex-shrink-0 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  </div>
-                </a>
-              </div>
+                image={member.image}
+                name={member.name}
+                link={member.link}
+              />
             ))}
           </div>
         </div>
