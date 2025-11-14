@@ -3,7 +3,7 @@ import DiyaImage from "../../../assets/diya.png"
 const Hero = () => {
   return (
     <section
-      className="relative flex items-center justify-start w-full h-[824px] px-6 sm:px-12 lg:px-[135px]"
+      className="relative flex items-center justify-start w-full h-[824px] px-6 sm:px-12 lg:px-[135px] -mt-[80px]"
       style={{
         background:
           `linear-gradient(270deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 79.2%), url(${DiyaImage}) center/cover no-repeat`,

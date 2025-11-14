@@ -10,6 +10,8 @@ import About from "./pages/About";
 import Partners from "./pages/Partners";
 import Testimonial from "./pages/Testimonial";
 import Sulabh from "./pages/Sulabh";
+import Programs from "./pages/Programs";
+import JnanshalaPage from "./pages/JnanshalaPage";
 
 function App() {
   return (
@@ -23,6 +25,10 @@ function App() {
             <Route path="/partners" element={<Partners />} />
             <Route path="/testimonials" element={<Testimonial />} />
             <Route path="/app" element={<Sulabh />} />
+            <Route path="/programs">
+              <Route index element={<Programs />} />
+              <Route path="jnanashala" element={<JnanshalaPage />} />
+            </Route>
           </Routes>
         </Layout>
 
