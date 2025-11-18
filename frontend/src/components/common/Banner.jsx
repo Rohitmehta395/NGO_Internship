@@ -19,7 +19,7 @@ const Banner = ({ image, title, currentPath }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative h-96 w-full -mt-[80px]">
+    <div className="relative h-96 w-full -mt-20">
       {/* Background Image */}
       <img
         src={image}
