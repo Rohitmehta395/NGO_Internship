@@ -16,12 +16,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Enable CORS
+// app.use(
+//   cors({
+//     origin:
+//       process.env.NODE_ENV === "production"
+//         ? "https://yourdomain.com"
+//         : "https://ngo-82p8.onrender.com",
+//     credentials: true,
+//   })
+// );
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? "https://yourdomain.com"
-        : "https://ngo-82p8.onrender.com",
+    origin: [
+      "http://localhost:5173", // Local development
+      process.env.FRONTEND_URL, // Production Vercel URL
+    ],
     credentials: true,
   })
 );
