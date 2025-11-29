@@ -32,7 +32,7 @@ import vijaya from "../assets/AboutUsPics/Patrons_Images/VijayaShenoy.webp";
 //Volunteer Background Image
 import VolunteerBgImage from "../assets/AboutUsPics/Volunteer_Images/VolunteerBgImage.webp";
 
-//Images of Patrons
+//Images of Volunteer
 import david from "../assets/AboutUsPics/Volunteer_Images/DavidPfister.webp";
 import marcel from "../assets/AboutUsPics/Volunteer_Images/MarcelZbinden.webp";
 import Tobias from "../assets/AboutUsPics/Volunteer_Images/Tobias.webp";

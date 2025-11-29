@@ -21,7 +21,7 @@ app.use(
     origin:
       process.env.NODE_ENV === "production"
         ? "https://yourdomain.com"
-        : "http://localhost:5173",
+        : "https://ngo-82p8.onrender.com",
     credentials: true,
   })
 );
