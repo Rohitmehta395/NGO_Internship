@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-
+import SchoolSapling from "../../../assets/schoolSapling.webp"
+import SulabhUniversalLearningApp from "../../../assets/sulabhUniversalLearningApp.webp"
 export default function AllPrograms() {
   const programs = [
     {
@@ -13,7 +14,7 @@ export default function AllPrograms() {
       id: 2,
       title: "Project Sulabh",
       description: "An ed-tech and community empowerment programme: online spoken English and soft-skills courses for rural teachers and under-privileged students, delivered via the Sulabh learning app.",
-      image: "https://api.builder.io/api/v1/image/assets/TEMP/806fd369b9ef4655f05c989af33b7a34b2620f8a?width=832",
+      image: SulabhUniversalLearningApp,
       route: "/programs/project-sulabh"
     },
     {
@@ -27,7 +28,7 @@ export default function AllPrograms() {
       id: 4,
       title: "Others",
       description: "Initiatives including the School Sapling Project and Financial Inclusion, focused on environmental awareness and basic financial literacy.",
-      image: "https://api.builder.io/api/v1/image/assets/TEMP/11b1a46a0749630374fa2ff412483125e236902d?width=832",
+      image: SchoolSapling,
       route: "/programs/others"
     },
   ];
