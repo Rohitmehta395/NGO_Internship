@@ -12,12 +12,13 @@ export default function Header() {
     { name: "Sulabh App", path: "/app" },
     { name: "Events", path: "/events" },
     { name: "About Us", path: "/about" },
-    { name: "Contact Us", path: "/contact" },
-    { name: "Donate", path: "/donate" },
+    { name: "Our Partners", path: "/partners" },
+    // { name: "Contact Us", path: "/contact" },
+    // { name: "Donate", path: "/donate" },
   ];
 
   const moreItems = [
-    { name: "Our Partners", path: "/partners" },
+    
     { name: "Testimonials", path: "/testimonials" },
     { name: "Blog", path: "/blog" },
   ];
