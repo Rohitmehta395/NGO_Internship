@@ -1,11 +1,11 @@
-import DiyaImage from "../../../assets/diya.png"
+import sulabhHero from "../../../assets/sulabhHero.jpg"
 
 const Hero = () => {
   return (
     <section
       className="relative flex items-center justify-start w-full h-[824px] px-6 sm:px-12 lg:px-[135px] -mt-[80px]"
       style={{
-        background: `linear-gradient(270deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 79.2%), url(${DiyaImage}) center/cover no-repeat`,
+        background: `linear-gradient(270deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 79.2%), url(${sulabhHero}) center/cover no-repeat`,
       }}
     >
       <div className="max-w-[700px] text-left flex flex-col gap-10 mb-40">

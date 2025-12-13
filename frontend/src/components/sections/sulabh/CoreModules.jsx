@@ -1,24 +1,7 @@
+import sulabhActivityBasedLearning from "../../../assets/sulabhActivityBasedLearning.jpg"
+import sulabhAPT from "../../../assets/sulabhAPT.jpeg"
+import sulabh1 from "../../../assets/sulabh1.jpg"
 const CoreModules = () => {
-  const modules = [
-    {
-      title: "AI-Powered Translator module (APT)",
-      description:
-        "Enabling real-time translation of speech or text from native languages to English.",
-      imgSrc: "https://via.placeholder.com/400x300.png?text=Classroom+View", // Placeholder
-    },
-    {
-      title: "AI-Powered Translator module (APT)",
-      description:
-        "Enabling real-time translation of speech or text from native languages to English.",
-      imgSrc: "https://via.placeholder.com/400x300.png?text=AI+Interface", // Placeholder
-    },
-    {
-      title: "Sulabh App 1.0",
-      description:
-        "A legacy module focused on helping educators teach the aforementioned subjects to their students.",
-      imgSrc: "https://via.placeholder.com/400x300.png?text=Group+Learning", // Placeholder
-    },
-  ];
 
   return (
     <section className="w-full px-6 sm:px-12 lg:px-[140px] py-16 lg:py-[100px]">
@@ -37,7 +20,7 @@ const CoreModules = () => {
           {/* Module 1 - AI-Powered Translator (APT) */}
           <div className="relative rounded-[20px] overflow-hidden aspect-[411/421] group cursor-pointer">
             <img
-              src="https://api.builder.io/api/v1/image/assets/TEMP/6d9bcdfc567738dbca2fd3d5163b712192b74d0f?width=822"
+              src={sulabhActivityBasedLearning}
               alt="AI-Powered Translator module"
               className="w-full h-full object-cover"
             />
@@ -55,7 +38,7 @@ const CoreModules = () => {
           {/* Module 2 - AI-Powered Translator (APT) - Duplicate */}
           <div className="relative rounded-[20px] overflow-hidden aspect-[411/421] group cursor-pointer">
             <img
-              src="https://api.builder.io/api/v1/image/assets/TEMP/d23b2b6e3f636de449a0342041173af621e54eb6?width=822"
+              src={sulabhAPT}
               alt="AI-Powered Translator module"
               className="w-full h-full object-cover"
             />
@@ -74,7 +57,7 @@ const CoreModules = () => {
           {/* Module 3 - Sulabh App 1.0 */}
           <div className="relative rounded-[20px] overflow-hidden aspect-[411/421] group cursor-pointer">
             <img
-              src="https://api.builder.io/api/v1/image/assets/TEMP/170ec8aea8454acc793f35bebef7a118ad10a73a?width=822"
+              src={sulabh1}
               alt="Sulabh App 1.0"
               className="w-full h-full object-cover"
             />
