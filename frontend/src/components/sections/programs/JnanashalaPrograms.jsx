@@ -7,12 +7,14 @@ const SharadaPrograms = () => {
       {AllPrograms.projectJnanashala.map((p, idx) => (
         <CardGlass
           key={idx}
+          type={p.type}
           image={p.image}
+          videoId={p.videoId}
           title={p.title}
           description={p.description}
         />
       ))}
-      </div>
+    </div>
   );
 };
 
