@@ -1,7 +1,7 @@
 import React from "react";
 import WhiteButton from "../buttons/WhiteButton";
 
-export default function FlagshipCard({ image, title, date, location }) {
+export default function FlagshipCard({ image, title, desc }) {
   return (
     <article className="bg-white rounded-2xl shadow-lg p-4 flex items-center gap-6 w-full max-w-3xl">
       {/* Left: image */}
@@ -14,9 +14,8 @@ export default function FlagshipCard({ image, title, date, location }) {
         <h3 className="text-[#E57C23] text-lg sm:text-xl font-semibold leading-snug">
           {title}
         </h3>
-        <p className="text-gray-700 mt-2 text-sm sm:text-base leading-relaxed">
-          launched on <span className="font-medium">{date}</span> at{" "}
-          <span className="font-medium">{location}</span>.
+        <p className="text-gray-700 mt-2 text-sm sm:text-base leading-relaxed mb-1">
+          {desc}
         </p>
         <WhiteButton
           work="Explore More"

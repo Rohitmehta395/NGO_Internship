@@ -1,9 +1,11 @@
 import React from "react";
-import image1 from "../../../assets/sulabhapp.webp"; // your image
 import CircleStat from "../../common/cards/CircleStat";
 import { DollarSign, Gift, User, Users } from "lucide-react";
 import OrangeButton from "../../common/buttons/OrangeButton";
 import FlagshipCard from "../../common/cards/FlagshipCard";
+
+import sharada from "../../../assets/home/FlagshipPrograms_images/sharada.webp";
+import image1 from "../../../assets/sulabhapp.webp";
 
 export default function FlagshipPrograms() {
   const stats = [
@@ -29,12 +31,28 @@ export default function FlagshipPrograms() {
     },
   ];
 
-  const programs = new Array(4).fill(0).map((_, i) => ({
-    image: image1,
-    title: "Sulabh App 2.0",
-    date: "14th June 2025",
-    location: "GMPS Sathanuru",
-  }));
+  const programs = [
+    {
+      image: sharada,
+      title: "Sharada Academy",
+      desc: "A structured learning initiative that supports after-school academics.",
+    },
+    {
+      image: image1,
+      title: "Project Sulabh",
+      desc: "An ed-tech and community empowerment programme: online spoken English and soft-skills courses. ",
+    },
+    {
+      image: image1,
+      title: "Project JnanaShala",
+      desc: "A school-support programme that provides library kits, digital learning tools, etc.",
+    },
+    {
+      image: image1,
+      title: "Others",
+      desc: "Many other programmes which help the students grow.",
+    },
+  ];
 
   return (
     <section className="relative bg-[#0a2540] py-16 px-6 lg:px-20">
@@ -65,8 +83,7 @@ export default function FlagshipPrograms() {
               key={idx}
               image={p.image}
               title={p.title}
-              date={p.date}
-              location={p.location}
+              desc={p.desc}
             />
           ))}
         </div>
