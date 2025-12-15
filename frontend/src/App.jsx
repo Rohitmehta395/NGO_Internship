@@ -15,7 +15,7 @@ import JnanshalaPage from "./pages/JnanshalaPage";
 import SharadaAcademyPage from "./pages/SharadaAcademyPage";
 import ProjectSulabhPage from "./pages/ProjectSulabhPage";
 import OtherProgramsPage from "./pages/OtherProgramsPage";
-import Notfound from "./pages/notfound";
+import Notfound from "./pages/Notfound";
 
 function App() {
   return (
