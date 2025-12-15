@@ -6,13 +6,23 @@ export default function OrangeButton({ path, className = "", work }) {
   const handleClick = () => {
     if (!path) return;
 
+    // 🔹 External link
     if (path.startsWith("http")) {
-      // External link → open in new tab
       window.open(path, "_blank");
-    } else {
-      // Internal navigation via React Router
-      navigate(path);
+      return;
     }
+
+    // 🔹 Hash scroll (same page)
+    if (path.startsWith("#")) {
+      const element = document.getElementById(path.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+      return;
+    }
+
+    // 🔹 Internal route
+    navigate(path);
   };
 
   return (

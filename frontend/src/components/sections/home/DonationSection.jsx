@@ -9,7 +9,7 @@ export default function DonationSection() {
     "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://sharadaeducationaltrust.org";
 
   return (
-    <div className="w-full px-4 py-8 md:py-12">
+    <div id="donation" className="w-full px-4 py-8 md:py-12">
       <div className="max-w-7xl mx-auto">
         <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-600 rounded-3xl shadow-2xl overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">

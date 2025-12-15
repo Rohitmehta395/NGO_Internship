@@ -46,7 +46,7 @@ const HeroSection = () => {
               world <span className="font-light italic">– Nelson Mandela</span>
             </h1>
 
-            <DonationButton work="Make Donation"/>
+            <DonationButton work="Donate Now" path="#donation" />
           </div>
         </div>
 

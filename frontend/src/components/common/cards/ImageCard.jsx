@@ -2,6 +2,7 @@ import React from "react";
 
 const ImageCard = () => {
   const [stopScroll, setStopScroll] = React.useState(false);
+
   const cardData = [
     {
       image:
@@ -26,59 +27,43 @@ const ImageCard = () => {
       <style>{`
         .marquee-inner {
           animation: marqueeScroll linear infinite;
+          will-change: transform;
         }
 
         @keyframes marqueeScroll {
-          0% {
-            transform: translateX(0%);
+          from {
+            transform: translateX(0);
           }
-          100% {
-            transform: translateX(-50%);
+          to {
+            transform: translateX(calc(-100% / 3));
           }
         }
       `}</style>
 
-      <div
-        className="overflow-hidden w-full relative"
-        onMouseEnter={() => setStopScroll(true)}
-        onMouseLeave={() => setStopScroll(false)}
-      >
+      {/* 🔒 overflow-x-hidden prevents right-side space */}
+      <div className="relative w-full overflow-x-hidden">
         <div
-          className="marquee-inner flex w-fit"
-          style={{
-            animationPlayState: stopScroll ? "paused" : "running",
-            animationDuration: cardData.length * 3000 + "ms",
-          }}
+          className="overflow-hidden w-full relative mb-10"
+          onMouseEnter={() => setStopScroll(true)}
+          onMouseLeave={() => setStopScroll(false)}
         >
-          <div className="flex gap-6 mb-10">
-            {[...cardData, ...cardData].map((card, index) => (
+          <div
+            className="marquee-inner flex gap-6 w-max"
+            style={{
+              animationPlayState: stopScroll ? "paused" : "running",
+              animationDuration: "18s",
+            }}
+          >
+            {[...cardData, ...cardData, ...cardData].map((card, index) => (
               <div
                 key={index}
-                className="w-56 h-80 relative group rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-white"
+                className="w-56 h-80 rounded-2xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0"
               >
                 <img
                   src={card.image}
-                  alt={`Donation card ${index + 1}`}
-                  className="w-full h-56 object-cover"
+                  alt=""
+                  className="w-full h-full object-cover rounded-2xl"
                 />
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)]">
-                  <button className="w-full bg-black text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors">
-                    Donate Now
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="7 13 12 18 17 13"></polyline>
-                      <polyline points="7 6 12 11 17 6"></polyline>
-                    </svg>
-                  </button>
-                </div>
               </div>
             ))}
           </div>
