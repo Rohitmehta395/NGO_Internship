@@ -15,6 +15,8 @@ import JnanshalaPage from "./pages/JnanshalaPage";
 import SharadaAcademyPage from "./pages/SharadaAcademyPage";
 import ProjectSulabhPage from "./pages/ProjectSulabhPage";
 import OtherProgramsPage from "./pages/OtherProgramsPage";
+import Notfound from "./pages/notfound";
+
 function App() {
   return (
     <Router>
@@ -34,6 +36,7 @@ function App() {
               <Route path="project-sulabh" element={<ProjectSulabhPage />} />
               <Route path="others" element={<OtherProgramsPage />} />
             </Route>
+            <Route path="*" element={<Notfound />} />
           </Routes>
         </Layout>
 

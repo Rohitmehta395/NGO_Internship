@@ -396,7 +396,7 @@ export const API_BASE_URL =
       "description": "Sharada Academy runs soft-skills and communication training for college-going girls via its MargaDarshak initiative."
     }
   ],
-  "others": [
+  "others": [ 
     {
       "type": "image",
       "image": SchoolSapling,

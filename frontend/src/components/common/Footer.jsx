@@ -8,9 +8,41 @@ import {
   FaYoutube,
   FaChevronRight,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import logo from "/Logo.png";
 
 const Footer = () => {
+  const quickLinks = [
+    { label: "Our Programs", path: "/programs" },
+    { label: "Our Partners", path: "/partners" },
+    { label: "Sulabh App", path: "/app" },
+    { label: "Events", path: "/events" },
+    { label: "About Us", path: "/about" },
+  ];
+
+  const socialLinks = [
+    // {
+    //   icon: FaFacebookF,
+    //   url: "https://www.facebook.com/YourPageName",
+    //   label: "Facebook",
+    // },
+    // {
+    //   icon: FaTwitter,
+    //   url: "https://twitter.com/YourProfile",
+    //   label: "Twitter",
+    // },
+    {
+      icon: FaLinkedinIn,
+      url: "https://linkedin.com/company/89561047",
+      label: "LinkedIn",
+    },
+    {
+      icon: FaYoutube,
+      url: "https://www.youtube.com/c/JnanaShala",
+      label: "YouTube",
+    },
+  ];
+
   return (
     <footer className="bg-[#0a2540] text-white">
       {/* 🔸 Main Footer Content */}
@@ -37,17 +69,23 @@ const Footer = () => {
                 Education <span className="text-pink-400">❤️</span>
               </h3>
               <div className="flex gap-3">
-                {[FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube].map(
-                  (Icon, i) => (
+                {socialLinks.map((item, i) => {
+                  const Icon = item.icon;
+
+                  return (
                     <a
                       key={i}
-                      href="#"
-                      className="border border-gray-600 rounded p-2 text-white hover:bg-orange-400 hover:border-orange-400 transition"
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={item.label}
+                      className="border border-gray-600 rounded p-2 text-white 
+                   hover:bg-orange-400 hover:border-orange-400 transition"
                     >
                       <Icon className="w-5 h-5" />
                     </a>
-                  )
-                )}
+                  );
+                })}
               </div>
             </div>
 
@@ -57,21 +95,15 @@ const Footer = () => {
                 Quick Links
               </h3>
               <ul className="mt-1 space-y-1">
-                {[
-                  "Our Programs",
-                  "Sulabh App",
-                  "Events",
-                  "About Us",
-                  "Contact Us",
-                ].map((link, i) => (
+                {quickLinks.map((item, i) => (
                   <li key={i}>
-                    <a
-                      href="#"
+                    <Link
+                      to={item.path}
                       className="text-gray-300 hover:text-orange-400 transition flex items-center gap-2"
                     >
                       <FaChevronRight className="w-5 h-5 text-gray-400" />
-                      {link}
-                    </a>
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

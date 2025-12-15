@@ -1,8 +1,6 @@
-import OtherPrograms from "../components/sections/programs/OtherPrograms"
+import OtherPrograms from "../components/sections/programs/OtherPrograms";
 const OtherProgramsPage = () => {
-  return (
-    <OtherPrograms/>
-  )
-}
+  return <OtherPrograms />;
+};
 
-export default OtherProgramsPage
+export default OtherProgramsPage;
