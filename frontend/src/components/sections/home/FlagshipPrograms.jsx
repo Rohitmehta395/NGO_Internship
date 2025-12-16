@@ -55,29 +55,36 @@ export default function FlagshipPrograms() {
   ];
 
   return (
-    <section className="relative bg-[#0a2540] py-16 px-6 lg:px-20">
+    <section className="relative bg-[#0a2540] py-12 px-4 md:py-16 md:px-8 lg:px-20">
       <div className="max-w-6xl mx-auto">
-        {/* --- Top Row: Circles + Heading + Button --- */}
-        <div className="flex flex-wrap justify-between items-center gap-6 mb-16">
-          {/* Circles */}
-          <div className="flex-1 flex flex-wrap gap-8 justify-center md:justify-start">
+        {/* --- Top Section --- */}
+        <div className="flex flex-col-reverse lg:flex-row justify-between items-center gap-10 lg:gap-6 mb-12 lg:mb-16">
+          {/* Stats Container
+              - Mobile/Tablet: 'grid grid-cols-2' 
+                (Keeps the 2-per-row layout for small devices).
+              - Desktop (lg): 'lg:flex lg:flex-wrap lg:justify-start lg:gap-8' 
+                (Restores your original code's Flex behavior for Desktop).
+          */}
+          <div className="w-full lg:flex-1 grid grid-cols-2 justify-items-center gap-6 lg:flex lg:flex-wrap lg:gap-8 lg:justify-start lg:w-auto">
             {stats.map((s, i) => (
               <CircleStat key={i} {...s} />
             ))}
           </div>
 
-          {/* Heading + Orange Button */}
-          <div className="flex flex-col items-end gap-4 text-right">
-            <h2 className="text-white text-2xl md:text-3xl font-semibold flex items-center gap-2">
-              <span className="text-[#E57C23] text-2xl">♡</span>
+          {/* Heading + Button Container */}
+          <div className="w-full lg:w-auto flex flex-col items-center lg:items-end text-center lg:text-right gap-4">
+            <h2 className="text-white text-2xl md:text-3xl font-semibold flex flex-col md:flex-row items-center gap-2">
+              <span className="text-[#E57C23] text-3xl md:text-2xl">♡</span>
               Know More About Our Flagship Programs
             </h2>
-            <OrangeButton work="Explore More" path="/programs" />
+            <div className="mt-2">
+              <OrangeButton work="Explore More" path="/programs" />
+            </div>
           </div>
         </div>
 
-        {/* --- Cards --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {/* --- Cards Grid --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
           {programs.map((p, idx) => (
             <FlagshipCard
               key={idx}

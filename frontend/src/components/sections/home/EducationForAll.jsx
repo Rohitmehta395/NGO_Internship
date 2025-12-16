@@ -5,31 +5,32 @@ import BackGroundImage from "../../../assets/Background_Image_EducationForAll.we
 
 const EducationForAll = () => {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-[#FFFBED]">
+    <section className="relative min-h-[70vh] md:min-h-screen w-full overflow-hidden bg-[#FFFBED]">
       {/* Background Image (right side) with curved edge */}
       <div
-        className="absolute right-0 top-0 w-full h-full bg-cover bg-center bg-no-repeat"
+        className="pointer-events-none absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${BackGroundImage})`,
+          // ellipse with percentage radii stays responsive across widths/heights [web:62][web:15]
           clipPath: "ellipse(45% 100% at 100% 50%)",
         }}
       >
         {/* Dark overlay on image */}
-        <div className="absolute inset-0 bg-black/30"></div>
+        <div className="absolute inset-0 bg-black/30" />
       </div>
 
       {/* Content Area */}
-      <div className="relative z-10 px-6 md:px-20 py-16">
+      <div className="relative z-10 px-6 sm:px-10 md:px-16 lg:px-20 py-12 sm:py-16 md:py-20">
         {/* Header Section */}
-        <div className="mb-12 md:w-[50%]">
-          <h1 className="text-3xl md:text-5xl font-bold text-orange-500 mb-6 tracking-widest">
+        <div className="mb-10 sm:mb-12 max-w-xl">
+          <h1 className="text-2xl sm:text-2xl md:text-5xl font-bold text-orange-500 mb-4 sm:mb-6 tracking-widest">
             #EDUCATION_FOR_ALL
           </h1>
           <DonationButton work="Make Donation" path="#donation" />
         </div>
 
         {/* Cards Section (Full width) */}
-        <div className="mt-16 w-full">
+        <div className="mt-10 sm:mt-12 md:mt-16 w-full">
           <ImageCard />
         </div>
       </div>

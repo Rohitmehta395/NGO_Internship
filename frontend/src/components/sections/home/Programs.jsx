@@ -3,16 +3,16 @@ import { BookOpen, Users, Lightbulb, MoreHorizontal } from "lucide-react";
 
 function ProjectCard({ icon: Icon, title, description, href }) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 text-center flex flex-col items-center min-h-[380px]">
-      <div className="bg-[#0a2540] text-white w-20 h-20 rounded-full flex items-center justify-center mb-6">
-        {Icon && <Icon className="w-10 h-10" />}
+    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center flex flex-col items-center min-h-[320px] md:min-h-[380px] border-none">
+      <div className="bg-[#0a2540] text-white w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mb-4 md:mb-6">
+        {Icon && <Icon className="w-8 h-8 md:w-10 md:h-10" />}
       </div>
 
-      <h3 className="font-bold text-base mb-4 tracking-wide text-gray-900 uppercase">
+      <h3 className="font-bold text-sm md:text-base mb-3 md:mb-4 tracking-wide text-gray-900 uppercase">
         {title}
       </h3>
 
-      <p className="text-gray-600 text-sm mb-6 leading-relaxed italic flex-grow">
+      <p className="text-gray-600 text-sm mb-4 md:mb-6 leading-relaxed italic grow">
         {description}
       </p>
 
@@ -59,22 +59,35 @@ export default function Programs() {
   ];
 
   return (
-    <section className="relative overflow-hidden">
-      {/* White Top Section */}
-      <div className="bg-white pb-70 w-full"></div>
+    <section className="relative overflow-hidden w-full">
+      {/* Spacer Div (White Part):
+        - 'hidden': Hides this completely on mobile (No white space).
+        - 'md:block': Shows it on desktop to create the backdrop for the overlap.
+      */}
+      <div className="hidden md:block bg-white pb-16 md:pb-70 w-full"></div>
 
-      {/* Orange Section */}
-      <div className="bg-[#FF8904] pt-48 pb-24 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 -mt-96">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={index}
-              icon={project.icon}
-              title={project.title}
-              description={project.description}
-              href={project.href}
-            />
-          ))}
+      {/* Main Container:
+        - 'bg-[#FF8904]': Orange background for BOTH mobile and desktop.
+        - 'py-12': Adds padding on mobile so cards don't touch the edges.
+        - Desktop padding adjusted to accommodate the overlap logic.
+      */}
+      <div className="bg-[#FF8904] py-12 md:pt-48 md:pb-24 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Grid Container:
+            - 'mt-0': On mobile, cards sit naturally inside the orange box.
+            - 'md:-mt-96': On desktop, they are pulled up to overlap the white section.
+          */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-0 md:-mt-96 relative z-10">
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={index}
+                icon={project.icon}
+                title={project.title}
+                description={project.description}
+                href={project.href}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
