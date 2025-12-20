@@ -11,7 +11,7 @@ export default function DonationSection() {
     <div id="donation" className="w-full px-4 py-6 sm:py-8 md:py-12">
       <div className="max-w-7xl mx-auto">
         {/* <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-600 rounded-3xl shadow-2xl overflow-hidden"> */}
-        <div className="bg-[#FFB76B] rounded-3xl shadow-2xl overflow-hidden">
+        <div className="rounded-3xl shadow-2xl overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Left side - QR Code */}
             <div className="p-6 sm:p-8 md:p-12 flex items-center justify-center">
@@ -25,7 +25,7 @@ export default function DonationSection() {
             </div>
 
             {/* Right side - Content */}
-            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-[#0B0B45]">
+            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-[#0B0B45] bg-[#FFB76B]">
               {/* Header */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
