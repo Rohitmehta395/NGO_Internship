@@ -4,8 +4,12 @@ import { DollarSign, Gift, User, Users } from "lucide-react";
 import OrangeButton from "../../common/buttons/OrangeButton";
 import FlagshipCard from "../../common/cards/FlagshipCard";
 
-import sharada from "../../../assets/home/FlagshipPrograms_images/sharada.webp";
-import image1 from "../../../assets/sulabhapp.webp";
+// Images for Flagship Programs 
+import sharada from "../../../assets/home/FlagshipPrograms_images/Sharada_Academy.webp";
+import JnanaShala from "../../../assets/home/FlagshipPrograms_images/Project_JnanaShala.webp";
+import others from "../../../assets/home/FlagshipPrograms_images/Other_Programs.webp";
+import sulabhapp from "../../../assets/sulabhapp.webp";
+
 
 export default function FlagshipPrograms() {
   const stats = [
@@ -38,17 +42,17 @@ export default function FlagshipPrograms() {
       desc: "A structured learning initiative that supports after-school academics.",
     },
     {
-      image: image1,
+      image: sulabhapp,
       title: "Project Sulabh",
       desc: "An ed-tech and community empowerment programme: online spoken English and soft-skills courses. ",
     },
     {
-      image: image1,
+      image: JnanaShala,
       title: "Project JnanaShala",
       desc: "A school-support programme that provides library kits, digital learning tools, etc.",
     },
     {
-      image: image1,
+      image: others,
       title: "Others",
       desc: "Many other programmes which help the students grow.",
     },
@@ -83,7 +87,7 @@ export default function FlagshipPrograms() {
           </div>
         </div>
 
-        {/* --- Cards Grid --- */}
+        {/* --- Cards Grid --- */} 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
           {programs.map((p, idx) => (
             <FlagshipCard
@@ -92,7 +96,7 @@ export default function FlagshipPrograms() {
               title={p.title}
               desc={p.desc}
             />
-          ))}
+          ))} 
         </div>
       </div>
     </section>

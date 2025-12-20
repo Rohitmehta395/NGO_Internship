@@ -33,7 +33,7 @@ export default function GuidingSpirit({ leftImage, rightImage }) {
         {/* Header */}
         <div className="max-w-7xl mx-auto mb-12 md:mb-16">
           <div className="bg-white rounded-full px-12 py-6 inline-block shadow-lg">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-orange-500 text-center">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-orange-500 text-center">
               Our Guiding Spirit
             </h1>
           </div>
@@ -53,7 +53,7 @@ export default function GuidingSpirit({ leftImage, rightImage }) {
               </div>
             </div>
             <div className="bg-white rounded-full px-8 py-4 shadow-lg">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
+              <h2 className="text-2xl md:text-2xl font-bold text-[#0B0B45] text-center">
                 Smt Anuradha Kamath
               </h2>
             </div>
@@ -71,7 +71,7 @@ export default function GuidingSpirit({ leftImage, rightImage }) {
               </div>
             </div>
             <div className="bg-white rounded-full px-8 py-4 shadow-lg">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
+              <h2 className="text-2xl md:text-2xl font-bold text-[#0B0B45] text-center">
                 Shri Mulki Annu Kamath
               </h2>
             </div>

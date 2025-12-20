@@ -28,7 +28,7 @@ export default function Volunteers({ volunteers, backgroundImage }) {
       <div className="relative z-10 py-16 px-4 md:px-8 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-16 md:mb-20">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-16 md:mb-20 text-[#0B0B45]">
             Volunteers are our Strength
           </h1>
 

@@ -13,12 +13,9 @@ export default function Header() {
     { name: "Events", path: "/events" },
     { name: "About Us", path: "/about" },
     { name: "Our Partners", path: "/partners" },
-    // { name: "Contact Us", path: "/contact" },
-    // { name: "Donate", path: "/donate" },
   ];
 
   const moreItems = [
-    
     { name: "Testimonials", path: "/testimonials" },
     { name: "Blog", path: "/blog" },
   ];
@@ -88,7 +85,7 @@ export default function Header() {
                         <Link
                           key={index}
                           to={item.path}
-                          className="block px-6 py-3 text-orange-600 hover:bg-orange-50 transition-colors text-[15px] font-medium"
+                          className="block px-6 py-3 text-orange-500 hover:bg-orange-50 transition-colors text-[15px] font-medium"
                         >
                           {item.name}
                         </Link>
@@ -111,7 +108,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden text-white p-2 hover:bg-orange-600 rounded-lg transition-colors"
+            className="lg:hidden text-white p-2 hover:bg-orange-500 rounded-lg transition-colors focus:outline-none"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             <svg
@@ -142,56 +139,56 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden bg-orange-400 border-t border-orange-300 shadow-inner">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6">
-            <nav className="flex flex-col gap-1 py-3">
-              {navItems.map((item, index) => (
+      {/* --- MOBILE NAVIGATION MENU (Responsive Updates) --- */}
+      <div
+        className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-orange-400 border-t border-orange-300 ${
+          isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="px-6 py-6 space-y-4">
+          <nav className="flex flex-col gap-2">
+            {navItems.map((item, index) => (
+              <Link
+                key={index}
+                to={item.path}
+                className="text-white text-lg font-semibold hover:bg-orange-500 px-4 py-3 rounded-xl transition-all active:scale-95"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+
+            {/* Divider for More section */}
+            <div className="h-[1px] bg-orange-300 my-2 mx-4" />
+
+            <div className="flex flex-col gap-2">
+              {moreItems.map((item, index) => (
                 <Link
                   key={index}
                   to={item.path}
-                  className="text-white text-sm sm:text-base font-medium hover:bg-orange-500 active:bg-orange-600 transition-colors px-3 py-2.5 rounded"
+                  className="text-orange-100 text-base font-medium hover:bg-orange-500 px-4 py-2 rounded-xl transition-all"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
+            </div>
 
-              {/* Mobile More Section */}
-              <div className="px-3 py-2">
-                <div className="text-white text-sm sm:text-base font-medium mb-2">
-                  More
-                </div>
-                <div className="pl-4 flex flex-col gap-1">
-                  {moreItems.map((item, index) => (
-                    <Link
-                      key={index}
-                      to={item.path}
-                      className="text-white text-sm sm:text-base font-medium hover:bg-orange-500 active:bg-orange-600 transition-colors px-3 py-2 rounded"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2 px-3">
-                <button
-                  onClick={() => {
-                    console.log("Volunteer clicked");
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full bg-white text-orange-500 px-6 py-2.5 rounded-full font-semibold hover:bg-orange-50 transition-colors"
-                >
-                  Volunteer
-                </button>
-              </div>
-            </nav>
-          </div>
+            {/* Mobile Volunteer Button */}
+            <div className="pt-6">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSd26LDpdB_b9Ar3y2-11KLDx_nq3NlJGvwApx3W0hxAwRHATw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center bg-white text-orange-500 py-4 rounded-full font-bold shadow-lg active:scale-95 transition-transform"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Volunteer Now
+              </a>
+            </div>
+          </nav>
         </div>
-      )}
+      </div>
     </header>
   );
 }

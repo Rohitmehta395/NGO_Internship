@@ -27,7 +27,6 @@ export default function Patrons({ patrons }) {
     currentIndex + itemsPerPage
   );
 
-  // ✅ FIXED AUTO-PLAY (removed currentIndex from dependency)
   useEffect(() => {
     if (isHovered || totalPages <= 1) return;
 
@@ -36,7 +35,7 @@ export default function Patrons({ patrons }) {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isHovered, totalPages]); // ← FIXED
+  }, [isHovered, totalPages]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 py-16 px-4 md:px-8 lg:px-12">
@@ -47,7 +46,7 @@ export default function Patrons({ patrons }) {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header with Navigation */}
         <div className="flex justify-between items-center mb-16 md:mb-20">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B0B45]">
             Patrons are our Lifeline
           </h1>
 

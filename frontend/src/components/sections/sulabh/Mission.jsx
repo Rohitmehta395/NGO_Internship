@@ -1,4 +1,4 @@
-import sulabhApp from "../../../assets/sulabhapp.webp"
+import sulabhApp from "../../../assets/sulabhapp.webp";
 
 const Mission = () => {
   return (
@@ -9,19 +9,22 @@ const Mission = () => {
           <div>
             {/* Line + Label */}
             <div className="flex items-center gap-6 mb-6 lg:mb-8">
-              <div className="w-[72px] h-[2px] bg-[#1D2130]"></div>
-              <h3 className="font-inter font-semibold text-sm tracking-[2px] uppercase text-[#1D2130]">
+              <div className="w-[72px] h-0.5 bg-[#1D2130]"></div>
+              <h3 className="font-inter font-semibold text-sm tracking-[2px] uppercase text-[#0B0B45]">
                 Know more
               </h3>
             </div>
 
             {/* Heading */}
-            <h2 className="font-inter font-extrabold text-[40px] lg:text-[48px] leading-[120%] text-[#1D2130] mb-6 lg:mb-8">
+            <h2 className="font-inter font-extrabold text-[40px] lg:text-[48px] leading-[120%] text-[#0B0B45] mb-6 lg:mb-8">
               Sulabh App 2.0!
             </h2>
 
             {/* Paragraphs */}
-            <div className="space-y-6 mb-8 lg:mb-12">
+            <div
+              className="space-y-6 mb-8 lg:mb-12"
+              style={{ fontFamily: "roboto" }}
+            >
               <p className="font-inter text-base text-[#525560] leading-[160%]">
                 Designed to empower learners and educators in rural and
                 underserved communities, the Web-based App offers accessible,
@@ -29,7 +32,7 @@ const Mission = () => {
                 General Knowledge, Soft Skills, and more.
               </p>
               <p className="font-inter text-base text-[#525560] leading-[160%]">
-                <span className="font-bold text-[#1D2130]">
+                <span className="font-bold text-[#0B0B45]">
                   Sharada Educational Trust
                 </span>{" "}
                 is on a mission to bridge the digital divide and dismantle
@@ -81,4 +84,3 @@ const Mission = () => {
 };
 
 export default Mission;
-

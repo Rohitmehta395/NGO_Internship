@@ -10,12 +10,12 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden -mt-[80px]">
+    <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden -mt-20">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center scale-105 blur-[1px] brightness-[0.9]"
+        className="absolute inset-0 bg-cover bg-center scale-105  brightness-[2]"
         style={{
-          backgroundImage: `url(${programHeroImage})` // Replace with your image
+          backgroundImage: `url(${programHeroImage})`
         }}
       />
 

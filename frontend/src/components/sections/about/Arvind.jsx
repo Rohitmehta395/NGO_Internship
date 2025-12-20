@@ -25,7 +25,7 @@ const Arvind = () => {
               Hope to be the "Change" I wish to see in the world.
             </p>
             <div className="pt-6 border-t-2 border-gray-200 mt-6">
-              <p className="text-xl md:text-3xl lg:text-4xl font-serif italic text-gray-800">
+              <p className="text-xl md:text-3xl lg:text-4xl font-serif italic text-[#0B0B45]">
                 — Arvind Kamath
               </p>
             </div>

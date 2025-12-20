@@ -24,6 +24,7 @@ const Hero = () => {
           className="font-inter text-[16px] leading-[1.6] mb-10"
           style={{
             color: "rgba(255,255,255,0.85)",
+            fontFamily: "sans-serif",
             maxWidth: "480px",
           }}
         >

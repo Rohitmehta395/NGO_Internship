@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import BGAboutus from "../../../assets/AboutUsPics/BGAboutus.png";
+import BGAboutus from "../../../assets/AboutUsPics/BGAboutus.webp";
 import Banner from "../../common/Banner";
 
 const AboutHero = () => {

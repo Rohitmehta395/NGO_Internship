@@ -1,12 +1,9 @@
 import {
   FaMapMarkerAlt,
   FaEnvelope,
-  FaPhoneAlt,
-  FaFacebookF,
-  FaTwitter,
+  FaChevronRight,
   FaLinkedinIn,
   FaYoutube,
-  FaChevronRight,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "/Logo.png";
@@ -21,16 +18,6 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    // {
-    //   icon: FaFacebookF,
-    //   url: "https://www.facebook.com/YourPageName",
-    //   label: "Facebook",
-    // },
-    // {
-    //   icon: FaTwitter,
-    //   url: "https://twitter.com/YourProfile",
-    //   label: "Twitter",
-    // },
     {
       icon: FaLinkedinIn,
       url: "https://linkedin.com/company/89561047",
@@ -46,16 +33,17 @@ const Footer = () => {
   return (
     <footer className="bg-[#0a2540] text-white">
       {/* 🔸 Main Footer Content */}
-      <div className="py-10 px-6 sm:px-10 lg:px-20">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="py-8 px-6 sm:px-10 lg:px-20">
+        <div className="max-w-[1400px] mx-auto">
+          {/* Responsive Grid: 1 col on mobile, 2 on tablet, 4 on desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
             {/* Logo and Tagline */}
-            <div className="flex flex-col items-start">
-              <div className="mb-4">
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="mb-6">
                 <img
                   src={logo}
                   alt="Sharada Educational Trust"
-                  className="w-24 h-24 rounded-full bg-white"
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white object-contain p-1"
                   onError={(e) => {
                     e.currentTarget.src =
                       "https://placehold.co/96x96/ffffff/0a2540?text=Logo";
@@ -63,15 +51,14 @@ const Footer = () => {
                   }}
                 />
               </div>
-              <h3 className="text-gray-300 text-xl font-semibold mb-4">
+              <h3 className="text-gray-100 text-lg md:text-xl font-semibold mb-6 leading-tight">
                 Empowering Lives Through
                 <br />
                 Education <span className="text-pink-400">❤️</span>
               </h3>
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-center lg:justify-start">
                 {socialLinks.map((item, i) => {
                   const Icon = item.icon;
-
                   return (
                     <a
                       key={i}
@@ -79,8 +66,8 @@ const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={item.label}
-                      className="border border-gray-600 rounded p-2 text-white 
-                   hover:bg-orange-400 hover:border-orange-400 transition"
+                      className="border border-gray-600 rounded p-2.5 text-white 
+          hover:bg-orange-400 hover:border-orange-400 transition-all duration-300"
                     >
                       <Icon className="w-5 h-5" />
                     </a>
@@ -89,19 +76,19 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
+            {/* 2. Quick Links */}
             <div>
-              <h3 className="text-xl text-white font-bold mb-4 border-b-2 border-orange-400 pb-2 inline-block">
+              <h3 className="text-lg text-white font-bold mb-6 border-b-2 border-orange-400 pb-2 inline-block">
                 Quick Links
               </h3>
-              <ul className="mt-1 space-y-1">
+              <ul className="space-y-1">
                 {quickLinks.map((item, i) => (
                   <li key={i}>
                     <Link
                       to={item.path}
-                      className="text-gray-300 hover:text-orange-400 transition flex items-center gap-2"
+                      className="text-gray-300 hover:text-orange-400 transition-colors flex items-center gap-2 group"
                     >
-                      <FaChevronRight className="w-5 h-5 text-gray-400" />
+                      <FaChevronRight className="w-3 h-3 text-orange-400 group-hover:translate-x-1 transition-transform" />
                       {item.label}
                     </Link>
                   </li>
@@ -109,27 +96,28 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Recent Posts */}
+            {/* 3. Recent Posts */}
             <div>
-              <h3 className="text-xl text-white font-bold mb-4 border-b-2 border-orange-400 pb-2 inline-block">
+              <h3 className="text-lg text-white font-bold mb-6 border-b-2 border-orange-400 pb-2 inline-block">
                 Recent Posts
               </h3>
-              <div className="mt-1 space-y-3">
+              <div className="space-y-4">
                 {[1, 2].map((_, i) => (
-                  <div key={i} className="flex gap-2">
+                  <div key={i} className="flex gap-3 group cursor-pointer">
                     <img
                       src="https://placehold.co/64x64/cccccc/999999?text=Post"
                       alt="Post"
-                      className="w-16 h-16 rounded object-cover"
+                      className="w-14 h-14 rounded object-cover flex-shrink-0"
                     />
                     <div>
-                      <p className="text-xs text-gray-400 mb-1">Oct 10, 2025</p>
+                      <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1">
+                        Oct 10, 2025
+                      </p>
                       <a
                         href="#"
-                        className="text-xs text-gray-300 hover:text-orange-400 transition block"
+                        className="text-xs text-gray-300 group-hover:text-orange-400 transition-colors line-clamp-2 leading-snug"
                       >
                         Bridging Barriers, Building Futures: Sulabh App 2.0
-                        Ignites Learn
                       </a>
                     </div>
                   </div>
@@ -137,42 +125,44 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Contact Us */}
+            {/* 4. Contact Us */}
             <div>
-              <h3 className="text-xl text-white font-bold mb-4 border-b-2 border-orange-400 pb-2 inline-block">
+              <h3 className="text-lg text-white font-bold mb-6 border-b-2 border-orange-400 pb-2 inline-block">
                 Contact Us
               </h3>
-
-              <div className="space-y-3 mt-3">
-                {/* Address */}
+              <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <FaMapMarkerAlt className="w-5 h-5 text-white mt-1" />
-                  <p className="text-gray-300 text-xs">
-                    Sowmya Springs, Dewan Madhava Rao Road, <br />
-                    Basavanagudi, Bengaluru, Karnataka, India
+                  <FaMapMarkerAlt className="w-5 h-5 text-orange-400 mt-1 flex-shrink-0" />
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    Sowmya Springs, Dewan Madhava Rao Road, Basavanagudi,
+                    Bengaluru, Karnataka, India
                   </p>
                 </div>
 
-                {/* Email */}
                 <a
                   href="mailto:info@sharadatrust.org"
-                  className="flex items-center gap-3 text-gray-300 hover:text-orange-400 transition"
+                  className="flex items-center gap-3 text-gray-300 hover:text-orange-400 transition-colors"
                 >
-                  <FaEnvelope className="w-5 h-5 text-white" />
-                  info@sharadatrust.org
+                  <FaEnvelope className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                  <span className="text-sm">info@sharadatrust.org</span>
                 </a>
 
-                {/* Optional: subscription field */}
-                <div className="flex mt-4">
-                  <input
-                    type="email"
-                    placeholder="Your Email Address"
-                    className="flex-1 px-4 py-2 rounded-l bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  />
-                  <button className="bg-orange-400 hover:bg-orange-600 px-4 py-2 rounded-r transition text-white font-bold">
-                    →
-                  </button>
-                </div>
+                {/* Subscription field */}
+                {/* <div className="pt-2">
+                  <p className="text-sm text-gray-300 mb-2">
+                    Subscribe to our newsletter
+                  </p>
+                  <div className="flex">
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      className="w-full px-3 py-2 rounded-l bg-white/10 border border-gray-600 text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-400"
+                    />
+                    <button className="bg-orange-400 hover:bg-orange-500 px-4 py-2 rounded-r transition-colors text-[#0a2540] font-bold">
+                      →
+                    </button>
+                  </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -180,19 +170,25 @@ const Footer = () => {
       </div>
 
       {/* 🔸 Bottom Copyright */}
-      <div className="bg-orange-400 py-4 px-6 sm:px-10 lg:px-20">
-        <div className="max-w-[1600px] mx-auto flex flex-wrap justify-between items-center gap-4">
-          <p className="text-white text-sm">
+      <div className="bg-orange-400 py-4 px-6 sm:px-10">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+          <p className="text-white text-xs md:text-sm font-medium text-center">
             © 2025 Sharada Educational Trust. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <a href="#" className="text-white hover:underline text-sm">
+          {/* <div className="flex gap-4 md:gap-8">
+            <a
+              href="#"
+              className="text-[#0a2540] hover:underline text-xs md:text-sm font-medium"
+            >
               Terms & Conditions
             </a>
-            <a href="#" className="text-white hover:underline text-sm">
+            <a
+              href="#"
+              className="text-[#0a2540] hover:underline text-xs md:text-sm font-medium"
+            >
               Privacy Policy
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

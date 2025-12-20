@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Heart, ChevronDown } from "lucide-react";
 import volunteerBackgroundImage from "../../../assets/volunteer.webp";
+import OrangeButton from "../../common/buttons/OrangeButton";
 
 export default function VolunteerComponent() {
   const [expandedSection, setExpandedSection] = useState("");
@@ -14,7 +15,7 @@ export default function VolunteerComponent() {
       <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
         <div className="grid md:grid-cols-2">
           {/* ================= LEFT : IMAGE ================= */}
-          <div className="relative p-6 sm:p-8 md:p-12 flex items-center justify-center">
+          <div className="relative p-6 sm:p-8 md:p-12 flex flex-col items-center justify-center gap-6">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-yellow-500 rounded-2xl rotate-2"></div>
               <div className="relative bg-white p-2 rounded-2xl">
@@ -25,28 +26,33 @@ export default function VolunteerComponent() {
                 />
               </div>
             </div>
+
+            <OrangeButton
+              path="https://docs.google.com/forms/d/e/1FAIpQLSd26LDpdB_b9Ar3y2-11KLDx_nq3NlJGvwApx3W0hxAwRHATw/viewform"
+              work="Volunteer"
+            />
           </div>
 
           {/* ================= RIGHT : CONTENT ================= */}
           <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center">
             {/* -------- Header -------- */}
             <div className="mb-6">
-              <span className="inline-flex items-center gap-2 text-orange-500 mb-3">
+              {/* <span className="inline-flex items-center gap-2 text-orange-500 mb-3">
                 <Heart className="w-5 h-5 fill-current leading-none" />
                 <span className="font-semibold text-lg leading-tight">
                   Join us
                 </span>
-              </span>
+              </span> */}
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold text-[#0B0B45] leading-tight mb-4">
                 Why We Need You Become a Volunteer
               </h1>
 
-              <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+              <p className=" text-base sm:text-md leading-relaxed text-[#0B0B45]">
                 We need more volunteers like these inspiring youngsters — eager
                 to create real change in the world!
                 <br />
-                <span className="font-semibold">
+                <span className="font-semibold md:text-1xl text-[#0B0B45]">
                   Young, Driven & Making a Difference!
                 </span>
               </p>
@@ -64,7 +70,7 @@ export default function VolunteerComponent() {
                     className={`text-lg sm:text-xl font-semibold ${
                       expandedSection === "recognition"
                         ? "text-orange-500"
-                        : "text-gray-900"
+                        : "text-[#0B0B45]"
                     }`}
                   >
                     Recognition and Fulfillment
@@ -74,7 +80,7 @@ export default function VolunteerComponent() {
                     className={`w-5 h-5 transition-transform ${
                       expandedSection === "recognition"
                         ? "rotate-180 text-orange-500"
-                        : "text-gray-500"
+                        : "text-[#0B0B45]"
                     }`}
                   />
                 </button>
@@ -100,7 +106,7 @@ export default function VolunteerComponent() {
                     className={`text-lg sm:text-xl font-semibold ${
                       expandedSection === "why-join"
                         ? "text-orange-500"
-                        : "text-gray-900"
+                        : "text-[#0B0B45]"
                     }`}
                   >
                     Why Join Us as a Volunteer?
@@ -110,7 +116,7 @@ export default function VolunteerComponent() {
                     className={`w-5 h-5 transition-transform ${
                       expandedSection === "why-join"
                         ? "rotate-180 text-orange-500"
-                        : "text-gray-500"
+                        : "text-[#0B0B45]"
                     }`}
                   />
                 </button>
@@ -136,7 +142,7 @@ export default function VolunteerComponent() {
                     className={`text-lg sm:text-xl font-semibold ${
                       expandedSection === "community"
                         ? "text-orange-500"
-                        : "text-gray-900"
+                        : "text-[#0B0B45]"
                     }`}
                   >
                     Be Part of a Community
@@ -146,7 +152,7 @@ export default function VolunteerComponent() {
                     className={`w-5 h-5 transition-transform ${
                       expandedSection === "community"
                         ? "rotate-180 text-orange-500"
-                        : "text-gray-500"
+                        : "text-[#0B0B45]"
                     }`}
                   />
                 </button>
@@ -162,7 +168,6 @@ export default function VolunteerComponent() {
                 )}
               </div>
             </div>
-            {/* -------- End Accordion -------- */}
           </div>
         </div>
       </div>

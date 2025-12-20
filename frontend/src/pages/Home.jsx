@@ -6,7 +6,7 @@ import EducationForAll from "../components/sections/home/EducationForAll";
 import FlagshipPrograms from "../components/sections/home/FlagshipPrograms";
 import VolunteerSection from "../components/sections/home/VolunteerSection";
 import DonationSection from "../components/sections/home/DonationSection";
-import NewsLetter from "../components/sections/home/NewsLetter";
+import NewsLetter from "../components/sections/home/Newsletter";
 
 const Home = () => {
   return (
@@ -16,7 +16,7 @@ const Home = () => {
       transition={{ duration: 0.5 }}
     >
       <Hero />
-      <Programs />
+      {/* <Programs />   */}
       <EducationForAll />
       <FlagshipPrograms />
       <VolunteerSection />

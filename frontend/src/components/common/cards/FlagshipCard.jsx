@@ -14,13 +14,13 @@ export default function FlagshipCard({ image, title, desc }) {
         <h3 className="text-[#E57C23] text-lg sm:text-xl font-semibold leading-snug">
           {title}
         </h3>
-        <p className="text-gray-700 mt-2 text-sm sm:text-base leading-relaxed mb-1">
+        <p className="text-[#0B0B45] mt-2 text-sm sm:text-base leading-relaxed mb-1">
           {desc}
         </p>
         <WhiteButton
           work="Explore More"
           path="/programs"
-          className="border border-orange-700 hover:bg-orange-200"
+          className="border border-orange-700 hover:bg-orange-200 text-[#0B0B45]"
         />
       </div>
     </article>

@@ -99,7 +99,7 @@ export default function NewsLetter() {
               <Heart className="w-5 h-5 md:w-6 md:h-6 fill-current" />
               <span className="font-semibold text-lg">Latest Blogs</span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#0B0B45] leading-tight">
               Read Our Latest
               <br />
               NewsLetter
@@ -163,7 +163,10 @@ export default function NewsLetter() {
 
         {/* Subscribe Button */}
         <div className="flex justify-center">
-          <OrangeButton work="Subscribe To Our NewsLetter" />
+          <OrangeButton
+            path="http://eepurl.com/ig_Vuz"
+            work="Subscribe To Our NewsLetter"
+          />
         </div>
       </div>
     </div>

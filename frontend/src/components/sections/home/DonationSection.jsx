@@ -10,7 +10,8 @@ export default function DonationSection() {
   return (
     <div id="donation" className="w-full px-4 py-6 sm:py-8 md:py-12">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-600 rounded-3xl shadow-2xl overflow-hidden">
+        {/* <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-600 rounded-3xl shadow-2xl overflow-hidden"> */}
+        <div className="bg-[#FFB76B] rounded-3xl shadow-2xl overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Left side - QR Code */}
             <div className="p-6 sm:p-8 md:p-12 flex items-center justify-center">
@@ -24,7 +25,7 @@ export default function DonationSection() {
             </div>
 
             {/* Right side - Content */}
-            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-white">
+            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-[#0B0B45]">
               {/* Header */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
@@ -33,25 +34,25 @@ export default function DonationSection() {
                     Donate now
                   </span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug sm:leading-tight mb-4 sm:mb-6 text-white">
+                <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold leading-snug sm:leading-tight mb-4 sm:mb-6 text-[#0B0B45]">
                   Together Let's Change The World
                 </h2>
 
-                <div className="space-y-2 text-sm sm:text-base">
+                <div className="space-y-2 text-sm sm:text-base text-[#0B0B45]">
                   <p className="italic leading-relaxed">
                     "Donating for an Educational cause is an extremely noble act
                     since the impact lasts a lifetime".
                   </p>
-                  <p className="font-medium">
+                  <p className="font-medium text-[#0B0B45]">
                     Please scan the QR code to donate generously.
                   </p>
                 </div>
               </div>
 
               {/* Bullet Points */}
-              <div className="space-y-2 mb-3">
+              <div className="space-y-2 mb-3 text-[#0B0B45]">
                 <div className="flex items-start gap-2 sm:gap-3">
-                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current flex-shrink-0 mt-1" />
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current shrink-0 mt-1" />
                   <p className="leading-relaxed text-sm sm:text-base">
                     <span className="font-semibold">
                       Sharada Educational Trust
@@ -75,7 +76,7 @@ export default function DonationSection() {
               </div>
 
               {/* Note Section */}
-              <div className="border-t border-white/30 pt-3">
+              <div className="border-t border-white/30 pt-3 text-[#0B0B45]">
                 <p className="font-bold text-lg sm:text-xl mb-2 sm:mb-3">
                   Note:
                 </p>

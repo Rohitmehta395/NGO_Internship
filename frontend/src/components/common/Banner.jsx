@@ -28,7 +28,7 @@ const Banner = ({ image, title, currentPath }) => {
       />
 
       {/* Dark Overlay - 60% opacity */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">

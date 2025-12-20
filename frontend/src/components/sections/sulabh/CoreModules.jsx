@@ -12,7 +12,7 @@ const CoreModules = () => {
             Sulabh app 2.0
           </h3>
         </div>
-        <h2 className="font-roboto font-bold text-2xl sm:text-4xl lg:text-[45px] leading-tight lg:leading-[120%] text-primary-text mb-6 lg:mb-[50px] max-w-[808px] ml-26">
+        <h2 className="font-roboto font-bold text-2xl sm:text-4xl lg:text-[45px] leading-tight lg:leading-[120%] text-primary-text mb-6 lg:mb-[50px] max-w-[808px] ml-26 text-[#0B0B45]">
           Sulabh App 2.0 offers 3 core modules:
         </h2>
 
@@ -30,7 +30,8 @@ const CoreModules = () => {
                 Activity-Based Learning module (ABLE)
               </h3>
               <p className="font-roboto text-base leading-[160%] text-white">
-               Engaging students with quizzes that transform learning into a dynamic, hands-on experience.
+                Engaging students with quizzes that transform learning into a
+                dynamic, hands-on experience.
               </p>
             </div>
           </div>

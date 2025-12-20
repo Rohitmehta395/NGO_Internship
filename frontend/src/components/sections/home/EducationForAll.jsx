@@ -12,7 +12,7 @@ const EducationForAll = () => {
         style={{
           backgroundImage: `url(${BackGroundImage})`,
           // ellipse with percentage radii stays responsive across widths/heights [web:62][web:15]
-          clipPath: "ellipse(45% 100% at 100% 50%)",
+          clipPath: "ellipse(52% 100% at 100% 50%)",
         }}
       >
         {/* Dark overlay on image */}
@@ -23,10 +23,10 @@ const EducationForAll = () => {
       <div className="relative z-10 px-6 sm:px-10 md:px-16 lg:px-20 py-12 sm:py-16 md:py-20">
         {/* Header Section */}
         <div className="mb-10 sm:mb-12 max-w-xl">
-          <h1 className="text-2xl sm:text-2xl md:text-5xl font-bold text-orange-500 mb-4 sm:mb-6 tracking-widest">
-            #EDUCATION_FOR_ALL
+          <h1 className="text-2xl sm:text-2xl md:text-4xl font-bold text-orange-500 mb-4 sm:mb-6 tracking-widest">
+            #EDUCATION FOR ALL
           </h1>
-          <DonationButton work="Make Donation" path="#donation" />
+          <DonationButton work="Make a donation" path="#donation" />
         </div>
 
         {/* Cards Section (Full width) */}

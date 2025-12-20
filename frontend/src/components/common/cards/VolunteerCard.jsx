@@ -17,7 +17,7 @@ export default function VolunteerCard({ image, name, link }) {
         href={link || "#"}
         target="_blank"
         rel="noopener noreferrer"
-        className="block bg-black text-white hover:bg-gray-800 transition-colors"
+        className="block bg-orange-400 text-white hover:bg-orange-500 transition-colors"
       >
         <div className="px-4 py-4 flex items-center justify-between">
           <span className="text-base md:text-lg font-medium text-center flex-1">

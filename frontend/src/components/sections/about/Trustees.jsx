@@ -11,7 +11,7 @@ export default function Trustees({ trustees }) {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-16 md:mb-20">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16 md:mb-20 text-[#0B0B45]">
           Trustees <span className="font-normal">(Karyakartas)</span>
         </h1>
 
@@ -36,7 +36,7 @@ export default function Trustees({ trustees }) {
               {/* Name Badge */}
               <div className="px-6 py-4">
                 <div className="bg-orange-400 rounded-full px-6 py-3 text-center">
-                  <h2 className="text-xl md:text-2xl font-bold text-white">
+                  <h2 className="text-xl md:text-1xl font-bold text-white">
                     {trustee.name}
                   </h2>
                 </div>
@@ -48,7 +48,7 @@ export default function Trustees({ trustees }) {
                   href={trustee.link || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-center text-xl md:text-xl font-bold text-black hover:text-orange-400 transition-colors underline"
+                  className="block text-center text-xl md:text-sm font-bold text-[#0B0B45] hover:text-orange-400 transition-colors underline"
                 >
                   Know More
                 </a>
