@@ -1,55 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import ArticleCard from "../../common/cards/ArticleCard";
 import OrangeButton from "../../common/buttons/OrangeButton";
 
+import { blogsAPI } from "../../../services/api";
+import { IMAGE_BASE_URL } from "../../../utils/constants";
+
 export default function NewsLetter() {
+  const [blogs, setBlogs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(1); // Default to 1 to prevent hydration mismatch, updates in useEffect
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const navigate = useNavigate(); // Initialize hook
 
-  // Sample blog data
-  const blogs = [
-    {
-      id: 1,
-      date: "10",
-      month: "Dec",
-      image:
-        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=400&fit=crop",
-      author: "Admin",
-      title:
-        "Bridging Barriers, Building Futures: Sulabh App 2.0 Ignites Learn",
-    },
-    {
-      id: 2,
-      date: "15",
-      month: "Dec",
-      image:
-        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
-      author: "Admin",
-      title:
-        "Bridging Barriers, Building Futures: Sulabh App 2.0 Ignites Learn",
-    },
-    {
-      id: 3,
-      date: "20",
-      month: "Dec",
-      image:
-        "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop",
-      author: "Admin",
-      title: "Empowering Education Through Technology and Innovation",
-    },
-    {
-      id: 4,
-      date: "25",
-      month: "Dec",
-      image:
-        "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop",
-      author: "Admin",
-      title: "Creating Impact: Stories from Our Community Programs",
-    },
-  ];
+  // Fetch Blogs from Backend
+  useEffect(() => {
+    const loadBlogs = async () => {
+      try {
+        const res = await blogsAPI.getAll();
+        setBlogs(res.data.data);
+      } catch (error) {
+        console.error("Failed to load blogs");
+      }
+    };
+    loadBlogs();
+  }, []);
 
-  // Responsive logic to toggle between 1 card (mobile) and 2 cards (desktop)
+  // Responsive logic
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
@@ -59,17 +36,13 @@ export default function NewsLetter() {
       }
     };
 
-    // Set initial value
     handleResize();
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Recalculate max index based on dynamic itemsPerPage
   const maxIndex = Math.max(0, blogs.length - itemsPerPage);
 
-  // Ensure currentIndex doesn't get stuck out of bounds when resizing
   useEffect(() => {
     if (currentIndex > maxIndex) {
       setCurrentIndex(maxIndex);
@@ -84,9 +57,9 @@ export default function NewsLetter() {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
-  const handleReadMore = (blogId) => {
-    console.log("Read more clicked for blog:", blogId);
-    // Add your navigation logic here
+  // UPDATED: Now navigates to the blog detail page
+  const handleReadMore = (blogSlug) => {
+    navigate(`/blog/${blogSlug}`);
   };
 
   return (
@@ -138,26 +111,47 @@ export default function NewsLetter() {
           <div
             className="flex transition-transform duration-500 ease-in-out mb-15"
             style={{
-              // Transform logic automatically adjusts based on itemsPerPage (100% for 1 item, 50% for 2 items)
               transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
             }}
           >
-            {blogs.map((blog) => (
-              <div
-                key={blog.id}
-                // Width: 100% on mobile, 50% on desktop
-                className="w-full md:w-1/2 shrink-0 px-3"
-              >
-                <ArticleCard
-                  date={blog.date}
-                  month={blog.month}
-                  image={blog.image}
-                  author={blog.author}
-                  title={blog.title}
-                  onReadMore={() => handleReadMore(blog.id)}
-                />
+            {blogs.length > 0 ? (
+              blogs.map((blog) => {
+                // Parse Date
+                const dateObj = new Date(blog.createdAt);
+                const date = dateObj.getDate();
+                const month = dateObj.toLocaleString("default", {
+                  month: "short",
+                });
+
+                // Handle Image URL
+                const imageUrl = blog.image
+                  ? blog.image.startsWith("http")
+                    ? blog.image
+                    : `${IMAGE_BASE_URL}/${blog.image}`
+                  : "https://placehold.co/600x400?text=No+Image";
+
+                return (
+                  <div
+                    key={blog._id}
+                    className="w-full md:w-1/2 shrink-0 px-3 h-full"
+                  >
+                    <ArticleCard
+                      date={date}
+                      month={month}
+                      image={imageUrl}
+                      author={blog.author || "Admin"}
+                      title={blog.title}
+                      desc={blog.description || "No description available."}
+                      onReadMore={() => handleReadMore(blog.slug)}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="w-full text-center py-10 text-gray-500">
+                No articles published yet.
               </div>
-            ))}
+            )}
           </div>
         </div>
 

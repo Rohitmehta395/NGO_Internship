@@ -8,7 +8,7 @@ import FlagshipCard from "../../common/cards/FlagshipCard";
 import sharada from "../../../assets/home/FlagshipPrograms_images/Sharada_Academy.webp";
 import JnanaShala from "../../../assets/home/FlagshipPrograms_images/Project_JnanaShala.webp";
 import others from "../../../assets/home/FlagshipPrograms_images/Other_Programs.webp";
-import sulabhapp from "../../../assets/sulabhapp.webp";
+import sulabhapp from "../../../assets/home/FlagshipPrograms_images/sulabhapp.webp";
 
 
 export default function FlagshipPrograms() {

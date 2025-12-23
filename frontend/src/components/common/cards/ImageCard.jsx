@@ -1,26 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { educationImagesAPI } from "../../../services/api"; // Adjust path
+import { IMAGE_BASE_URL } from "../../../utils/constants";
 
 const ImageCard = () => {
-  const [stopScroll, setStopScroll] = React.useState(false);
+  const [stopScroll, setStopScroll] = useState(false);
+  const [images, setImages] = useState([]);
 
-  const cardData = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop&q=80",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=80",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop&q=80",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&auto=format&fit=crop&q=80",
-    },
-  ];
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await educationImagesAPI.getAll();
+        setImages(res.data.data);
+      } catch (error) {
+        console.error("Failed to load education images");
+      }
+    };
+    fetchImages();
+  }, []);
+
+  // Use placeholder if no images uploaded yet
+  const displayImages =
+    images.length > 0
+      ? images
+      : [
+          { image: "https://placehold.co/600x400?text=Upload+Images" },
+          { image: "https://placehold.co/600x400?text=Via+Dashboard" },
+        ];
 
   return (
     <>
@@ -29,18 +34,12 @@ const ImageCard = () => {
           animation: marqueeScroll linear infinite;
           will-change: transform;
         }
-
         @keyframes marqueeScroll {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(calc(-100% / 3));
-          }
+          from { transform: translateX(0); }
+          to { transform: translateX(calc(-100% / 3)); }
         }
       `}</style>
 
-      {/* 🔒 overflow-x-hidden prevents right-side space */}
       <div className="relative w-full overflow-x-hidden">
         <div
           className="overflow-hidden w-full relative mb-10"
@@ -51,21 +50,34 @@ const ImageCard = () => {
             className="marquee-inner flex gap-6 w-max"
             style={{
               animationPlayState: stopScroll ? "paused" : "running",
-              animationDuration: "18s",
+              animationDuration: "25s", // Slower for better view
             }}
           >
-            {[...cardData, ...cardData, ...cardData].map((card, index) => (
-              <div
-                key={index}
-                className="w-56 h-80 rounded-2xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0"
-              >
-                <img
-                  src={card.image}
-                  alt=""
-                  className="w-full h-full object-cover rounded-2xl"
-                />
-              </div>
-            ))}
+            {/* Repeat 3 times for smooth infinite scroll */}
+            {[...displayImages, ...displayImages, ...displayImages].map(
+              (item, index) => {
+                const imgUrl = item.image.startsWith("http")
+                  ? item.image
+                  : `${IMAGE_BASE_URL}/${item.image}`;
+
+                return (
+                  <div
+                    key={index}
+                    className="w-56 h-80 rounded-2xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0"
+                  >
+                    <img
+                      src={imgUrl}
+                      alt="Education"
+                      className="w-full h-full object-cover rounded-2xl"
+                      onError={(e) => {
+                        e.target.src =
+                          "https://placehold.co/600x400?text=Error";
+                      }}
+                    />
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
       </div>

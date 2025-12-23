@@ -24,7 +24,7 @@ const CoreModules = () => {
               alt="AI-Powered Translator module"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/60"></div>
+            <div className="absolute inset-0 bg-black/35"></div>
             <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-center">
               <h3 className="font-roboto font-bold text-2xl lg:text-[28px] leading-[150%] text-white mb-4">
                 Activity-Based Learning module (ABLE)
@@ -43,7 +43,7 @@ const CoreModules = () => {
               alt="AI-Powered Translator module"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/60"></div>
+            <div className="absolute inset-0 bg-black/35"></div>
             <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-center">
               <h3 className="font-roboto font-bold text-2xl lg:text-[28px] leading-[150%] text-white mb-4">
                 AI-Powered Translator module (APT)
@@ -62,7 +62,7 @@ const CoreModules = () => {
               alt="Sulabh App 1.0"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/60"></div>
+            <div className="absolute inset-0 bg-black/35"></div>
             <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-center">
               <h3 className="font-roboto font-bold text-2xl lg:text-[28px] leading-[150%] text-white mb-4">
                 Sulabh App 1.0

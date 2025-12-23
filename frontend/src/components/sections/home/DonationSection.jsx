@@ -25,7 +25,7 @@ export default function DonationSection() {
             </div>
 
             {/* Right side - Content */}
-            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-[#0B0B45] bg-[#FFB76B]">
+            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-[#0B0B45] bg-[#FFB76B] ">
               {/* Header */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">

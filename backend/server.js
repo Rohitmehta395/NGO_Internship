@@ -1,81 +1,44 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-// Load env vars
 dotenv.config();
-
-// Connect to database
 connectDB();
 
 const app = express();
 
-// Body parser middleware
+const auth = require("./routes/auth");
+const members = require("./routes/members");
+const blogs = require("./routes/blogs");
+const educationImg = require("./routes/educationImages");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Enable CORS
-// app.use(
-//   cors({
-//     origin:
-//       process.env.NODE_ENV === "production"
-//         ? "https://yourdomain.com"
-//         : "https://ngo-82p8.onrender.com",
-//     credentials: true,
-//   })
-// );
+// MAKE UPLOADS FOLDER PUBLIC
+// This allows the frontend to access images at http://localhost:5000/uploads/image.jpg
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // Local development
-      process.env.FRONTEND_URL, // Production Vercel URL
-    ],
+    origin: ["http://localhost:5173", process.env.FRONTEND_URL],
     credentials: true,
   })
 );
 
-// Static folder
-app.use("/uploads", express.static("uploads"));
-
-// Route files
-const auth = require("./routes/auth");
-const programs = require("./routes/programs");
-const volunteers = require("./routes/volunteers");
-
-// Mount routers
+// Routes
 app.use("/api/auth", auth);
-app.use("/api/programs", programs);
-app.use("/api/volunteers", volunteers);
+app.use("/api/members", members);
+app.use("/api/blogs", blogs);
+app.use("/api/education-images", educationImg);
 
-// Error handler middleware
+// Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    message: "Server Error",
-  });
-});
-
-// Handle 404 - CORRECTED: Remove the problematic '*' route
-app.use((req, res) => {
-  // Changed from app.use('*', ...) to app.use(...)
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-  });
+  res.status(500).json({ success: false, message: "Server Error" });
 });
 
 const PORT = process.env.PORT || 5000;
-
-const server = app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
-
-// Handle unhandled promise rejections
-process.on("unhandledRejection", (err, promise) => {
-  console.log(`Error: ${err.message}`);
-  server.close(() => {
-    process.exit(1);
-  });
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

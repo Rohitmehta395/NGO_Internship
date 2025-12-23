@@ -5,10 +5,45 @@ import {
   FaLinkedinIn,
   FaYoutube,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import logo from "/Logo.png";
+import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
+import { useState, useEffect } from "react";
+import logo from "/Logo.webp";
+import { blogsAPI } from "../../services/api";
+import { IMAGE_BASE_URL } from "../../utils/constants";
 
 const Footer = () => {
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
+
+  // Fetch recent blogs
+  useEffect(() => {
+    const loadRecentPosts = async () => {
+      try {
+        const res = await blogsAPI.getAll();
+        // Take only the first 2 posts
+        if (res.data && res.data.data) {
+          setRecentPosts(res.data.data.slice(0, 2));
+        }
+      } catch (error) {
+        console.error("Failed to load footer posts");
+      }
+    };
+    loadRecentPosts();
+  }, []);
+
+  // Handle Subscription
+  const handleSubscribe = async () => {
+    if (!email) return;
+    try {
+      await blogsAPI.subscribe(email);
+      alert("Subscribed successfully!");
+      setEmail("");
+    } catch (error) {
+      alert(error.response?.data?.message || "Subscription failed");
+    }
+  };
+
   const quickLinks = [
     { label: "Our Programs", path: "/programs" },
     { label: "Our Partners", path: "/partners" },
@@ -102,26 +137,58 @@ const Footer = () => {
                 Recent Posts
               </h3>
               <div className="space-y-4">
-                {[1, 2].map((_, i) => (
-                  <div key={i} className="flex gap-3 group cursor-pointer">
-                    <img
-                      src="https://placehold.co/64x64/cccccc/999999?text=Post"
-                      alt="Post"
-                      className="w-14 h-14 rounded object-cover flex-shrink-0"
-                    />
-                    <div>
-                      <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-1">
-                        Oct 10, 2025
-                      </p>
-                      <a
-                        href="#"
-                        className="text-xs text-gray-300 group-hover:text-orange-400 transition-colors line-clamp-2 leading-snug"
+                {recentPosts.length > 0 ? (
+                  recentPosts.map((post) => {
+                    const imageUrl = post.image
+                      ? post.image.startsWith("http")
+                        ? post.image
+                        : `${IMAGE_BASE_URL}/${post.image}`
+                      : "https://placehold.co/64x64/cccccc/999999?text=Post";
+
+                    const dateStr = new Date(post.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      }
+                    );
+
+                    return (
+                      <div
+                        key={post._id}
+                        onClick={() => navigate(`/blog/${post.slug}`)} // Navigate on click
+                        className="flex gap-3 group cursor-pointer"
                       >
-                        Bridging Barriers, Building Futures: Sulabh App 2.0
-                      </a>
-                    </div>
-                  </div>
-                ))}
+                        <img
+                          src={imageUrl}
+                          alt={post.title}
+                          className="w-14 h-14 rounded object-cover flex-shrink-0"
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "https://placehold.co/64x64/cccccc/999999?text=Post";
+                          }}
+                        />
+                        <div className="flex flex-col">
+                          <p className="text-[10px] uppercase tracking-wider text-gray-400 mb-0.5">
+                            {dateStr}
+                          </p>
+                          <span className="text-xs font-semibold text-gray-200 group-hover:text-orange-400 transition-colors line-clamp-1">
+                            {post.title}
+                          </span>
+                          {/* Short Description: Truncated to 2 lines max */}
+                          <p className="text-[11px] text-gray-400 line-clamp-2 mt-1 leading-snug group-hover:text-gray-300 transition-colors">
+                            {post.description || "Click to read more..."}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="text-gray-400 text-sm">
+                    No recent posts found.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -148,7 +215,7 @@ const Footer = () => {
                 </a>
 
                 {/* Subscription field */}
-                {/* <div className="pt-2">
+                <div className="pt-2">
                   <p className="text-sm text-gray-300 mb-2">
                     Subscribe to our newsletter
                   </p>
@@ -156,13 +223,18 @@ const Footer = () => {
                     <input
                       type="email"
                       placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full px-3 py-2 rounded-l bg-white/10 border border-gray-600 text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-400"
                     />
-                    <button className="bg-orange-400 hover:bg-orange-500 px-4 py-2 rounded-r transition-colors text-[#0a2540] font-bold">
+                    <button
+                      onClick={handleSubscribe}
+                      className="bg-orange-400 hover:bg-orange-500 px-4 py-2 rounded-r transition-colors text-[#0a2540] font-bold"
+                    >
                       →
                     </button>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -175,20 +247,6 @@ const Footer = () => {
           <p className="text-white text-xs md:text-sm font-medium text-center">
             © 2025 Sharada Educational Trust. All rights reserved.
           </p>
-          {/* <div className="flex gap-4 md:gap-8">
-            <a
-              href="#"
-              className="text-[#0a2540] hover:underline text-xs md:text-sm font-medium"
-            >
-              Terms & Conditions
-            </a>
-            <a
-              href="#"
-              className="text-[#0a2540] hover:underline text-xs md:text-sm font-medium"
-            >
-              Privacy Policy
-            </a>
-          </div> */}
         </div>
       </div>
     </footer>

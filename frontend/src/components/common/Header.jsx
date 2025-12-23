@@ -6,6 +6,13 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
 
+  // --- HELPER: Scroll to top & Close Menus ---
+  const handleNavClick = () => {
+    window.scrollTo(0, 0);
+    setIsMenuOpen(false);
+    setIsMoreDropdownOpen(false);
+  };
+
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Our Programs", path: "/programs" },
@@ -26,9 +33,9 @@ export default function Header() {
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-4 lg:gap-8">
           {/* Logo */}
-          <Link to="/" className="shrink-0">
+          <Link to="/" className="shrink-0" onClick={handleNavClick}>
             <img
-              src="/Logo.png"
+              src="/Logo.webp"
               alt="Logo"
               className="h-14 w-14 sm:h-16 sm:w-16 lg:h-[70px] lg:w-[70px] rounded-full object-cover border-2 sm:border-4 border-white shadow-md"
               onError={(e) => {
@@ -46,6 +53,7 @@ export default function Header() {
                 <Link
                   key={index}
                   to={item.path}
+                  onClick={handleNavClick} // Added Scroll Click
                   className="text-white text-[14px] xl:text-[16px] 2xl:text-[17px] font-medium hover:text-orange-100 transition-colors whitespace-nowrap"
                 >
                   {item.name}
@@ -85,6 +93,7 @@ export default function Header() {
                         <Link
                           key={index}
                           to={item.path}
+                          onClick={handleNavClick} // Added Scroll Click
                           className="block px-6 py-3 text-orange-500 hover:bg-orange-50 transition-colors text-[15px] font-medium"
                         >
                           {item.name}
@@ -139,7 +148,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* --- MOBILE NAVIGATION MENU (Responsive Updates) --- */}
+      {/* --- MOBILE NAVIGATION MENU --- */}
       <div
         className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-orange-400 border-t border-orange-300 ${
           isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
@@ -152,7 +161,7 @@ export default function Header() {
                 key={index}
                 to={item.path}
                 className="text-white text-lg font-semibold hover:bg-orange-500 px-4 py-3 rounded-xl transition-all active:scale-95"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleNavClick} // Added Scroll Click & Close Menu
               >
                 {item.name}
               </Link>
@@ -167,7 +176,7 @@ export default function Header() {
                   key={index}
                   to={item.path}
                   className="text-orange-100 text-base font-medium hover:bg-orange-500 px-4 py-2 rounded-xl transition-all"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={handleNavClick} // Added Scroll Click & Close Menu
                 >
                   {item.name}
                 </Link>

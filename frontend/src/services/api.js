@@ -1,61 +1,41 @@
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
-// Request interceptor to add auth token
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// Request interceptor (Token)
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-// Response interceptor for error handling
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Auth API
 export const authAPI = {
-  register: (userData) => api.post("/auth/register", userData),
-  login: (credentials) => api.post("/auth/login", credentials),
-  getProfile: () => api.get("/auth/me"),
+  login: (credentials) => api.post("/api/auth/login", credentials),
+  getProfile: () => api.get("/api/auth/me"),
 };
 
-// Programs API
-export const programsAPI = {
-  getAll: (params) => api.get("/programs", { params }),
-  getById: (id) => api.get(`/programs/${id}`),
-  create: (data) => api.post("/programs", data),
-  update: (id, data) => api.put(`/programs/${id}`, data),
-  delete: (id) => api.delete(`/programs/${id}`),
+export const membersAPI = {
+  getAll: () => api.get("/api/members"),
+  create: (formData) => api.post("/api/members", formData),
+  update: (id, formData) => api.put(`/api/members/${id}`, formData),
+  delete: (id) => api.delete(`/api/members/${id}`),
 };
 
-// Volunteers API
-export const volunteersAPI = {
-  submit: (data) => api.post("/volunteers", data),
-  getAll: (params) => api.get("/volunteers", { params }),
-  updateStatus: (id, status) => api.put(`/volunteers/${id}/status`, { status }),
+export const blogsAPI = {
+  getAll: () => api.get("/api/blogs"),
+  create: (formData) => api.post("/api/blogs", formData),
+  update: (id, formData) => api.put(`/api/blogs/${id}`, formData),
+  delete: (id) => api.delete(`/api/blogs/${id}`),
+  subscribe: (email) => api.post("/api/blogs/subscribe", { email }),
+};
+
+export const educationImagesAPI = {
+  getAll: () => api.get("/api/education-images"),
+  upload: (formData) => api.post("/api/education-images", formData),
+  delete: (id) => api.delete(`/api/education-images/${id}`),
 };
 
 export default api;
