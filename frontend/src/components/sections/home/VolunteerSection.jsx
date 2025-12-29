@@ -29,7 +29,7 @@ export default function VolunteerComponent() {
 
             <OrangeButton
               path="https://docs.google.com/forms/d/e/1FAIpQLSd26LDpdB_b9Ar3y2-11KLDx_nq3NlJGvwApx3W0hxAwRHATw/viewform"
-              work="Volunteer"
+              work="Click to register as a Volunteer with us"
             />
           </div>
 
