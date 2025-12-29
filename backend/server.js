@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -9,6 +10,16 @@ connectDB();
 
 const app = express();
 
+// --- Create uploads folders if missing ---
+const uploadDirs = ["uploads", "uploads/educationImages"];
+uploadDirs.forEach((dir) => {
+  const dirPath = path.join(__dirname, dir);
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+    console.log(`Created directory: ${dirPath}`);
+  }
+});
+
 const auth = require("./routes/auth");
 const members = require("./routes/members");
 const blogs = require("./routes/blogs");
@@ -17,10 +28,10 @@ const educationImg = require("./routes/educationImages");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// MAKE UPLOADS FOLDER PUBLIC
-// This allows the frontend to access images at http://localhost:5000/uploads/image.jpg
+// Serve Static Files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// CORS Configuration
 app.use(
   cors({
     origin: ["http://localhost:5173", process.env.FRONTEND_URL],
