@@ -1,4 +1,4 @@
-import sulabhApp from "../../../assets/home/FlagshipPrograms_images/sulabhApp.webp";
+import sulabhApp from "../../../assets/home/FlagshipPrograms_images/sulabhapp.webp";
 
 const Mission = () => {
   return (
