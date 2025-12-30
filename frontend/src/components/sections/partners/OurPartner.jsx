@@ -25,7 +25,7 @@ const OurPartners = () => {
     },
     {
       id: 4,
-      img: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/WhatsApp%20Image%202022-11-03%20at%201.11.55.jpeg/:/rs=w:1200,h:600",
+      img: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/WhatsApp%20Image%202022-11-03%20at%201.11.55%20-fa14eee.jpeg/:/cr=t:5.56%25,l:0%25,w:100%25,h:88.89%25/rs=w:1200,h:600,cg:true",
       name: "Punyatma Prabhakar Sharma Seva Mandal",
       desc:
         "An 80-year-old trust from Igatpuri (MH) supporting children with disabilities through free education, food, and shelter.",
