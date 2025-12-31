@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
 import EventCard from "./EventsCard";
-import "../../../styles/EventList.css";
 
 const EventsList = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 4;
   const eventsTopRef = useRef(null);
+
+  const eventsPerPage = 4;
 
   const events = [
     {
@@ -16,7 +16,7 @@ const EventsList = () => {
       month: "Sept 2025",
       title: "Certificates & Award ceremony",
       description:
-        "On Teacher’s Day (5th Sept 2025), Govt Model Primary School – Sathanuru became a beacon of how Sulabh App 2.0 is transforming education. 🌟 The 2nd batch of 30 students (Grades 4–7) proudly received their Sulabh App 2.0 Certificates, while 9 bright Toppers were honoured with Certificates of Excellence & Special Prizes. 🎓✨ Since the launch of Sulabh App 2.0 on 15th June 2025, this single school has achieved remarkable milestones: ✅ 70 Students and 6 Teachers completed their courses ✅ 260 Certificates awarded in just 3 months.",
+        "On Teacher’s Day (5th Sept 2025), Govt Model Primary School – Sathanuru became a beacon...",
       venue: "GMPS - Sathanuru",
     },
     {
@@ -26,7 +26,7 @@ const EventsList = () => {
       month: "August 2025",
       title: "Certificates & Award ceremony",
       description:
-        "On the occasion of India’s 79th Independence Day, 5 Toppers from the Grade 7 cohort studying at Govt Model Higher Primary School – Hulageri (Koppal District) were given Prizes and Merit Certificates. The rest 7 students, who completed the course using the Sulabh App 2.0, received Certificates of Completion.",
+        "On the occasion of India’s 79th Independence Day...",
       venue: "GMHPS - Hulageri",
     },
     {
@@ -36,7 +36,7 @@ const EventsList = () => {
       month: "July 2025",
       title: "Orientation & Demo session",
       description:
-        "An Orientation & Demo session was conducted at St Teresa’s School attended by 12 Teachers. A Quiz program was organised using the Activity-Based Learning module of the Sulabh App 2.0. Teachers have been given access to 68 Activities. Post completion of all courses, an event is planned in end August to handover Certificates & Prizes to the Cohort Toppers.",
+        "An Orientation & Demo session was conducted at St Teresa’s School...",
       venue: "St. Teresa's School",
     },
     {
@@ -46,7 +46,7 @@ const EventsList = () => {
       month: "July 2025",
       title: "Certificates & Award ceremony",
       description:
-        "On the auspicious occasion of Guru Purnima, 3 toppers each from Grades 3 to 7, 5 Teachers and 28 other students were honoured with Certificates and Prizes.",
+        "On the auspicious occasion of Guru Purnima...",
       venue: "GMPS - Sathanuru",
     },
     {
@@ -56,64 +56,49 @@ const EventsList = () => {
       month: "June 2025",
       title: "Sulabh App 2.0 Launch",
       description:
-        "Sharada Educational Trust launched Sulabh App 2.0 at Govt Model Primary School, Sathanuru on 14th June 2025 attended by 40 students from Classes 3–7. Click on image to watch a short video.",
+        "Sharada Educational Trust launched Sulabh App 2.0...",
       venue: "GMPS - Sathanuru",
     },
   ];
 
-  // Pagination logic
-  const indexOfLastEvent = currentPage * eventsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
+  const indexOfLast = currentPage * eventsPerPage;
+  const indexOfFirst = indexOfLast - eventsPerPage;
+  const currentEvents = events.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(events.length / eventsPerPage);
 
-  // Scroll to top when page changes
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    if (eventsTopRef.current) {
-      window.scrollTo({
-        top: eventsTopRef.current.offsetTop - 50,
-        behavior: "smooth",
-      });
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    eventsTopRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Handle opening full event details
-  const handleReadMore = (event) => {
-    setSelectedEvent(event);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // If user clicked on one event, show details instead of the list
+  /* ===== EVENT DETAILS VIEW ===== */
   if (selectedEvent) {
     return (
-      <div className="event-details">
+      <div className="max-w-4xl mx-auto px-5 py-10">
         <img
           src={selectedEvent.image}
           alt={selectedEvent.title}
-          className="event-details-img"
+          className="w-full rounded-xl mb-6"
         />
-        <h2>{selectedEvent.title}</h2>
-        <p className="event-date">
+
+        <h2 className="text-2xl font-bold">{selectedEvent.title}</h2>
+
+        <p className="text-gray-500 mt-1">
           {selectedEvent.date} {selectedEvent.month}
         </p>
-        <p className="event-venue">
+
+        <p className="mt-2">
           <strong>Venue:</strong> {selectedEvent.venue}
         </p>
-        <p className="event-full-description">{selectedEvent.description}</p>
+
+        <p className="mt-4 text-gray-700 leading-relaxed">
+          {selectedEvent.description}
+        </p>
 
         <button
-          className="event-btn"
           onClick={() => setSelectedEvent(null)}
-          style={{
-            backgroundColor: "#ED9121",
-            color: "#fff",
-            border: "none",
-            padding: "10px 20px",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontFamily: "Poppins, sans-serif",
-          }}
+          className="mt-6 bg-[#ED9121] text-white
+                     px-6 py-2 rounded-md font-semibold"
         >
           ← Back to Events
         </button>
@@ -121,37 +106,51 @@ const EventsList = () => {
     );
   }
 
-  // Otherwise show event list
+  /* ===== EVENT LIST VIEW ===== */
   return (
-    <section className="events-list" ref={eventsTopRef}>
-      <div className="events-container">
-        {currentEvents.map((e) => (
-          <EventCard key={e.id} {...e} onReadMore={() => handleReadMore(e)} />
+    <section
+      ref={eventsTopRef}
+      className="bg-[#f9f9f9] px-5 md:px-20 py-16"
+    >
+      <div className="flex flex-wrap justify-between gap-8">
+        {currentEvents.map((event) => (
+          <EventCard
+            key={event.id}
+            {...event}
+            onReadMore={() => setSelectedEvent(event)}
+          />
         ))}
       </div>
 
       {/* Pagination */}
-      <div className="pagination">
+      <div className="flex justify-center items-center gap-3 mt-10">
         <button
-          onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40"
         >
           ←
         </button>
 
-        {Array.from({ length: totalPages }).map((_, index) => (
+        {Array.from({ length: totalPages }).map((_, i) => (
           <button
-            key={index}
-            className={currentPage === index + 1 ? "active" : ""}
-            onClick={() => handlePageChange(index + 1)}
+            key={i}
+            onClick={() => handlePageChange(i + 1)}
+            className={`w-9 h-9 rounded-full border font-semibold
+              ${
+                currentPage === i + 1
+                  ? "bg-[#ED9121] text-white border-[#ED9121]"
+                  : "bg-white"
+              }`}
           >
-            {index + 1}
+            {i + 1}
           </button>
         ))}
 
         <button
-          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40"
         >
           →
         </button>
@@ -160,5 +159,4 @@ const EventsList = () => {
   );
 };
 
-export default EventsList
-;
+export default EventsList;
