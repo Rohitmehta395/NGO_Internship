@@ -1,57 +1,62 @@
-import sulabhHero from "../../../assets/sulabhHero.jpg"
+import React from "react";
+import sulabhHero from "../../../assets/sulabhHero.jpg";
 
 const Hero = () => {
   return (
-    <section
-      className="relative flex items-center justify-start w-full h-[824px] px-6 sm:px-12 lg:px-[135px] -mt-[80px]"
-      style={{
-        background: `linear-gradient(270deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.80) 79.2%), url(${sulabhHero}) center/cover no-repeat`,
-      }}
-    >
-      <div className="max-w-[700px] text-left flex flex-col gap-10 mb-40">
-        <h1
-          className="font-teachers font-extrabold text-white! text-[42px] sm:text-[52px] lg:text-[64px] leading-[1.1] mb-6"
-          style={{
-            textShadow: "0px 4px 12px rgba(0,0,0,0.4)",
-          }}
-        >
-          The Future Is Here,
-          <br />
-          Discover Sulabh App 2.0!
-        </h1>
+    <section className="relative flex items-center w-full min-h-[85vh] lg:min-h-screen px-6 sm:px-12 lg:px-20 -mt-[80px] overflow-hidden">
+      {/* Background Image & Gradient Overlay */}
+      {/* We apply this to a background div to keep the text accessible and clean */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.85) 85%), url(${sulabhHero})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
 
-        <p
-          className="font-inter text-[16px] leading-[1.6] mb-10"
-          style={{
-            color: "rgba(255,255,255,0.85)",
-            fontFamily: "sans-serif",
-            maxWidth: "480px",
-          }}
-        >
-          Sulabh App (Sharada Universal Learning App for Bharat) is a
-          transformative EdTech platform pioneered by Sharada Educational Trust
-          in collaboration with Bern University of Applied Sciences (BFH
-          University).
-        </p>
+      {/* Content Container */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full pt-20">
+        <div className="max-w-2xl text-left flex flex-col justify-center h-full">
+          {/* Main Heading */}
+          <h1 className="font-teachers font-extrabold text-white text-3xl sm:text-4xl lg:text-5xl leading-[1.1] mb-6 drop-shadow-xl">
+            The Future Is Here, <br />
+            <span className="text-orange-400">Discover Sulabh App 2.0!</span>
+          </h1>
 
-        <div className="flex gap-8 flex-col ">
-          <a
-            href="https://sulabh2-frontend-341341131750.europe-west3.run.app/login"
-            target="_blank"
-          >
-            <button className="px-6 py-[10px] bg-orange-400 text-white font-inter font-bold text-[14px] uppercase rounded-full shadow-md hover:shadow-lg hover:bg-[#e96f14] transition-all duration-200 cursor-pointer -mt-10">
-              Login
-            </button>
-          </a>
+          {/* Description */}
+          <p className="font-inter text-base sm:text-md lg:text-md leading-relaxed text-gray-200 mb-10 max-w-lg drop-shadow-md text-justify hyphens-auto">
+            Sulabh App (Sharada Universal Learning App for Bharat) is a
+            transformative EdTech platform pioneered by Sharada Educational
+            Trust in collaboration with Bern University of Applied Sciences (BFH
+            University).
+          </p>
 
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfCBIpQ7LozFNRrt1i-Bd-lxlTCjHEupUtEuAPVbFxpYG1zag/viewform"
-            target="_blank"
-          >
-            <button className="px-6 py-[10px] bg-orange-400 text-white font-inter font-bold text-[14px] uppercase rounded-full shadow-md hover:shadow-lg hover:bg-[#e96f14] transition-all duration-200 cursor-pointer">
-              Register for Project Sulabh
-            </button>
-          </a>
+          {/* Buttons Group */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+            <a
+              href="https://sulabh2-frontend-341341131750.europe-west3.run.app/login"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto"
+            >
+              <button className="w-full sm:w-auto px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-inter font-bold text-sm lg:text-base uppercase tracking-wide rounded-full shadow-lg hover:shadow-orange-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                Login
+              </button>
+            </a>
+
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfCBIpQ7LozFNRrt1i-Bd-lxlTCjHEupUtEuAPVbFxpYG1zag/viewform"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto"
+            >
+              <button className="w-full sm:w-auto px-8 py-3 bg-white/10 hover:bg-white text-white hover:text-orange-600 border-2 border-white font-inter font-bold text-sm lg:text-base uppercase tracking-wide rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:-translate-y-1">
+                Register for Project Sulabh
+              </button>
+            </a>
+          </div>
         </div>
       </div>
     </section>

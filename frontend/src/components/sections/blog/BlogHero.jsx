@@ -1,6 +1,6 @@
 import React from "react";
 import Banner from "../../common/Banner";
-import blogBgImage from "../../../assets/blogs/blog_bg_image2.webp";
+import blogBgImage from "../../../assets/blogs/blog_bg_image.webp";
 import { useLocation } from "react-router-dom";
 
 const BlogHero = () => {

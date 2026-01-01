@@ -48,13 +48,13 @@ export default function AboutInspiration() {
                   Our Inspiration
                 </h2>
               </div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#0B0B45] leading-tight">
+              <h1 className="text-2xl md:text-2xl lg:text-3   xl font-bold text-[#0B0B45] leading-tight">
                 About Late Smt Sharada Kamath
               </h1>
             </div>
 
             {/* First paragraph */}
-            <p className="text-[#0B0B45] text-base md:text-md leading-relaxed">
+            <p className="text-[#0B0B45] text-base md:text-md leading-relaxed text-justify hyphens-auto">
               <span className="text-orange-500 font-semibold">
                 Smt Sharadabai Kamath
               </span>{" "}
@@ -66,7 +66,7 @@ export default function AboutInspiration() {
             </p>
 
             {/* Second paragraph */}
-            <p className="text-[#0B0B45] text-base md:text-md leading-relaxed">
+            <p className="text-[#0B0B45] text-base md:text-md leading-relaxed text-justify hyphens-auto">
               Though studied upto Class 3, she encouraged her children to
               continue their education. She had mastered the art of narrating
               stories from Ramayana, Mahabharata and Puranas to convey relevant
@@ -78,7 +78,7 @@ export default function AboutInspiration() {
             </p>
 
             {/* Third paragraph */}
-            <p className="text-[#0B0B45] text-base md:text-md leading-relaxed">
+            <p className="text-[#0B0B45] text-base md:text-md leading-relaxed text-justify hyphens-auto">
               The Trust formed in the memory of Late Smt Sharada Kamath by her
               grand children, on the occasion of her 25th Death Anniversary
               (Punyatithi), shall support Education related causes, especially
