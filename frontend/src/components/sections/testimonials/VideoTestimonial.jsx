@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../../../styles/VideoTestimonial.css";
 
 const VideoTestimonials = () => {
   const [expanded, setExpanded] = useState(null);
@@ -11,7 +10,7 @@ const VideoTestimonials = () => {
       name: "Ms Shwetha",
       title: "Benefited from “Spoken English” course",
       description:
-        "Watch this short video by Ms. Shwetha P.S., Teacher of Govt Model Primary School - Sathanuru. She was the top rated student from our “Online Spoken English course for Govt. School Teachers” batch held in April-May 2024. She is also an important member of the Core User Group, involved in testing and deploying the Sulabh App at her school. More such Shwethas in Government schools are needed to generate a favourable impact among the student community in rural India. These educators have the potential to significantly improve our existing education system 👏👏",
+        "Watch this short video by Ms. Shwetha P.S., Teacher of Govt Model Primary School - Sathanuru. She was the top rated student from our “Online Spoken English course for Govt. School Teachers” batch held in April-May 2024. She is also an important member of the Core User Group, involved in testing and deploying the Sulabh App at her school.",
       ytLink: "https://www.youtube.com/embed/yAewD7DN-Us",
     },
     {
@@ -19,7 +18,7 @@ const VideoTestimonials = () => {
       name: "Monika",
       title: "Benefited from “Spoken English” course",
       description:
-        "This is Monika V., one of the students of our “Spoken English” online course. She hails from a small town called Vijayapura (70 kms from Bangalore), who is studying Science in a local Government College. Look how confidently and fluently she speaks English. There is no dearth of talent in rural or semi-urban areas of India and with the right support and encouragement, they can compete with the best. Hats off to Monika, who has proved that given an opportunity, any barrier can be broken to emerge as a champion in the digital world! She definitely has a bright future ahead 👍",
+        "This is Monika V., one of the students of our “Spoken English” online course. She hails from a small town called Vijayapura near Bangalore.",
       ytLink: "https://www.youtube.com/embed/T9dAYuv8cFQ",
     },
     {
@@ -27,7 +26,7 @@ const VideoTestimonials = () => {
       name: "With Dr Tejaswini",
       title: "How Mentorship helped Monisha",
       description:
-        "Watch this video created by young Monisha, a student of Aeronautical Engineering in Bangalore, who benefited from the Mentorship program ",
+        "Watch this video created by young Monisha, a student of Aeronautical Engineering in Bangalore.",
       ytLink: "https://www.youtube.com/embed/6LTv6Xo8-0Q",
     },
     {
@@ -35,77 +34,103 @@ const VideoTestimonials = () => {
       name: "Happy World Foundation",
       title: "Feedback from rural kids",
       description:
-        "Rural kids from Kottagalu Village share their feedback on Project JnanaShala, that bridged the digital divide during the pandemic",
+        "Rural kids from Kottagalu Village share their feedback on Project JnanaShala.",
       ytLink: "https://www.youtube.com/embed/qS6QpIshwRk",
     },
   ];
 
-  const scroll = (direction) => {
+  const scroll = (dir) => {
     const container = carouselRef.current;
-    const scrollAmount = direction === "left" ? -450 : 450;
-    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    if (!container) return;
+    container.scrollBy({
+      left: dir === "left" ? -450 : 450,
+      behavior: "smooth",
+    });
   };
 
-  //  Auto-scroll effect
   useEffect(() => {
     if (videos.length > 3) {
-      const interval = setInterval(() => {
-        scroll("right");
-      }, 4000); // every 4 seconds
-      return () => clearInterval(interval);
+      const id = setInterval(() => scroll("right"), 4000);
+      return () => clearInterval(id);
     }
-  }, [videos.length]);
-
-  const toggleReadMore = (id) => {
-    setExpanded(expanded === id ? null : id);
-  };
+  }, []);
 
   return (
-    <section className="video-testimonials">
-      <h2 className="section-heading">Video Testimonials</h2>
-      <p className="section-sub">Real voices. Real impact.</p>
+    <section className="bg-[#fafafa] px-4 py-12 md:px-24 md:py-20 font-[Poppins]">
+      {/* Heading */}
+      <h2 className="text-center text-2xl md:text-4xl font-bold text-[#ED9121] font-[Quicksand]">
+        Video Testimonials
+      </h2>
+      <p className="text-center text-gray-600 mt-2 mb-10">
+        Real voices. Real impact.
+      </p>
 
-      <div className="carousel-container">
-        {videos.length > 2 && (
-          <button className="arrow left" onClick={() => scroll("left")}>
-            &#8249;
-          </button>
-        )}
+      {/* Carousel */}
+      <div className="relative flex items-center">
+        {/* Left Arrow */}
+        <button
+          onClick={() => scroll("left")}
+          className="flex items-center justify-center
+            absolute left-2 md:left-[-25px]
+            top-1/2 -translate-y-1/2
+            w-9 h-9 md:w-[45px] md:h-[45px]
+            rounded-full bg-[#ED9121] text-white text-xl md:text-2xl
+            hover:bg-[#c86d00] z-20"
+        >
+          &#8249;
+        </button>
 
+        {/* Cards */}
         <div
-          className="video-carousel"
           ref={carouselRef}
-          style={{
-            justifyContent: videos.length < 3 ? "center" : "flex-start",
-          }}
+          className="flex gap-6 overflow-x-auto scroll-smooth py-4 px-1
+                     scrollbar-hide"
         >
           {videos.map((v) => {
             const isExpanded = expanded === v.id;
-            const truncatedDesc =
+            const desc =
               v.description.length > 160 && !isExpanded
                 ? v.description.slice(0, 160) + "..."
                 : v.description;
 
             return (
-              <div className="video-card" key={v.id}>
-                <div className="video-wrapper">
-                  <iframe
-                    src={v.ytLink}
-                    title={v.name}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
+              <div
+                key={v.id}
+                className="flex-shrink-0 w-[300px] md:w-[380px]
+                           bg-white rounded-[14px]
+                           shadow-[0_4px_15px_rgba(0,0,0,0.08)]
+                           hover:-translate-y-1 hover:shadow-[0_6px_25px_rgba(237,145,33,0.3)]
+                           transition-all duration-300 text-left"
+              >
+                {/* Video */}
+                <iframe
+                  src={v.ytLink}
+                  title={v.name}
+                  className="w-full h-[200px] md:h-[220px]
+                             rounded-t-[14px] border-b-[3px] border-[#ED9121]"
+                  allowFullScreen
+                />
 
-                <div className="video-content">
-                  <h3 className="video-name">{v.name}</h3>
-                  <p className="video-title">{v.title}</p>
-                  <p className="video-desc">{truncatedDesc}</p>
+                {/* Content */}
+                <div className="p-5">
+                  <h3 className="font-[Quicksand] text-lg font-semibold text-gray-900 relative inline-block">
+                    {v.name}
+                  </h3>
+
+                  <p className="text-[#ED9121] font-semibold mt-2">
+                    {v.title}
+                  </p>
+
+                  <p className="text-gray-600 text-sm leading-relaxed mt-2">
+                    {desc}
+                  </p>
+
                   {v.description.length > 160 && (
                     <button
-                      className="read-more-btn"
-                      onClick={() => toggleReadMore(v.id)}
+                      onClick={() =>
+                        setExpanded(isExpanded ? null : v.id)
+                      }
+                      className="mt-2 text-[#ED9121] font-semibold text-sm hover:text-[#c86d00]"
                     >
                       {isExpanded ? "Read Less" : "Read More"}
                     </button>
@@ -116,11 +141,18 @@ const VideoTestimonials = () => {
           })}
         </div>
 
-        {videos.length > 2 && (
-          <button className="arrow right" onClick={() => scroll("right")}>
-            &#8250;
-          </button>
-        )}
+        {/* Right Arrow */}
+        <button
+          onClick={() => scroll("right")}
+          className="flex items-center justify-center
+            absolute right-2 md:right-[-25px]
+            top-1/2 -translate-y-1/2
+            w-9 h-9 md:w-[45px] md:h-[45px]
+            rounded-full bg-[#ED9121] text-white text-xl md:text-2xl
+            hover:bg-[#c86d00] z-20"
+        >
+          &#8250;
+        </button>
       </div>
     </section>
   );

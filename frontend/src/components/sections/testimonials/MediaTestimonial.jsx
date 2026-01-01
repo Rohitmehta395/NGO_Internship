@@ -1,23 +1,24 @@
 import React, { useEffect } from "react";
-import "../../../styles/MediaTestimonial.css";
 
 const mediaItems = [
   {
-    image: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/Story%20of%20Shwetha-The%20Catalyst%20of%20Change%20in%20Rur.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1200,cg:true",
+    image:
+      "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/Story%20of%20Shwetha-The%20Catalyst%20of%20Change%20in%20Rur.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1200,cg:true",
     title: "Conversations Today",
     source: "TRENDSETTER MEDIA",
     description:
-      "“The Catalyst of Change in Rural Education”, published by Conversations Today (leading Online Magazine focused on the social sector), is the story of Ms Shwetha P.S., a School Teacher at Government Model Primary School - Sathanuru in Ramanagara district of Karnataka. “If you empower a Govt. School Teacher, the entire School benefits”",
-    date: "31 AUG 2024 ",
+      "“The Catalyst of Change in Rural Education”, published by Conversations Today...",
+    date: "31 AUG 2024",
     link: "#",
   },
   {
-    image: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/Picture%2022-compressed.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:858,cg:true",
+    image:
+      "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/Picture%2022-compressed.jpg/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:858,cg:true",
     title: "Wonder Woman Wednesday",
     source: "The Hindu",
     description:
-      "“Empowering Govt Schools through Project Sulabh”, an article published on the “Wonder Woman Wednesday” digital platform. Wonder Woman Wednesday is a digital platform that celebrates the remarkable achievements of women from all walks of life. Every Wednesday, the platform shares captivating stories of women. On Wednesday dated 23rd Oct 2024, Shwetha P.S. featured as the Wonder Woman who empowered Government Schools through Project Sulabh",
-    date: "23rd Oct 2024",
+      "Empowering Govt Schools through Project Sulabh...",
+    date: "23 Oct 2024",
     link: "#",
   },
   {
@@ -45,48 +46,127 @@ const MediaTestimonial = () => {
     const cards = document.querySelectorAll(".media-card");
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries) =>
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            entry.target.classList.remove(
+              "opacity-0",
+              "translate-y-10"
+            );
           }
-        });
-      },
+        }),
       { threshold: 0.2 }
     );
 
-    cards.forEach((card) => observer.observe(card));
-
+    cards.forEach((c) => observer.observe(c));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="media-coverage">
-      <h2 className="media-heading">Media Coverage</h2>
-      <div className="media-grid">
-       {mediaItems.map((item, index) => (
-  <div key={index} className="media-card">
-    {/* Image */}
-    <img src={item.image} alt={item.title} className="media-img" />
+    <section
+      className="
+        w-full bg-[#fafafa] 
+        font-[Poppins] 
+        px-[6vw] py-[4vw]
+        max-[900px]:px-[4vw]
+        max-[600px]:px-0
+        box-border
+      "
+    >
+      {/* Heading */}
+      <h2
+        className="
+          font-[Quicksand] text-center font-bold
+          text-[#ED9121]
+          text-[clamp(1.8rem,2.5vw,2.6rem)]
+          mb-12
+          max-[600px]:text-[1.6rem]
+          max-[600px]:py-6
+        "
+      >
+        Media Coverage
+      </h2>
 
-    {/* Overlay Title */}
-    <h3 className="hover-title">{item.title}</h3>
+      {/* Grid */}
+      <div
+        className="
+          grid grid-cols-[repeat(2,minmax(300px,1fr))]
+          gap-8 w-full
+          max-[900px]:grid-cols-1
+          max-[900px]:gap-[1.8rem]
+          max-[600px]:gap-4
+        "
+      >
+        {mediaItems.map((item, i) => (
+          <article
+            key={i}
+            className="
+              media-card
+              bg-white
+              rounded-[16px]
+              overflow-hidden
+              shadow-[0_4px_15px_rgba(0,0,0,0.08)]
+              transition-all duration-300 ease
+              flex flex-col relative
+              opacity-0 translate-y-10
+              hover:-translate-y-[6px]
+              hover:shadow-[0_8px_25px_rgba(0,0,0,0.12)]
+              max-[600px]:rounded-none
+              max-[600px]:shadow-none
+            "
+          >
+            {/* Image */}
+            <img
+              src={item.image}
+              alt={item.title}
+              className="
+                w-full aspect-[16/9] object-cover
+                border-b border-[#eee]
+                transition-all duration-400 ease
+                group-hover:scale-[1.03]
+              "
+            />
 
-    {/* Card Content */}
-    <div className="media-content">
-      <p className="source">{item.source}</p>
-      <p className="desc">{item.description}</p>
-      <p className="date">{item.date}</p>
-      <a href={item.link} className="read-more">
-        View Article →
-      </a>
-    </div>
-  </div>
-))}
+            {/* Content */}
+            <div
+              className="
+                p-6 flex flex-col flex-grow
+                max-[600px]:p-4
+              "
+            >
+              <p className="text-[0.95rem] font-semibold text-[#ED9121] mb-1">
+                {item.source}
+              </p>
 
+              <p className="text-[0.92rem] text-[#555] leading-[1.5] mb-auto">
+                {item.description}
+              </p>
+
+              <p className="text-[0.85rem] text-[#999] my-[0.8rem]">
+                {item.date}
+              </p>
+
+              <a
+                href={item.link}
+                className="
+                  text-[0.9rem] font-semibold
+                  text-[#ED9121]
+                  transition-colors duration-200
+                  hover:text-[#c96f11]
+                  self-start
+                "
+              >
+                View Article →
+              </a>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
 };
 
 export default MediaTestimonial;
+
+
+
