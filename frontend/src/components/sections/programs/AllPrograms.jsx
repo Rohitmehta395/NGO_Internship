@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import SchoolSapling from "../../../assets/schoolSapling.webp";
 import SulabhUniversalLearningApp from "../../../assets/sulabhUniversalLearningApp.webp";
+
 export default function AllPrograms() {
   const programs = [
     {
@@ -40,63 +41,66 @@ export default function AllPrograms() {
   ];
 
   return (
-    <div
-      className="flex flex-col items-center py-12 px-4 sm:py-16 sm:px-6 lg:py-[120px] lg:px-[72px] bg-white"
+    <section
+      className="bg-gray-50 py-12 px-4 sm:py-16 lg:py-24"
       id="next-section"
     >
-      <div className="w-full max-w-[1296px]">
-        {/* <div className="flex justify-center items-start mb-10 sm:mb-12 lg:mb-[60px]">
-          <h1 className="text-3xl sm:text-4xl lg:text-[50px] font-bold leading-none text-black" style={{ fontFamily: 'Teachers, -apple-system, Roboto, Helvetica, sans-serif' }}>
-            All Programs
-          </h1>
+      <div className="container mx-auto max-w-7xl">
+        {/* Optional Header - Uncomment if needed */}
+        {/* <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold text-[#0B0B45] sm:text-4xl font-sans">
+            Our Programs
+          </h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Empowering communities through education and innovation.
+          </p>
         </div> */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6 mx-[100px]">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10">
           {programs.map((program) => (
             <div
               key={program.id}
-              className="flex flex-col rounded-[20px] bg-white overflow-hidden"
-              style={{ boxShadow: "0 4px 13px 0 rgba(0, 0, 0, 0.05)" }}
+              className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <img
-                src={program.image}
-                alt={program.title}
-                className="w-full h-[200px] sm:h-[240px] lg:h-[280px] object-cover"
-              />
+              {/* Image Container with Zoom Effect */}
+              <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
+                <img
+                  src={program.image}
+                  alt={program.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                {/* Overlay gradient for better text contrast if you ever put text on image */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </div>
 
-              <div className="flex flex-col gap-6 sm:gap-7 p-5 sm:px-5 sm:pt-7 sm:pb-10">
-                <div className="flex flex-col gap-3">
-                  <h2
-                    className="text-2xl sm:text-[28px] font-bold leading-none text-[#0B0B45]"
-                    style={{
-                      fontFamily:
-                        "Teachers, -apple-system, Roboto, Helvetica, sans-serif",
-                    }}
-                  >
-                    {program.title}
-                  </h2>
-                  <p
-                    className="text-base leading-5 text-[#0B0B45]/60 line-clamp-3"
-                    style={{
-                      fontFamily:
-                        "Inter, -apple-system, Roboto, Helvetica, sans-serif",
-                    }}
-                  >
-                    {program.description}
-                  </p>
-                </div>
+              {/* Content */}
+              <div className="flex flex-1 flex-col p-6 sm:p-8">
+                <h3 className="mb-3 text-2xl font-bold leading-tight text-[#0B0B45] font-sans">
+                  {program.title}
+                </h3>
 
-                <Link to={program.route}>
-                  <button className="flex h-[60px] items-center justify-center rounded-xl bg-orange-400 px-10 py-4 transition-opacity hover:opacity-90 cursor-pointer">
-                    <span
-                      className="text-base font-bold uppercase text-white leading-none"
-                      style={{
-                        fontFamily:
-                          "Teachers, -apple-system, Roboto, Helvetica, sans-serif",
-                      }}
+                <p className="mb-6 flex-grow text-base leading-relaxed text-gray-600 font-sans">
+                  {program.description}
+                </p>
+
+                <Link to={program.route} className="mt-auto block w-full">
+                  <button className="group/btn flex w-full items-center justify-center gap-2 rounded-xl bg-orange-400 px-6 py-4 font-bold uppercase text-white transition-all hover:bg-orange-500 active:scale-95 cursor-pointer">
+                    View Details
+                    {/* Simple arrow icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2.5}
+                      stroke="currentColor"
+                      className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1"
                     >
-                      View Details
-                    </span>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                      />
+                    </svg>
                   </button>
                 </Link>
               </div>
@@ -104,6 +108,6 @@ export default function AllPrograms() {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
