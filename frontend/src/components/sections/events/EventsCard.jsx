@@ -58,7 +58,7 @@ const EventCard = ({
         <div className="flex gap-3 mt-4">
           <button
             onClick={onReadMore}
-            className="bg-[#ED9121] text-white px-5 py-2 rounded-full font-semibold"
+            className="bg-[#ED9121] text-white px-5 py-2 rounded-full font-semibold cursor-pointer"
           >
             Read More
           </button>
@@ -66,7 +66,7 @@ const EventCard = ({
           {youtubeUrl && (
             <button
               onClick={openVideo}
-              className="border border-[#ED9121] text-[#ED9121] px-5 py-2 rounded-full font-semibold"
+              className="border border-[#ED9121] text-[#ED9121] px-5 py-2 rounded-full font-semibold cursor-pointer"
             >
               Watch Video
             </button>

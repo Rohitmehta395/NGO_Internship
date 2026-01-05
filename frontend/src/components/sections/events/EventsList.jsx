@@ -18,7 +18,6 @@ const EventsList = () => {
       description:
         "On Teacher’s Day (5th Sept 2025), Govt Model Primary School – Sathanuru became a beacon...",
       venue: "GMPS - Sathanuru",
-      
     },
     {
       id: 2,
@@ -26,10 +25,8 @@ const EventsList = () => {
       date: "15",
       month: "August 2025",
       title: "Certificates & Award ceremony",
-      description:
-        "On the occasion of India’s 79th Independence Day...",
+      description: "On the occasion of India’s 79th Independence Day...",
       venue: "GMHPS - Hulageri",
-      
     },
     {
       id: 3,
@@ -40,7 +37,6 @@ const EventsList = () => {
       description:
         "An Orientation & Demo session was conducted at St Teresa’s School...",
       venue: "St. Teresa's School",
-     
     },
     {
       id: 4,
@@ -48,10 +44,8 @@ const EventsList = () => {
       date: "11",
       month: "July 2025",
       title: "Certificates & Award ceremony",
-      description:
-        "On the auspicious occasion of Guru Purnima...",
+      description: "On the auspicious occasion of Guru Purnima...",
       venue: "GMPS - Sathanuru",
-      
     },
     {
       id: 5,
@@ -59,8 +53,7 @@ const EventsList = () => {
       date: "14",
       month: "June 2025",
       title: "Sulabh App 2.0 Launch",
-      description:
-        "Sharada Educational Trust launched Sulabh App 2.0...",
+      description: "Sharada Educational Trust launched Sulabh App 2.0...",
       venue: "GMPS - Sathanuru",
       youtubeUrl: "https://www.youtube.com/shorts/XsMM8KITZ1w",
     },
@@ -114,7 +107,7 @@ const EventsList = () => {
         <button
           onClick={() => setSelectedEvent(null)}
           className="block mt-6 border border-[#ED9121] text-[#ED9121]
-                     px-6 py-2 rounded-md font-semibold"
+                     px-6 py-2 rounded-md font-semibold cursor-pointer"
         >
           ← Back to Events
         </button>
@@ -124,10 +117,7 @@ const EventsList = () => {
 
   /* ===== EVENT LIST VIEW ===== */
   return (
-    <section
-      ref={eventsTopRef}
-      className="bg-[#f9f9f9] px-5 md:px-20 py-16"
-    >
+    <section ref={eventsTopRef} className="bg-[#f9f9f9] px-5 md:px-20 py-16">
       <div className="flex flex-wrap justify-between gap-8">
         {currentEvents.map((event) => (
           <EventCard
@@ -143,7 +133,7 @@ const EventsList = () => {
         <button
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40"
+          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40 cursor-pointer"
         >
           ←
         </button>
@@ -152,7 +142,7 @@ const EventsList = () => {
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
-            className={`w-9 h-9 rounded-full border font-semibold
+            className={`w-9 h-9 rounded-full border font-semibold cursor-pointer
               ${
                 currentPage === i + 1
                   ? "bg-[#ED9121] text-white border-[#ED9121]"
@@ -166,7 +156,7 @@ const EventsList = () => {
         <button
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40"
+          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40 cursor-pointer"
         >
           →
         </button>
