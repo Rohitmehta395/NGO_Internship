@@ -18,6 +18,7 @@ const EventsList = () => {
       description:
         "On Teacher’s Day (5th Sept 2025), Govt Model Primary School – Sathanuru became a beacon...",
       venue: "GMPS - Sathanuru",
+      
     },
     {
       id: 2,
@@ -28,6 +29,7 @@ const EventsList = () => {
       description:
         "On the occasion of India’s 79th Independence Day...",
       venue: "GMHPS - Hulageri",
+      
     },
     {
       id: 3,
@@ -38,6 +40,7 @@ const EventsList = () => {
       description:
         "An Orientation & Demo session was conducted at St Teresa’s School...",
       venue: "St. Teresa's School",
+     
     },
     {
       id: 4,
@@ -48,16 +51,18 @@ const EventsList = () => {
       description:
         "On the auspicious occasion of Guru Purnima...",
       venue: "GMPS - Sathanuru",
+      
     },
     {
       id: 5,
-      image: "/10th_june.jpg",
-      date: "10",
+      image: "/14th_june.jpg",
+      date: "14",
       month: "June 2025",
       title: "Sulabh App 2.0 Launch",
       description:
         "Sharada Educational Trust launched Sulabh App 2.0...",
       venue: "GMPS - Sathanuru",
+      youtubeUrl: "https://www.youtube.com/shorts/XsMM8KITZ1w",
     },
   ];
 
@@ -95,9 +100,20 @@ const EventsList = () => {
           {selectedEvent.description}
         </p>
 
+        {selectedEvent.youtubeUrl && (
+          <a
+            href={selectedEvent.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-4 bg-[#ED9121] text-white px-6 py-2 rounded-md font-semibold"
+          >
+            ▶ Watch Video
+          </a>
+        )}
+
         <button
           onClick={() => setSelectedEvent(null)}
-          className="mt-6 bg-[#ED9121] text-white
+          className="block mt-6 border border-[#ED9121] text-[#ED9121]
                      px-6 py-2 rounded-md font-semibold"
         >
           ← Back to Events
