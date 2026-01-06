@@ -6,37 +6,54 @@ const VideoTestimonials = () => {
 
   const videos = [
     {
-      id: 1,
-      name: "Ms Shwetha",
-      title: "Benefited from “Spoken English” course",
-      description:
-        "Watch this short video by Ms. Shwetha P.S., Teacher of Govt Model Primary School - Sathanuru. She was the top rated student from our “Online Spoken English course for Govt. School Teachers” batch held in April-May 2024. She is also an important member of the Core User Group, involved in testing and deploying the Sulabh App at her school.",
-      ytLink: "https://www.youtube.com/embed/yAewD7DN-Us",
-    },
-    {
-      id: 2,
-      name: "Monika",
-      title: "Benefited from “Spoken English” course",
-      description:
-        "This is Monika V., one of the students of our “Spoken English” online course. She hails from a small town called Vijayapura near Bangalore.",
-      ytLink: "https://www.youtube.com/embed/T9dAYuv8cFQ",
-    },
-    {
-      id: 3,
-      name: "With Dr Tejaswini",
-      title: "How Mentorship helped Monisha",
-      description:
-        "Watch this video created by young Monisha, a student of Aeronautical Engineering in Bangalore.",
-      ytLink: "https://www.youtube.com/embed/6LTv6Xo8-0Q",
-    },
-    {
-      id: 4,
-      name: "Happy World Foundation",
-      title: "Feedback from rural kids",
-      description:
-        "Rural kids from Kottagalu Village share their feedback on Project JnanaShala.",
-      ytLink: "https://www.youtube.com/embed/qS6QpIshwRk",
-    },
+    id: 1,
+    name: "Ms Shwetha",
+    title: "Benefited from “Spoken English” course",
+    description: "Exactly a year ago, on 𝟏𝟓𝐭𝐡 𝐉𝐮𝐧𝐞 𝟐𝟎𝟐𝟒, we launched the 𝐒𝐮𝐥𝐚𝐛𝐡 𝐀𝐩𝐩 at 𝐆𝐨𝐯𝐭. 𝐏𝐫𝐢𝐦𝐚𝐫𝐲 𝐒𝐜𝐡𝐨𝐨𝐥, 𝐒𝐚𝐭𝐡𝐚𝐧𝐮𝐫𝐮 in Ramanagara District (Karnataka). This year, on 𝐒𝐚𝐭𝐮𝐫𝐝𝐚𝐲, 𝟏𝟒𝐭𝐡 𝐉𝐮𝐧𝐞 𝟐𝟎𝟐𝟓, Sharada Educational Trust returns to the same school, with the same passionate Teacher Ms. 𝐒𝐡𝐰𝐞𝐭𝐡𝐚 𝐏.𝐒, to launch 𝐒𝐮𝐥𝐚𝐛𝐡 𝐀𝐩𝐩 𝟐.𝟎 ... only now, it's in the newly named Bengaluru South District 😊 All thanks to 𝐒𝐡𝐰𝐞𝐭𝐡𝐚 𝐏.𝐒., 𝐒𝐮𝐥𝐚𝐛𝐡 𝟏.𝟎 positively impacted 𝟒𝟎 𝐬𝐭𝐮𝐝𝐞𝐧𝐭𝐬 & 𝟓 𝐭𝐞𝐚𝐜𝐡𝐞𝐫𝐬 at GMPS Sathanuru. This time around, we’ve already onboarded 𝟒𝟎+ 𝐬𝐭𝐮𝐝𝐞𝐧𝐭𝐬 from 𝐂𝐥𝐚𝐬𝐬𝐞𝐬 𝟑 𝐭𝐨 𝟕 from the same school, who are ready to dive into: 🔹 Activity-Based & Visual Learning tools 🔹 Interactive Quizzes 🔹 Fun filled, AI-Powered Translator We’re excited to see many more students join this learning journey in the days ahead! 👏 🎥 Don’t miss 𝐒𝐡𝐰𝐞𝐭𝐡𝐚 𝐏.𝐒's testimonial on 𝐒𝐮𝐥𝐚𝐛𝐡 𝐀𝐩𝐩 𝟐.𝟎, a journey she’s been part of right from the blueprint stage to final user testing! 👍",
+    ytLink: "https://www.youtube.com/embed/yAewD7DN-Us",
+  },
+  {
+    id: 2,
+    name: "Monika",
+    title: "Benefited from “Spoken English” course",
+    description: "This is 𝐌𝐨𝐧𝐢𝐤𝐚 𝐕., one of the students of our 𝐒𝐩𝐨𝐤𝐞𝐧 𝐄𝐧𝐠𝐥𝐢𝐬𝐡 online course. She hails from a small town called Vijayapura (70 kms from Bangalore), who is studying Science in a local Government College. A child of a single parent, her mother works as a cook in a local girls' hostel to sustain their livelihood. 𝐋𝐨𝐨𝐤 𝐡𝐨𝐰 𝐜𝐨𝐧𝐟𝐢𝐝𝐞𝐧𝐭𝐥𝐲 𝐚𝐧𝐝 𝐟𝐥𝐮𝐞𝐧𝐭𝐥𝐲 𝐬𝐡𝐞 𝐬𝐩𝐞𝐚𝐤𝐬 𝐄𝐧𝐠𝐥𝐢𝐬𝐡. There is no dearth of talent in the rural or semi-urban areas of India and with the right amount of support and encouragement, they can compete with the best. Hats off to 𝐌𝐨𝐧𝐢𝐤𝐚, who has proved that given an opportunity any barrier can be broken, to emerge as a 𝐜𝐡𝐚𝐦𝐩𝐢𝐨𝐧 𝐢𝐧 𝐭𝐡𝐞 𝐝𝐢𝐠𝐢𝐭𝐚𝐥 𝐰𝐨𝐫𝐥𝐝 ! She definitely has a bright future ahead👍",
+    ytLink: "https://www.youtube.com/embed/T9dAYuv8cFQ",
+  },
+  {
+    id: 3,
+    name: "Sirisha",
+    title: "Benefited from “Spoken English” course from Sulabh App 1.0",
+    description: "Watch this young girl student 𝐒𝐢𝐫𝐢𝐬𝐡𝐚 (𝐂𝐥𝐚𝐬𝐬 𝟓𝐭𝐡) from 𝐆𝐨𝐯𝐞𝐫𝐧𝐦𝐞𝐧𝐭 𝐌𝐨𝐝𝐞𝐥 𝐏𝐫𝐢𝐦𝐚𝐫𝐲 𝐒𝐜𝐡𝐨𝐨𝐥 - 𝐒𝐚𝐭𝐡𝐚𝐧𝐮𝐫𝐮 (Ramanagara District), proudly talking about her School, in such 𝐟𝐥𝐮𝐞𝐧𝐭 𝐄𝐧𝐠𝐥𝐢𝐬𝐡 👏 ",
+    ytLink: "https://www.youtube.com/embed/ljhxm0cYoUw",
+  },
+  {
+    id: 4,
+    name: "Inchana talks",
+    title: "Her experience with Financial Literacy Program",
+    description: "Meet 𝐈𝐧𝐜𝐡𝐚𝐧𝐚, a bright young learner at 𝐆𝐨𝐯𝐭 𝐏𝐫𝐢𝐦𝐚𝐫𝐲 𝐒𝐜𝐡𝐨𝐨𝐥 - 𝐒𝐚𝐭𝐡𝐚𝐧𝐮𝐫𝐮, as she recounts her journey with the 𝐅𝐢𝐧𝐚𝐧𝐜𝐢𝐚𝐥 𝐋𝐢𝐭𝐞𝐫𝐚𝐜𝐲 program organised by 𝐒𝐡𝐚𝐫𝐚𝐝𝐚 𝐄𝐝𝐮𝐜𝐚𝐭𝐢𝐨𝐧𝐚𝐥 𝐓𝐫𝐮𝐬𝐭 at her school in October 2024. Through interactive sessions, she gained valuable insights into saving, budgeting, the process of opening a zero-balance bank account, and the significance of securing insurance.What stood out to her was the program’s creative approach—using storytelling, role-plays, and fun quizzes—to make complex financial concepts relatable and easy to grasp 👍",
+    ytLink: "https://www.youtube.com/embed/JlBBhAcaIVI",
+  },
+  {
+    id: 5,
+    name: "Bindushree",
+    title: "testimonial on Sulabh App 2.0",
+    description: "𝐌𝐞𝐞𝐭 𝐭𝐡𝐞 𝐏𝐚𝐬𝐬𝐢𝐨𝐧𝐚𝐭𝐞 𝐂𝐡𝐚𝐧𝐠𝐞𝐦𝐚𝐤𝐞𝐫 𝐁𝐞𝐡𝐢𝐧𝐝 𝐭𝐡𝐞 𝐂𝐡𝐚𝐥𝐤𝐛𝐨𝐚𝐫𝐝 🔬📐Say hello to 𝐌𝐬. 𝐁𝐢𝐧𝐝𝐮𝐬𝐡𝐫𝐞𝐞, a committed Maths & Science teacher from Govt Model Primary School – Sathanuru, who is quietly transforming classrooms in rural India. She successfully completed all three courses mapped to the 𝐀𝐜𝐭𝐢𝐯𝐢𝐭𝐲-𝐁𝐚𝐬𝐞𝐝 𝐋𝐞𝐚𝐫𝐧𝐢𝐧𝐠 (𝐀𝐁𝐋) 𝐦𝐨𝐝𝐮𝐥𝐞 of the 𝐒𝐮𝐥𝐚𝐛𝐡 𝐀𝐩𝐩 𝟐.𝟎 and she didn't stop there.  With curiosity and conviction, she also embraced the 𝐀𝐈-𝐏𝐨𝐰𝐞𝐫𝐞𝐝 𝐓𝐫𝐚𝐧𝐬𝐥𝐚𝐭𝐨𝐫 (𝐀𝐏𝐓) 𝐦𝐨𝐝𝐮𝐥𝐞 to help her students bridge language barriers. Thanks to her proactive involvement and feedback, we’re excited to announce the upcoming launch of two new curriculum modules in Maths and Science, exclusively designed for 𝐒𝐮𝐥𝐚𝐛𝐡 𝐀𝐩𝐩 𝟐.𝟎, with rural learners in mind. Educators like 𝐌𝐬. 𝐁𝐢𝐧𝐝𝐮𝐬𝐡𝐫𝐞𝐞 remind us that real innovation begins in grassroots classrooms!!",
+    ytLink: "https://www.youtube.com/embed/iHWjg0oP5Bo",
+  },
+  {
+    id: 6,
+    name: "Arvind",
+    title: "testimonial to Swiss students",
+    description: "Watch this testimonial from the Founder of Sharada Educational Trust for the Swiss students from BFH University, who developed Sulabh App 2.0 in just 2 months !!",
+    ytLink: "https://www.youtube.com/embed/9LTCW4vQmFc",
+  },
+  {
+    id: 7,
+    name: "Arvind",
+    title: "Watch this short video Testimonial of a Volunteer",
+    description: "Watch this Testimonial from the Founder of Sharada Educational Trust - Arvind Kamath. In a space of just 2 months, our Volunteer - NavyaShree P., has created a lot of impact among Govt school students from the rural areas of Kanakapura taluk. She has conducted Workshops in areas such as Personal Hygiene, Menstrual Hygiene, Good & Bad Touch, Bad effects of Smoking, Alcohol and Drugs on young kids at a couple of Govt Schools impacting more than 200 kids. 👍",
+    ytLink: "https://www.youtube.com/embed/VFli6xFroqg",
+  },
   ];
 
   const scroll = (dir) => {
