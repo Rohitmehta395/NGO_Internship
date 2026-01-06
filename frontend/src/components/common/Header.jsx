@@ -6,7 +6,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
 
-  // --- HELPER: Scroll to top & Close Menus ---
+  //--- Scroll to top & Close Menus ---
   const handleNavClick = () => {
     window.scrollTo(0, 0);
     setIsMenuOpen(false);
@@ -33,7 +33,11 @@ export default function Header() {
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-4 lg:gap-8">
           {/* Logo */}
-          <Link to="/" className="shrink-0" onClick={handleNavClick}>
+          <Link
+            to="/"
+            className="flex items-center gap-3 shrink-0"
+            onClick={handleNavClick}
+          >
             <img
               src="/Logo.webp"
               alt="Logo"
@@ -44,6 +48,9 @@ export default function Header() {
                 e.currentTarget.onerror = null;
               }}
             />
+            <h2 className="hidden sm:block text-white font-medium text-lg lg:text-xl hover:text-orange-100 transition-colors whitespace-nowrap font-serif italic">
+              Sharada <br /> Educational Trust
+            </h2>
           </Link>
 
           {/* Desktop & Tablet Navigation */}
@@ -66,7 +73,7 @@ export default function Header() {
                 onMouseEnter={() => setIsMoreDropdownOpen(true)}
                 onMouseLeave={() => setIsMoreDropdownOpen(false)}
               >
-                <button className="text-white text-[14px] xl:text-[16px] 2xl:text-[17px] font-medium hover:text-orange-100 transition-colors whitespace-nowrap flex items-center gap-1">
+                <button className="text-white text-[14px] xl:text-[16px] 2xl:text-[17px] font-medium hover:text-orange-100 transition-colors whitespace-nowrap flex items-center gap-1 cursor-pointer">
                   More
                   <svg
                     width="16"
