@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const events = require("./routes/eventRoute");
 
 dotenv.config();
 connectDB();
@@ -44,6 +45,7 @@ app.use("/api/auth", auth);
 app.use("/api/members", members);
 app.use("/api/blogs", blogs);
 app.use("/api/education-images", educationImg);
+app.use("/api/events", events);
 
 // Error Handler
 app.use((err, req, res, next) => {
