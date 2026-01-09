@@ -32,7 +32,7 @@ const Banner = ({ image, title, currentPath }) => {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
-        <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white">
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
           {title}
         </h1>
         <div className="text-lg md:text-xl font-medium bg-gray-700 px-3 py-1.5 rounded-3xl">
