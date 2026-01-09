@@ -6,10 +6,10 @@ const ScreenshotCarousel = () => {
   const screenshots = [
     { id: 1, src: "/image1.jpg", alt: "Bhagya Ran" },
     { id: 2, src: "/pvmaiya.jpg", alt: "pv maiya" },
-    { id: 3, src: "/AshokKamanth.jpg", alt: "Ashok Kamanth" },
+    // { id: 3, src: "/AshokKamanth.jpg", alt: "Ashok Kamanth" },
     { id: 4, src: "/email.jpg", alt: "Screenshot 4" },
-    { id: 5, src: "/MalaKumar.jpg", alt: "Mala Kumar" },
-    { id: 6, src: "/certi.jpg", alt: "Certificate" },
+    // { id: 5, src: "/MalaKumar.jpg", alt: "Mala Kumar" },
+    // { id: 6, src: "/certi.jpg", alt: "Certificate" },
   ];
 
   const scroll = (direction) => {
