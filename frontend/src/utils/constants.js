@@ -25,6 +25,7 @@ export const API_BASE_URL = BASE_URL.endsWith("/")
 
 export const IMAGE_BASE_URL = API_BASE_URL;
 
+
 export const AllPrograms = {
   projectJnanashala: [
     {

@@ -38,4 +38,14 @@ export const educationImagesAPI = {
   delete: (id) => api.delete(`/api/education-images/${id}`),
 };
 
+export const eventsAPI = {
+  getAll: (params) => api.get("/api/events", { params }),
+  getById: (id) => api.get(`/api/events/${id}`),
+  create: (data, config = {}) => api.post("/api/events", data, config),
+  update: (id, data, config = {}) => api.put(`/api/events/${id}`, data, config),
+  delete: (id) => api.delete(`/api/events/${id}`),
+};
+
+
+
 export default api;

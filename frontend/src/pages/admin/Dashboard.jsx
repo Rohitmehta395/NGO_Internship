@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { IMAGE_BASE_URL } from "../../utils/constants";
 import BlogForm from "./BlogForm";
 import EducationImageManager from "./EducationImageManager";
+import EventsAdmin from "./eventsAdmin";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -228,6 +229,19 @@ const Dashboard = () => {
             onClick={() => setActiveTab("education-images")}
           >
             Education Images
+          </button>
+
+           {/* 2. NEW Event BUTTON */}
+          
+          <button
+        className={`pb-2 px-4 font-bold text-lg transition-colors whitespace-nowrap ${
+        activeTab === "events"
+          ? "border-b-4 border-orange-500 text-orange-600"
+          : "text-gray-500 hover:text-gray-700"
+          }`}
+         onClick={() => setActiveTab("events")}
+           >
+          Events
           </button>
         </div>
 
@@ -499,6 +513,14 @@ const Dashboard = () => {
             <EducationImageManager />
           </div>
         )}
+
+        {/* ================= 4. NEW EVENTS TAB ================= */}
+        
+         {activeTab === "events" && (
+         <div className="animate-fade-in">
+            <EventsAdmin />
+          </div>
+     )}
       </div>
     </div>
   );

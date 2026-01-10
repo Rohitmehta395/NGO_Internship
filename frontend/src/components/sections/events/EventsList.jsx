@@ -1,80 +1,53 @@
-import { useState, useRef } from "react";
-import EventCard from "./EventsCard";
+
+
+import { useEffect, useState, useRef } from "react";
+import { IMAGE_BASE_URL } from "../../../utils/constants";
 
 const EventsList = () => {
+  const [events, setEvents] = useState([]);
+  const [selectedEventId, setSelectedEventId] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const eventsTopRef = useRef(null);
 
-  const eventsPerPage = 4;
+  /* ================= FETCH EVENTS LIST ================= */
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/events?page=${currentPage}&limit=4`)
+      .then((res) => res.json())
+      .then((data) => {
+        setEvents(data.data);
+        setTotalPages(data.pagination.totalPages);
+      })
+      .catch((err) => console.error(err));
+  }, [currentPage]);
 
-  const events = [
-    {
-      id: 1,
-      image: "/5th sept.jpg",
-      date: "5",
-      month: "Sept 2025",
-      title: "Certificates & Award ceremony",
-      description:
-        "On Teacher’s Day (5th Sept 2025), Govt Model Primary School – Sathanuru became a beacon...",
-      venue: "GMPS - Sathanuru",
-    },
-    {
-      id: 2,
-      image: "/15_august.jpg",
-      date: "15",
-      month: "August 2025",
-      title: "Certificates & Award ceremony",
-      description: "On the occasion of India’s 79th Independence Day...",
-      venue: "GMHPS - Hulageri",
-    },
-    {
-      id: 3,
-      image: "/23rs_jult.jpg",
-      date: "23",
-      month: "July 2025",
-      title: "Orientation & Demo session",
-      description:
-        "An Orientation & Demo session was conducted at St Teresa’s School...",
-      venue: "St. Teresa's School",
-    },
-    {
-      id: 4,
-      image: "/10_july.jpg",
-      date: "11",
-      month: "July 2025",
-      title: "Certificates & Award ceremony",
-      description: "On the auspicious occasion of Guru Purnima...",
-      venue: "GMPS - Sathanuru",
-    },
-    {
-      id: 5,
-      image: "/14th_june.jpg",
-      date: "14",
-      month: "June 2025",
-      title: "Sulabh App 2.0 Launch",
-      description: "Sharada Educational Trust launched Sulabh App 2.0...",
-      venue: "GMPS - Sathanuru",
-      youtubeUrl: "https://www.youtube.com/shorts/XsMM8KITZ1w",
-    },
-  ];
+  /* ================= FETCH SINGLE EVENT ================= */
+  useEffect(() => {
+    if (!selectedEventId) return;
 
-  const indexOfLast = currentPage * eventsPerPage;
-  const indexOfFirst = indexOfLast - eventsPerPage;
-  const currentEvents = events.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(events.length / eventsPerPage);
+    fetch(`http://localhost:5000/api/events/${selectedEventId}`)
+      .then((res) => res.json())
+      .then((data) => setSelectedEvent(data.data || data))
+      .catch((err) => console.error(err));
+  }, [selectedEventId]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     eventsTopRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  /* ===== EVENT DETAILS VIEW ===== */
+  /* ================= EVENT DETAILS VIEW ================= */
   if (selectedEvent) {
+    const fullImageUrl = selectedEvent.imageUrl
+      ? `${IMAGE_BASE_URL}/uploads/${selectedEvent.imageUrl.startsWith("events/") ? selectedEvent.imageUrl : `events/${selectedEvent.imageUrl}`}`
+      : "https://placehold.co/600x400?text=No+Image";
+
     return (
       <div className="max-w-4xl mx-auto px-5 py-10">
         <img
-          src={selectedEvent.image}
+          src={fullImageUrl}
           alt={selectedEvent.title}
           className="w-full rounded-xl mb-6"
         />
@@ -105,9 +78,12 @@ const EventsList = () => {
         )}
 
         <button
-          onClick={() => setSelectedEvent(null)}
+          onClick={() => {
+            setSelectedEvent(null);
+            setSelectedEventId(null);
+          }}
           className="block mt-6 border border-[#ED9121] text-[#ED9121]
-                     px-6 py-2 rounded-md font-semibold cursor-pointer"
+                     px-6 py-2 rounded-md font-semibold"
         >
           ← Back to Events
         </button>
@@ -115,15 +91,15 @@ const EventsList = () => {
     );
   }
 
-  /* ===== EVENT LIST VIEW ===== */
+  /* ================= EVENT LIST VIEW ================= */
   return (
     <section ref={eventsTopRef} className="bg-[#f9f9f9] px-5 md:px-20 py-16">
       <div className="flex flex-wrap justify-between gap-8">
-        {currentEvents.map((event) => (
+        {events.map((event) => (
           <EventCard
-            key={event.id}
+            key={event._id}
             {...event}
-            onReadMore={() => setSelectedEvent(event)}
+            onReadMore={() => setSelectedEventId(event._id)}
           />
         ))}
       </div>
@@ -133,7 +109,7 @@ const EventsList = () => {
         <button
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40 cursor-pointer"
+          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40"
         >
           ←
         </button>
@@ -142,7 +118,7 @@ const EventsList = () => {
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
-            className={`w-9 h-9 rounded-full border font-semibold cursor-pointer
+            className={`w-9 h-9 rounded-full border font-semibold
               ${
                 currentPage === i + 1
                   ? "bg-[#ED9121] text-white border-[#ED9121]"
@@ -156,7 +132,7 @@ const EventsList = () => {
         <button
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40 cursor-pointer"
+          className="w-9 h-9 rounded-full border font-semibold disabled:opacity-40"
         >
           →
         </button>
@@ -165,4 +141,86 @@ const EventsList = () => {
   );
 };
 
+/* ================= EVENT CARD COMPONENT ================= */
+const EventCard = ({
+  imageUrl,
+  title,
+  description,
+  date,
+  month,
+  venue,
+  youtubeUrl,
+  onReadMore,
+}) => {
+  const openVideo = () => {
+    if (!youtubeUrl) return;
+    window.open(youtubeUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const fullImageUrl = imageUrl
+    ? `${IMAGE_BASE_URL}/uploads/${imageUrl.startsWith("events/") ? imageUrl : `events/${imageUrl}`}`
+    : "https://placehold.co/600x400?text=No+Image";
+
+  return (
+    <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.08)]
+                    transition-transform duration-300 hover:-translate-y-1
+                    w-full md:w-[45%] flex flex-col">
+
+      <div
+        className={`relative ${youtubeUrl ? "cursor-pointer" : ""}`}
+        onClick={youtubeUrl ? openVideo : undefined}
+      >
+        <img
+          src={fullImageUrl}
+          alt={title}
+          className="w-full h-[250px] object-cover"
+        />
+
+        <div className="absolute top-4 left-4 bg-white text-[#ED9121]
+                        rounded-lg px-3 py-1 font-semibold text-center">
+          {date}
+          <div className="text-xs">{month}</div>
+        </div>
+
+        {youtubeUrl && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <span className="bg-white text-[#ED9121] px-4 py-2 rounded-full font-bold">
+              ▶ Watch Video
+            </span>
+          </div>
+        )}
+      </div>
+
+      <div className="p-5">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <p className="text-sm text-gray-600 mt-1">{venue}</p>
+
+        <p className="text-[15px] text-gray-600 mt-3 leading-relaxed">
+          {description.slice(0, 130)}...
+        </p>
+
+        <div className="flex gap-3 mt-4">
+          <button
+            onClick={onReadMore}
+            className="bg-[#ED9121] text-white px-5 py-2 rounded-full font-semibold"
+          >
+            Read More
+          </button>
+
+          {youtubeUrl && (
+            <button
+              onClick={openVideo}
+              className="border border-[#ED9121] text-[#ED9121] px-5 py-2 rounded-full font-semibold"
+            >
+              Watch Video
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default EventsList;
+
+
