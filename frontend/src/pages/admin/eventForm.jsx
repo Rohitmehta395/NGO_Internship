@@ -1,81 +1,103 @@
 import React, { useEffect, useState } from "react";
-import { Image, Upload, X, Type, MapPin, Calendar, Trash2 } from "lucide-react";
+import {
+  Image,
+  Upload,
+  X,
+  Type,
+  MapPin,
+  Calendar,
+  Trash2,
+} from "lucide-react";
 import { IMAGE_BASE_URL } from "../../utils/constants";
 
-const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [venue, setVenue] = useState("");
-  const [date, setDate] = useState("");
-  const [month, setMonth] = useState("");
-  const [youtubeUrl, setYoutubeUrl] = useState("");
-
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-
-  /* ================= LOAD DATA FOR EDIT ================= */
-  useEffect(() => {
-    if (!initialData) return;
-
-    setTitle(initialData.title || "");
-    setDescription(initialData.description || "");
-    setVenue(initialData.venue || "");
-    setDate(initialData.date || "");
-    setMonth(initialData.month || "");
-    setYoutubeUrl(initialData.youtubeUrl || "");
-
-    if (initialData.imageUrl) {
-      const imgUrl = initialData.imageUrl.startsWith("http")
-        ? initialData.imageUrl
-        : `${IMAGE_BASE_URL}/${initialData.imageUrl}`;
-      setPreview(imgUrl);
-    }
-  }, [initialData]);
-
-  const resetForm = () => {
-    setTitle("");
-    setDescription("");
-    setVenue("");
-    setDate("");
-    setMonth("");
-    setYoutubeUrl("");
-    setImage(null);
-    setPreview(null);
-  };
-
-  /* ================= IMAGE ================= */
-  const handleImageChange = (e) => {
-  const file = e.target.files[0];
-  console.log("Selected file:", file);  // <--- ADD THIS
-  if (!file) return;
-
-  setImage(file);
-  setPreview(URL.createObjectURL(file));
+/* ================= DEFAULT STATE ================= */
+const emptyForm = {
+  title: "",
+  description: "",
+  venue: "",
+  date: "",
+  month: "",
+  youtubeUrl: "",
+  image: null,          // local file
+  preview: null,        // image URL (server OR local)
 };
 
+const EventForm = ({ onSubmit, initialData, onCancel }) => {
+  const [form, setForm] = useState(emptyForm);
 
-  const removeImage = () => {
-    setImage(null);
-    setPreview(null);
+  /* ================= LOAD / RESET ================= */
+  useEffect(() => {
+    if (!initialData) {
+      setForm(emptyForm);
+      return;
+    }
+
+    const previewUrl = initialData.imageUrl
+      ? initialData.imageUrl.startsWith("http")
+        ? initialData.imageUrl
+        : `${IMAGE_BASE_URL}/uploads/${initialData.imageUrl}`
+      : null;
+
+    setForm({
+      title: initialData.title || "",
+      description: initialData.description || "",
+      venue: initialData.venue || "",
+      date: initialData.date || "",
+      month: initialData.month || "",
+      youtubeUrl: initialData.youtubeUrl || "",
+      image: null,      // IMPORTANT: existing image ≠ file
+      preview: previewUrl,
+    });
+  }, [initialData]);
+
+  /* ================= HANDLERS ================= */
+  const handleChange = (key) => (e) => {
+    setForm((prev) => ({ ...prev, [key]: e.target.value }));
   };
 
-  /* ================= SUBMIT ================= */
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setForm((prev) => ({
+      ...prev,
+      image: file,
+      preview: URL.createObjectURL(file),
+    }));
+  };
+
+  const removeImage = () => {
+    setForm((prev) => ({
+      ...prev,
+      image: null,
+      preview: null,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     onSubmit({
-      title,
-      description,
-      venue,
-      date: Number(date),
-      month,
-      youtubeUrl,
-      image,
+      title: form.title,
+      description: form.description,
+      venue: form.venue,
+      date: Number(form.date),
+      month: form.month,
+      youtubeUrl: form.youtubeUrl,
+      image: form.image, // null if user didn’t change image
     });
 
-    if (!initialData) resetForm();
+    if (!initialData) {
+      setForm(emptyForm);
+    }
   };
 
+  const handleCancel = () => {
+    setForm(emptyForm);
+    onCancel?.();
+  };
+
+  /* ================= UI ================= */
   return (
     <div className="bg-white p-6 rounded-lg shadow border-t-4 border-orange-500">
       <div className="flex justify-between mb-6">
@@ -83,7 +105,7 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
           {initialData ? "✏️ Edit Event" : "📅 Create Event"}
         </h2>
         {onCancel && (
-          <button onClick={onCancel}>
+          <button type="button" onClick={handleCancel}>
             <X />
           </button>
         )}
@@ -97,8 +119,8 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
           </label>
           <input
             className="w-full border p-2 rounded"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={form.title}
+            onChange={handleChange("title")}
             required
           />
         </div>
@@ -110,8 +132,8 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
           </label>
           <input
             className="w-full border p-2 rounded"
-            value={venue}
-            onChange={(e) => setVenue(e.target.value)}
+            value={form.venue}
+            onChange={handleChange("venue")}
             required
           />
         </div>
@@ -127,8 +149,8 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
               min="1"
               max="31"
               className="w-full border p-2 rounded"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={form.date}
+              onChange={handleChange("date")}
               required
             />
           </div>
@@ -138,8 +160,8 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
             <input
               className="w-full border p-2 rounded"
               placeholder="July 2025"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
+              value={form.month}
+              onChange={handleChange("month")}
               required
             />
           </div>
@@ -150,8 +172,8 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
           <label className="font-semibold">Description</label>
           <textarea
             className="w-full border p-2 rounded"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={form.description}
+            onChange={handleChange("description")}
             required
           />
         </div>
@@ -168,13 +190,17 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
             <input type="file" hidden onChange={handleImageChange} />
           </label>
 
-          {preview && (
+          {form.preview && (
             <div className="relative w-32 mt-3">
-              <img src={preview} className="rounded" />
+              <img
+                src={form.preview}
+                alt="Event preview"
+                className="rounded object-cover w-32 h-32"
+              />
               <button
                 type="button"
                 onClick={removeImage}
-                className="absolute inset-0 bg-black/50 text-white"
+                className="absolute inset-0 bg-black/50 text-white flex items-center justify-center"
               >
                 <Trash2 />
               </button>
@@ -187,8 +213,8 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
           <label className="font-semibold">YouTube URL (optional)</label>
           <input
             className="w-full border p-2 rounded"
-            value={youtubeUrl}
-            onChange={(e) => setYoutubeUrl(e.target.value)}
+            value={form.youtubeUrl}
+            onChange={handleChange("youtubeUrl")}
           />
         </div>
 
@@ -204,7 +230,7 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
           {onCancel && (
             <button
               type="button"
-              onClick={onCancel}
+              onClick={handleCancel}
               className="border px-6 py-2 rounded"
             >
               Cancel
@@ -217,3 +243,5 @@ const EventForm = ({ onSubmit, initialData = null, onCancel }) => {
 };
 
 export default EventForm;
+
+
