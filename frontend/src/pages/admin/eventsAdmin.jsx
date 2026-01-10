@@ -86,7 +86,7 @@ const EventsAdmin = () => {
 
   // If backend already gives relative path like "events/xxx.jpg"
   if (!imageUrl.startsWith("http")) {
-    return `${IMAGE_BASE_URL}/uploads/events/${imageUrl}`;
+    return `${IMAGE_BASE_URL}/uploads/${imageUrl}`;
   }
 
   // Fallback (in case full URL is stored someday)
