@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import EventForm from "./eventForm";
-import { eventsAPI } from "../../services/api";
-import { IMAGE_BASE_URL } from "../../utils/constants";
+import EventForm from "./eventForm.jsx";
+import { eventsAPI } from "../../../services/api.js";
+import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 
-const EventsAdmin = () => {
+const EventManagement = () => {
   const [events, setEvents] = useState([]);
   const [editingEvent, setEditingEvent] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -80,18 +80,26 @@ const EventsAdmin = () => {
     }
   };
 
-  /* ================= IMAGE URL NORMALIZER ================= */
- const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return null;
+  /* ================= IMAGE URL BUILDER ================= */
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
 
-  // If backend already gives relative path like "events/xxx.jpg"
-  if (!imageUrl.startsWith("http")) {
-    return `${IMAGE_BASE_URL}/uploads/${imageUrl}`;
-  }
+    if (imagePath.startsWith("http")) return imagePath;
 
-  // Fallback (in case full URL is stored someday)
-  return imageUrl;
-};
+
+    let cleanPath = imagePath.replace(/^uploads\//, "");
+
+    if (cleanPath.startsWith("/")) cleanPath = cleanPath.slice(1);
+
+    if (!cleanPath.startsWith("events/")) {
+      cleanPath = `events/${cleanPath}`;
+    }
+
+    const finalUrl = `${IMAGE_BASE_URL}/uploads/${cleanPath}`;
+
+    return finalUrl;
+  };
+
   /* ================= RENDER ================= */
   return (
     <div className="p-6 space-y-6 min-h-screen bg-gray-50">
@@ -110,7 +118,7 @@ const EventsAdmin = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => {
-            const imageSrc = getImageUrl(event.imageUrl);
+            const imageSrc = getImageUrl(event.image || event.imageUrl);
 
             return (
               <div
@@ -118,20 +126,24 @@ const EventsAdmin = () => {
                 className="bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
               >
                 {/* IMAGE */}
-                {imageSrc && (
-                  <div className="w-full h-40 overflow-hidden">
+                <div className="w-full h-40 overflow-hidden bg-gray-100">
+                  {imageSrc ? (
                     <img
                       src={imageSrc}
                       alt={event.title}
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        console.error("Image failed:", imageSrc);
+                        console.error("Failed to load image at:", imageSrc);
                         e.target.src =
-                          "https://placehold.co/600x400?text=No+Image";
+                          "https://placehold.co/600x400?text=Image+Not+Found";
                       }}
                     />
-                  </div>
-                )}
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      No Image
+                    </div>
+                  )}
+                </div>
 
                 {/* DETAILS */}
                 <div className="p-4 flex flex-col gap-2">
@@ -176,6 +188,4 @@ const EventsAdmin = () => {
   );
 };
 
-export default EventsAdmin;
-
-
+export default EventManagement;

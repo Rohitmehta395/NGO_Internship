@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { IMAGE_BASE_URL } from "../../utils/constants.js";
+import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 
 const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
   const [title, setTitle] = useState("");

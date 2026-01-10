@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { educationImagesAPI } from "../../services/api.js";
-import { IMAGE_BASE_URL } from "../../utils/constants.js";
+import { educationImagesAPI } from "../../../services/api.js";
+import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 import { toast } from "react-toastify";
 import { Upload, X, Trash2 } from "lucide-react";
 
-const EducationImageManager = () => {
+const EducationImageManagement = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -122,4 +122,4 @@ const EducationImageManager = () => {
   );
 };
 
-export default EducationImageManager;
+export default EducationImageManagement;

@@ -1,10 +1,14 @@
 const Event = require("../models/Event");
+const fs = require("fs");
+const path = require("path");
 
 /* CREATE */
 const createEvent = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "Image is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Image is required" });
     }
 
     const event = await Event.create({
@@ -14,7 +18,7 @@ const createEvent = async (req, res) => {
       date: req.body.date,
       month: req.body.month,
       youtubeUrl: req.body.youtubeUrl,
-      imageUrl: `events/${req.file.filename}`, 
+      imageUrl: `events/${req.file.filename}`,
     });
 
     res.status(201).json(event);
@@ -22,7 +26,8 @@ const createEvent = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
-/* READ (Paginated) */
+
+/* READ */
 const getEvents = async (req, res) => {
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 4;
@@ -52,8 +57,7 @@ const getEvents = async (req, res) => {
 const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
-    if (!event)
-      return res.status(404).json({ message: "Event not found" });
+    if (!event) return res.status(404).json({ message: "Event not found" });
 
     res.json({ success: true, data: event });
   } catch (err) {
@@ -74,12 +78,30 @@ const updateEvent = async (req, res) => {
     };
 
     if (req.file) {
-      data.imageUrl = `events/${req.file.filename}`; // include folder path
+      const oldEvent = await Event.findById(req.params.id);
+      if (oldEvent && oldEvent.imageUrl) {
+        const oldPath = path.join(
+          __dirname,
+          "..",
+          "uploads",
+          oldEvent.imageUrl
+        );
+        fs.unlink(oldPath, (err) => {
+          if (err) console.error("Failed to delete old image:", err);
+        });
+      }
+
+      data.imageUrl = `events/${req.file.filename}`;
     }
 
-    const event = await Event.findByIdAndUpdate(req.params.id, data, { new: true });
+    const event = await Event.findByIdAndUpdate(req.params.id, data, {
+      new: true,
+    });
 
-    if (!event) return res.status(404).json({ success: false, message: "Event not found" });
+    if (!event)
+      return res
+        .status(404)
+        .json({ success: false, message: "Event not found" });
 
     res.json(event);
   } catch (err) {
@@ -90,12 +112,27 @@ const updateEvent = async (req, res) => {
 /* DELETE */
 const deleteEvent = async (req, res) => {
   try {
-    const event = await Event.findByIdAndDelete(req.params.id);
+    const event = await Event.findById(req.params.id);
 
-    if (!event)
+    if (!event) {
       return res.status(404).json({ message: "Event not found" });
+    }
 
-    res.json({ success: true, message: "Event deleted" });
+    if (event.imageUrl) {
+      const imagePath = path.join(__dirname, "..", "uploads", event.imageUrl);
+
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error(`Failed to delete local file: ${imagePath}`, err);
+        } else {
+          console.log(`Successfully deleted local file: ${imagePath}`);
+        }
+      });
+    }
+
+    await Event.findByIdAndDelete(req.params.id);
+
+    res.json({ success: true, message: "Event and image deleted" });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
   }
@@ -108,4 +145,3 @@ module.exports = {
   updateEvent,
   deleteEvent,
 };
-
