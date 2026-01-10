@@ -49,13 +49,10 @@ const MediaTestimonial = () => {
       (entries) =>
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.remove(
-              "opacity-0",
-              "translate-y-10"
-            );
+            entry.target.classList.remove("opacity-0", "translate-y-8");
           }
         }),
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
 
     cards.forEach((c) => observer.observe(c));
@@ -63,98 +60,42 @@ const MediaTestimonial = () => {
   }, []);
 
   return (
-    <section
-      className="
-        w-full bg-[#fafafa] 
-        font-[Poppins] 
-        px-[6vw] py-[4vw]
-        max-[900px]:px-[4vw]
-        max-[600px]:px-0
-        box-border
-      "
-    >
-      {/* Heading */}
-      <h2
-        className="
-          font-[Quicksand] text-center font-bold
-          text-[#ED9121]
-          text-[clamp(1.8rem,2.5vw,2.6rem)]
-          mb-12
-          max-[600px]:text-[1.6rem]
-          max-[600px]:py-6
-        "
-      >
+    <section className="w-full bg-[#fafafa] overflow-x-hidden px-4 py-12 font-[Poppins]">
+      <h2 className="text-center font-[Quicksand] font-bold text-[#ED9121] text-2xl md:text-4xl mb-10">
         Media Coverage
       </h2>
 
-      {/* Grid */}
-      <div
-        className="
-          grid grid-cols-[repeat(2,minmax(300px,1fr))]
-          gap-8 w-full
-          max-[900px]:grid-cols-1
-          max-[900px]:gap-[1.8rem]
-          max-[600px]:gap-4
-        "
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
         {mediaItems.map((item, i) => (
           <article
             key={i}
-            className="
-              media-card
-              bg-white
-              rounded-[16px]
-              overflow-hidden
-              shadow-[0_4px_15px_rgba(0,0,0,0.08)]
-              transition-all duration-300 ease
-              flex flex-col relative
-              opacity-0 translate-y-10
-              hover:-translate-y-[6px]
-              hover:shadow-[0_8px_25px_rgba(0,0,0,0.12)]
-              max-[600px]:rounded-none
-              max-[600px]:shadow-none
-            "
+            className="media-card bg-white rounded-xl overflow-hidden
+                       shadow-md transition-all duration-300
+                       opacity-0 translate-y-8
+                       hover:-translate-y-1 hover:shadow-xl"
           >
-            {/* Image */}
             <img
               src={item.image}
               alt={item.title}
-              className="
-                w-full aspect-[16/9] object-cover
-                border-b border-[#eee]
-                transition-all duration-400 ease
-                group-hover:scale-[1.03]
-              "
+              className="w-full aspect-video object-cover"
             />
 
-            {/* Content */}
-            <div
-              className="
-                p-6 flex flex-col flex-grow
-                max-[600px]:p-4
-              "
-            >
-              <p className="text-[0.95rem] font-semibold text-[#ED9121] mb-1">
+            <div className="p-5 flex flex-col h-full">
+              <p className="text-sm font-semibold text-[#ED9121] mb-1">
                 {item.source}
               </p>
 
-              <p className="text-[0.92rem] text-[#555] leading-[1.5] mb-auto">
+              <p className="text-sm text-gray-600 leading-relaxed mb-4">
                 {item.description}
               </p>
 
-              <p className="text-[0.85rem] text-[#999] my-[0.8rem]">
+              <p className="text-xs text-gray-400 mb-3">
                 {item.date}
               </p>
 
               <a
                 href={item.link}
-                className="
-                  text-[0.9rem] font-semibold
-                  text-[#ED9121]
-                  transition-colors duration-200
-                  hover:text-[#c96f11]
-                  self-start
-                "
+                className="mt-auto text-sm font-semibold text-[#ED9121] hover:text-[#c96f11]"
               >
                 View Article →
               </a>
@@ -167,6 +108,5 @@ const MediaTestimonial = () => {
 };
 
 export default MediaTestimonial;
-
 
 

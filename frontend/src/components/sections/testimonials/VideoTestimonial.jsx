@@ -57,89 +57,80 @@ const VideoTestimonials = () => {
   ];
 
   const scroll = (dir) => {
-    const container = carouselRef.current;
-    if (!container) return;
-    container.scrollBy({
-      left: dir === "left" ? -450 : 450,
+    carouselRef.current?.scrollBy({
+      left: dir === "left" ? -320 : 320,
       behavior: "smooth",
     });
   };
 
   useEffect(() => {
-    if (videos.length > 3) {
-      const id = setInterval(() => scroll("right"), 4000);
-      return () => clearInterval(id);
-    }
+    if (videos.length < 4) return;
+    const id = setInterval(() => scroll("right"), 4000);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <section className="bg-[#fafafa] px-4 py-12 md:px-24 md:py-20 font-[Poppins]">
-      {/* Heading */}
-      <h2 className="text-center text-2xl md:text-4xl font-bold text-[#ED9121] font-[Quicksand]">
+    <section className="bg-[#fafafa] px-4 py-12 overflow-x-hidden font-[Poppins]">
+      <h2 className="text-center font-[Quicksand] text-[#ED9121] text-2xl md:text-4xl font-bold">
         Video Testimonials
       </h2>
+
       <p className="text-center text-gray-600 mt-2 mb-10">
         Real voices. Real impact.
       </p>
 
-      {/* Carousel */}
-      <div className="relative flex items-center">
-        {/* Left Arrow */}
+      <div className="relative max-w-6xl mx-auto">
+        {/* Left */}
         <button
           onClick={() => scroll("left")}
-          className="flex items-center justify-center
-            absolute left-2 md:left-[-25px]
-            top-1/2 -translate-y-1/2
-            w-9 h-9 md:w-[45px] md:h-[45px]
-            rounded-full bg-[#ED9121] text-white text-xl md:text-2xl
-            hover:bg-[#c86d00] z-20"
+          className="absolute left-2 top-1/2 -translate-y-1/2
+                     w-9 h-9 rounded-full bg-[#ED9121] text-white
+                     flex items-center justify-center md:left-[-20px]"
         >
           &#8249;
         </button>
 
-        {/* Cards */}
+        {/* Carousel */}
         <div
           ref={carouselRef}
-          className="flex gap-6 overflow-x-auto scroll-smooth py-4 px-1
-                     scrollbar-hide"
+          className="flex gap-6 overflow-x-auto scroll-smooth
+                     px-2 scrollbar-hide"
         >
           {videos.map((v) => {
             const isExpanded = expanded === v.id;
-            const desc =
-              v.description.length > 160 && !isExpanded
+            const text =
+              !isExpanded && v.description.length > 160
                 ? v.description.slice(0, 160) + "..."
                 : v.description;
 
             return (
               <div
                 key={v.id}
-                className="flex-shrink-0 w-[300px] md:w-[380px]
-                           bg-white rounded-[14px]
-                           shadow-[0_4px_15px_rgba(0,0,0,0.08)]
-                           hover:-translate-y-1 hover:shadow-[0_6px_25px_rgba(237,145,33,0.3)]
-                           transition-all duration-300 text-left"
+                className="flex-shrink-0 w-[300px] bg-white rounded-xl
+                           shadow-md transition hover:-translate-y-1"
               >
-                {/* Video */}
                 <iframe
                   src={v.ytLink}
                   title={v.name}
-                  className="w-full h-[200px] md:h-[220px]
-                             rounded-t-[14px] border-b-[3px] border-[#ED9121]"
+                  className="w-full h-48 rounded-t-xl border-b-4 border-[#ED9121]"
                   allowFullScreen
                 />
 
-                {/* Content */}
-                <div className="p-5">
-                  <h3 className="font-[Quicksand] text-lg font-semibold text-gray-900 relative inline-block">
-                    {v.name}
-                  </h3>
+                <div className="p-4">
+                 <h3
+                  className="font-semibold text-base leading-tight
+                  line-clamp-2 min-h-[2.5rem]"
+                  title={v.name}
+                  >
+                  {v.name}
+                </h3>
 
-                  <p className="text-[#ED9121] font-semibold mt-2">
+                  <p className="text-[#ED9121] font-semibold text-sm mt-1">
                     {v.title}
                   </p>
 
-                  <p className="text-gray-600 text-sm leading-relaxed mt-2">
-                    {desc}
+                  <p className="text-sm text-gray-600 mt-2">
+                    {text}
                   </p>
 
                   {v.description.length > 160 && (
@@ -147,7 +138,7 @@ const VideoTestimonials = () => {
                       onClick={() =>
                         setExpanded(isExpanded ? null : v.id)
                       }
-                      className="mt-2 text-[#ED9121] font-semibold text-sm hover:text-[#c86d00]"
+                      className="text-[#ED9121] font-semibold text-sm mt-2"
                     >
                       {isExpanded ? "Read Less" : "Read More"}
                     </button>
@@ -158,15 +149,12 @@ const VideoTestimonials = () => {
           })}
         </div>
 
-        {/* Right Arrow */}
+        {/* Right */}
         <button
           onClick={() => scroll("right")}
-          className="flex items-center justify-center
-            absolute right-2 md:right-[-25px]
-            top-1/2 -translate-y-1/2
-            w-9 h-9 md:w-[45px] md:h-[45px]
-            rounded-full bg-[#ED9121] text-white text-xl md:text-2xl
-            hover:bg-[#c86d00] z-20"
+          className="absolute right-2 top-1/2 -translate-y-1/2
+                     w-9 h-9 rounded-full bg-[#ED9121] text-white
+                     flex items-center justify-center md:right-[-20px]"
         >
           &#8250;
         </button>
@@ -176,3 +164,6 @@ const VideoTestimonials = () => {
 };
 
 export default VideoTestimonials;
+
+
+
