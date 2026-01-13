@@ -5,7 +5,7 @@ const{
   createVideo,
   updateVideo,
   deleteVideo,
-} = require("../controllers/videoTestController");
+} = require("../controllers/VideoTestController");
 
 const router = express.Router();
 
