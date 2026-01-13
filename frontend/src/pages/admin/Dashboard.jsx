@@ -3,6 +3,7 @@ import TeamManagement from "./dashboardComponents/TeamManagement";
 import BlogManagement from "./dashboardComponents/BlogManagement";
 import EducationImages from "./dashboardComponents/EducationImageManagement";
 import EventManagement from "./dashboardComponents/EventManagement";
+import TestimonialsManagement from "./dashboardComponents/TestimonialDashboard/TestimonialManagment";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("members");
@@ -60,7 +61,14 @@ const Dashboard = () => {
           >
             Events
           </button>
+          <button
+            className={getTabClass("testimonials")}
+            onClick={() => setActiveTab("testimonials")}
+          >
+            Testimonials
+          </button>
         </div>
+          
 
         {/* TAB CONTENT */}
         <div className="animate-fade-in">
@@ -68,6 +76,7 @@ const Dashboard = () => {
           {activeTab === "blogs" && <BlogManagement />}
           {activeTab === "education-images" && <EducationImages />}
           {activeTab === "events" && <EventManagement />}
+          {activeTab === "testimonials" && <TestimonialsManagement />}
         </div>
       </div>
     </div>

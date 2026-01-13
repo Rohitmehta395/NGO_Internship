@@ -1,13 +1,28 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { screenshotsAPI } from "../../../services/api.js"; // your API
+import { IMAGE_BASE_URL } from "../../../utils/constants";
 
 const ScreenshotCarousel = () => {
   const carouselRef = useRef(null);
+  const [screenshots, setScreenshots] = useState([]);
 
-  const screenshots = [
-    { id: 1, src: "/image1.jpg", alt: "Bhagya Ran" },
-    { id: 2, src: "/pvmaiya.jpg", alt: "PV Maiya" },
-    { id: 3, src: "/email.jpg", alt: "Email Screenshot" },
-  ];
+
+  useEffect(() => {
+    const fetchScreenshots = async () => {
+      try {
+        const res = await screenshotsAPI.getAll();
+        setScreenshots(res.data || []);
+      } catch (err) {
+        console.error("Failed to fetch screenshots:", err);
+      }
+    };
+    fetchScreenshots();
+  }, []);
+
+  const getFullImageUrl = (imageUrl) =>
+    imageUrl
+      ? `${IMAGE_BASE_URL}/${imageUrl}`
+      : "https://placehold.co/600x400?text=No+Image";
 
   const scroll = (dir) => {
     carouselRef.current?.scrollBy({
@@ -17,18 +32,20 @@ const ScreenshotCarousel = () => {
   };
 
   useEffect(() => {
-    if (screenshots.length < 3) return;
-
+    if (screenshots.length < 2) return;
     const id = setInterval(() => scroll("right"), 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [screenshots]);
+
+  if (screenshots.length === 0) {
+    return <div className="text-center py-10">No screenshots available.</div>;
+  }
 
   return (
     <section className="bg-white px-4 py-12 overflow-x-hidden font-[Poppins]">
       <h2 className="font-[Quicksand] text-[#ED9121] text-2xl md:text-4xl text-center mb-2">
-        Images
+        Screenshots
       </h2>
-
       <p className="text-gray-600 text-center mb-8">
         Snapshots of our real impact
       </p>
@@ -47,18 +64,17 @@ const ScreenshotCarousel = () => {
         {/* Carousel */}
         <div
           ref={carouselRef}
-          className="flex gap-5 overflow-x-auto scroll-smooth
-                     max-w-full px-2 scrollbar-hide"
+          className="flex gap-5 overflow-x-auto scroll-smooth px-2 scrollbar-hide"
         >
           {screenshots.map((img) => (
             <div
-              key={img.id}
+              key={img._id}
               className="flex-shrink-0 w-60 md:w-72 bg-white rounded-xl
                          shadow-md p-3 transition hover:-translate-y-1"
             >
               <img
-                src={img.src}
-                alt={img.alt}
+                src={getFullImageUrl(img.image)}
+                alt={img.alt || "Screenshot"}
                 className="w-full h-72 object-contain rounded-md"
               />
             </div>

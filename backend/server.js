@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const events = require("./routes/eventRoute");
+
 
 dotenv.config();
 connectDB();
@@ -25,6 +25,10 @@ const auth = require("./routes/auth");
 const members = require("./routes/members");
 const blogs = require("./routes/blogs");
 const educationImg = require("./routes/educationImages");
+const events = require("./routes/eventRoute");
+const mediaTestimonialRoutes = require("./routes/mediaTestimonialRoutes");
+const screenshotRoutes = require("./routes/screenshotRouter");
+const videoTestimonialRoutes = require("./routes/videoTestimonialRoute");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,6 +50,9 @@ app.use("/api/members", members);
 app.use("/api/blogs", blogs);
 app.use("/api/education-images", educationImg);
 app.use("/api/events", events);
+app.use("/api/media", mediaTestimonialRoutes);
+app.use("/api/screenshots", screenshotRoutes);
+app.use("/api/videos", videoTestimonialRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {

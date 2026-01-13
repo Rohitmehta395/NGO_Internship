@@ -46,6 +46,32 @@ export const eventsAPI = {
   delete: (id) => api.delete(`/api/events/${id}`),
 };
 
+export const mediaAPI = {
+  getAll: (params) => api.get("/api/media", { params }),
+  getById: (id) => api.get(`/api/media/${id}`),
+  create: (data, config = {}) => api.post("/api/media", data, config),
+  update: (id, data, config = {}) => api.put(`/api/media/${id}`, data, config),
+  delete: (id) => api.delete(`/api/media/${id}`),
+};
+
+export const videoTestimonialsAPI = {
+  getAll: (params) => api.get("/api/videos", { params }),
+  getById: (id) => api.get(`/api/videos/${id}`),
+  create: (data) => api.post("/api/videos", data),
+  update: (id, data) => api.put(`/api/videos/${id}`, data),
+  delete: (id) => api.delete(`/api/videos/${id}`),
+};
+
+
+export const screenshotsAPI = {
+  getAll: (params) => api.get("/api/screenshots", { params }),
+  getById: (id) => api.get(`/api/screenshots/${id}`),
+  create: (data, config = {}) =>
+    api.post("/api/screenshots", data, config),
+  update: (id, data, config = {}) =>
+    api.put(`/api/screenshots/${id}`, data, config),
+  delete: (id) => api.delete(`/api/screenshots/${id}`),
+};
 
 
 export default api;

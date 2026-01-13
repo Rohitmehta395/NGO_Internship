@@ -1,0 +1,73 @@
+const MediaTestimonial = require("../models/MediaTestimonial");
+
+ const getAllMedia = async (req, res) => {
+  try {
+    const media = await MediaTestimonial.find().sort({ createdAt: -1 });
+    res.status(200).json(media);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// GET by ID
+ const getMediaById = async (req, res) => {
+  try {
+    const media = await MediaTestimonial.findById(req.params.id);
+    if (!media) return res.status(404).json({ message: "Not found" });
+    res.status(200).json(media);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// CREATE
+ const createMedia = async (req, res) => {
+  try {
+    const media = new MediaTestimonial({
+      ...req.body,
+      image: req.file ? req.file.filename : null,
+    });
+    await media.save();
+    res.status(201).json(media);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+// UPDATE
+ const updateMedia = async (req, res) => {
+  try {
+    const updatedData = { ...req.body };
+    if (req.file) updatedData.image = req.file.filename;
+
+    const updatedMedia = await MediaTestimonial.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true }
+    );
+
+    if (!updatedMedia) return res.status(404).json({ message: "Not found" });
+    res.status(200).json(updatedMedia);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+// DELETE
+ const deleteMedia = async (req, res) => {
+  try {
+    const deletedMedia = await MediaTestimonial.findByIdAndDelete(req.params.id);
+    if (!deletedMedia) return res.status(404).json({ message: "Not found" });
+    res.status(200).json({ message: "Deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  getAllMedia,
+  getMediaById,
+  createMedia,
+  updateMedia,
+  deleteMedia,
+};
