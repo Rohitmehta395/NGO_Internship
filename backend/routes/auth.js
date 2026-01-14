@@ -15,7 +15,7 @@ router.post(
 );
 
 router.get("/me", protect, getMe);
-router.post("/forgotpassword", forgotPassword);
-router.post("/resetpassword", resetPassword);
+router.post("/forgotpassword", forgotPassword); // Route for forget password 
+router.post("/resetpassword", resetPassword); // Route for reset password 
 
 module.exports = router;
