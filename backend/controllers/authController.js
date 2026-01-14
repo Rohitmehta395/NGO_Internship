@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+const sendEmail = require("../utils/sendEmail");
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -90,7 +91,95 @@ const getMe = async (req, res) => {
   }
 };
 
+// @desc    Forgot Password - Send OTP
+// @route   POST /api/auth/forgotpassword
+// @access  Public
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    // Save OTP to database (expires in 10 minutes)
+    user.resetPasswordOtp = otp;
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+    await user.save({ validateBeforeSave: false });
+
+    // Send Email
+    const message = `Your password reset OTP is: ${otp}\n\nThis OTP is valid for 10 minutes.`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: "Password Reset OTP",
+        message,
+      });
+
+      res.status(200).json({ success: true, message: "OTP sent to email" });
+    } catch (error) {
+      user.resetPasswordOtp = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return res
+        .status(500)
+        .json({ success: false, message: "Email could not be sent" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
+  }
+};
+
+// @desc    Reset Password via OTP
+// @route   POST /api/auth/resetpassword
+// @access  Public
+const resetPassword = async (req, res) => {
+  const { email, otp, password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      email,
+      resetPasswordOtp: otp,
+      resetPasswordExpire: { $gt: Date.now() }, // Check if not expired
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid OTP or OTP expired" });
+    }
+
+    // Set new password
+    user.password = password;
+    user.resetPasswordOtp = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save(); // Pre-save hook will hash the password
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully! You can now login.",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
+  }
+};
+
 module.exports = {
   login,
   getMe,
+  forgotPassword,
+  resetPassword,
 };
