@@ -6,6 +6,12 @@ const MediaTestimonial = () => {
   const [mediaItems, setMediaItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
+const formatDate = (date) =>
+  new Date(date).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
   /* ================= FETCH MEDIA FROM BACKEND ================= */
   useEffect(() => {
     const fetchMedia = async () => {
@@ -84,7 +90,7 @@ const MediaTestimonial = () => {
                 {item.description}
               </p>
 
-              <p className="text-xs text-gray-400 mb-3">{item.date}</p>
+              <p className="text-xs text-gray-400 mb-3">{formatDate(item.date)}</p>
 
               <a
                 href={item.link || "#"}
