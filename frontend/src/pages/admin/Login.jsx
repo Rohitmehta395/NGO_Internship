@@ -139,7 +139,7 @@ const Login = () => {
                 </button>
               </form>
             ) : (
-              // Step 2: Enter OTP & New Password
+              // Step 2: Enter OTP & New Password for admin
               <form onSubmit={handleResetPassword} className="space-y-4">
                 <input
                   type="text"
