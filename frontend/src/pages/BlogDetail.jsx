@@ -145,7 +145,7 @@ const BlogDetail = () => {
 
         <div className="mt-16 pt-8 border-t border-gray-200">
           <button
-            onClick={() => navigate("/blogs")}
+            onClick={() => navigate("/blog")}
             className="flex items-center gap-2 text-[#0B0B45] font-semibold hover:text-orange-600 transition-colors"
           >
             <ArrowLeft size={20} />
