@@ -9,12 +9,12 @@ const Mission = () => {
           {/* Left Content */}
           <div className="flex flex-col justify-center order-2 lg:order-1">
             {/* Header Tag */}
-            <div className="flex items-center gap-4 mb-6">
+            {/* <div className="flex items-center gap-4 mb-6">
               <div className="w-16 h-0.5 bg-[#1D2130]"></div>
               <span className="font-inter font-bold text-sm tracking-widest uppercase text-[#0B0B45]">
                 Know more
               </span>
-            </div>
+            </div> */}
 
             {/* Main Heading */}
             <h2 className="font-inter font-extrabold text-4xl lg:text-5xl leading-tight text-[#0B0B45] mb-8">
@@ -56,7 +56,7 @@ const Mission = () => {
           {/* Right Video / Image Section */}
           <div className="order-1 lg:order-2">
             <a
-              href="https://youtu.be/W3INztp7TuU?si=SPvJ4bdE8IyMaaAw"
+              href="https://youtube.com/shorts/ljhxm0cYoUw"
               target="_blank"
               rel="noreferrer"
               className="block relative group w-full aspect-[4/5] lg:aspect-square max-h-[500px] mx-auto rounded-2xl overflow-hidden shadow-xl"

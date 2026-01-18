@@ -17,9 +17,9 @@ export default function Header() {
     { name: "Home", path: "/" },
     { name: "Our Programs", path: "/programs" },
     { name: "Sulabh App", path: "/app" },
-    { name: "Events", path: "/events" },
     { name: "About Us", path: "/about" },
     { name: "Our Partners", path: "/partners" },
+    { name: "Events", path: "/events" },
   ];
 
   const moreItems = [

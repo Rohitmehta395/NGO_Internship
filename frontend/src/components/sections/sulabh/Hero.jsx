@@ -1,5 +1,5 @@
 import React from "react";
-import sulabhHero from "../../../assets/sulabhHero.jpg";
+import sulabhHero from "../../../assets/sulabhHero.webp";
 
 const Hero = () => {
   return (
@@ -9,7 +9,7 @@ const Hero = () => {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.85) 85%), url(${sulabhHero})`,
+          backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.50) 85%), url(${sulabhHero})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
@@ -41,7 +41,7 @@ const Hero = () => {
               rel="noreferrer"
               className="w-full sm:w-auto"
             >
-              <button className="w-full sm:w-auto px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-inter font-bold text-sm lg:text-base uppercase tracking-wide rounded-full shadow-lg hover:shadow-orange-500/30 transition-all duration-300 transform hover:-translate-y-1">
+              <button className="w-full sm:w-auto px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-inter font-bold text-sm lg:text-base uppercase tracking-wide rounded-full shadow-lg hover:shadow-orange-500/30 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
                 Login
               </button>
             </a>
@@ -52,7 +52,7 @@ const Hero = () => {
               rel="noreferrer"
               className="w-full sm:w-auto"
             >
-              <button className="w-full sm:w-auto px-8 py-3 bg-white/10 hover:bg-white text-white hover:text-orange-600 border-2 border-white font-inter font-bold text-sm lg:text-base uppercase tracking-wide rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:-translate-y-1">
+              <button className="w-full sm:w-auto px-8 py-3 bg-white/10 hover:bg-white text-white hover:text-orange-600 border-2 border-white font-inter font-bold text-sm lg:text-base uppercase tracking-wide rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
                 Register for Project Sulabh
               </button>
             </a>
