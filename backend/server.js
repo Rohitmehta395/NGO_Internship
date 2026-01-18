@@ -5,14 +5,13 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-
 dotenv.config();
 connectDB();
 
 const app = express();
 
 // --- Create uploads folders if missing ---
-const uploadDirs = ["uploads", "uploads/educationImages"];
+const uploadDirs = ["uploads", "uploads/educationImages", "uploads/programs"];
 uploadDirs.forEach((dir) => {
   const dirPath = path.join(__dirname, dir);
   if (!fs.existsSync(dirPath)) {
@@ -29,6 +28,7 @@ const events = require("./routes/eventRoute");
 const mediaTestimonialRoutes = require("./routes/mediaTestimonialRoutes");
 const screenshotRoutes = require("./routes/screenshotRouter");
 const videoTestimonialRoutes = require("./routes/videoTestimonialRoute");
+const programRoutes = require("./routes/programRoutes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -41,7 +41,7 @@ app.use(
   cors({
     origin: ["http://localhost:5173", process.env.FRONTEND_URL],
     credentials: true,
-  })
+  }),
 );
 
 // Routes
@@ -53,6 +53,7 @@ app.use("/api/events", events);
 app.use("/api/media", mediaTestimonialRoutes);
 app.use("/api/screenshots", screenshotRoutes);
 app.use("/api/videos", videoTestimonialRoutes);
+app.use("/api/programs", programRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {

@@ -1,44 +1,33 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import SchoolSapling from "../../../assets/schoolSapling.webp";
-import SulabhUniversalLearningApp from "../../../assets/sulabhUniversalLearningApp.webp";
+import { API_BASE_URL } from "../../../utils/constants";
 
 export default function AllPrograms() {
-  const programs = [
-    {
-      id: 1,
-      title: "Sharada Academy",
-      description:
-        "A structured learning initiative that supports after-school academics, spoken English, and life-skills training for rural students and teachers.",
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/1bbb09463828926f6b010dd177a295d16c862d83?width=832",
-      route: "/programs/sharada-academy",
-    },
-    {
-      id: 2,
-      title: "Project Sulabh",
-      description:
-        "An ed-tech and community empowerment programme: online spoken English and soft-skills courses for rural teachers and under-privileged students, delivered via the Sulabh learning app.",
-      image: SulabhUniversalLearningApp,
-      route: "/programs/project-sulabh",
-    },
-    {
-      id: 3,
-      title: "Project JnanaShala",
-      description:
-        "A school-support programme that provides library kits, digital learning tools, STEM activities, and value-based learning to enhance the learning environment in government schools.",
-      image:
-        "https://api.builder.io/api/v1/image/assets/TEMP/b3dffa61b6c3b6fc13ab586ac4da190e0034d68e?width=832",
-      route: "/programs/jnanashala",
-    },
-    {
-      id: 4,
-      title: "Others",
-      description:
-        "Initiatives including the School Sapling Project and Financial Inclusion, focused on environmental awareness and basic financial literacy.",
-      image: SchoolSapling,
-      route: "/programs/others",
-    },
-  ];
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/programs`);
+        // Filter ONLY programs meant for the Main Page
+        const mainPrograms = res.data.data.filter((p) => p.category === "main");
+        setPrograms(mainPrograms);
+      } catch (error) {
+        console.error("Error fetching programs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="text-center py-24 text-gray-500">Loading Programs...</div>
+    );
 
   return (
     <section
@@ -46,47 +35,53 @@ export default function AllPrograms() {
       id="next-section"
     >
       <div className="container mx-auto max-w-7xl">
-        {/* Optional Header - Uncomment if needed */}
-        {/* <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-[#0B0B45] sm:text-4xl font-sans">
-            Our Programs
-          </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Empowering communities through education and innovation.
-          </p>
-        </div> */}
-
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10">
           {programs.map((program) => (
             <div
-              key={program.id}
+              key={program._id}
               className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              {/* Image Container with Zoom Effect */}
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
-                <img
-                  src={program.image}
-                  alt={program.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                {/* Overlay gradient for better text contrast if you ever put text on image */}
+                {program.type === "video" ? (
+                  <iframe
+                    src={program.source}
+                    title={program.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={
+                      program.source.startsWith("http")
+                        ? program.source
+                        : `${API_BASE_URL}/${program.source}`
+                    }
+                    alt={program.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
-              {/* Content */}
               <div className="flex flex-1 flex-col p-6 sm:p-8">
                 <h3 className="mb-3 text-2xl font-bold leading-tight text-[#0B0B45] font-sans">
                   {program.title}
                 </h3>
-
                 <p className="mb-6 flex-grow text-base leading-relaxed text-gray-600 font-sans">
                   {program.description}
                 </p>
 
-                <Link to={program.route} className="mt-auto block w-full">
+                {/* DYNAMIC LINK GENERATION */}
+                {/* Use the slug (e.g. 'sharada-academy') to build the link */}
+                <Link
+                  to={
+                    program.slug
+                      ? `/programs/${program.slug}`
+                      : program.route || "#"
+                  }
+                  className="mt-auto block w-full"
+                >
                   <button className="group/btn flex w-full items-center justify-center gap-2 rounded-xl bg-orange-400 px-6 py-4 font-bold uppercase text-white transition-all hover:bg-orange-500 active:scale-95 cursor-pointer">
                     View Details
-                    {/* Simple arrow icon */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

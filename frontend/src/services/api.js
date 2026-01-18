@@ -16,7 +16,7 @@ export const authAPI = {
   login: (credentials) => api.post("/api/auth/login", credentials),
   getProfile: () => api.get("/api/auth/me"),
   forgotPassword: (email) => api.post("/api/auth/forgotpassword", { email }),
-  resetPassword: (data) => api.post("/api/auth/resetpassword", data),
+  resetPassword: (data) => api.post("/api/auth/resetpassword", { ...data }),
 };
 
 export const membersAPI = {
@@ -64,16 +64,20 @@ export const videoTestimonialsAPI = {
   delete: (id) => api.delete(`/api/videos/${id}`),
 };
 
-
 export const screenshotsAPI = {
   getAll: (params) => api.get("/api/screenshots", { params }),
   getById: (id) => api.get(`/api/screenshots/${id}`),
-  create: (data, config = {}) =>
-    api.post("/api/screenshots", data, config),
+  create: (data, config = {}) => api.post("/api/screenshots", data, config),
   update: (id, data, config = {}) =>
     api.put(`/api/screenshots/${id}`, data, config),
   delete: (id) => api.delete(`/api/screenshots/${id}`),
 };
 
+export const programsAPI = {
+  getAll: () => api.get("/api/programs"),
+  create: (formData) => api.post("/api/programs", formData),
+  update: (id, formData) => api.put(`/api/programs/${id}`, formData),
+  delete: (id) => api.delete(`/api/programs/${id}`),
+};
 
 export default api;

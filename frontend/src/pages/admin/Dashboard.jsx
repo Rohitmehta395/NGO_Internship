@@ -4,6 +4,7 @@ import BlogManagement from "./dashboardComponents/BlogManagement";
 import EducationImages from "./dashboardComponents/EducationImageManagement";
 import EventManagement from "./dashboardComponents/EventManagement";
 import TestimonialsManagement from "./dashboardComponents/TestimonialDashboard/TestimonialManagment";
+import ProgramManagement from "./dashboardComponents/ProgramManagement"; // Import the new component
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("members");
@@ -67,8 +68,13 @@ const Dashboard = () => {
           >
             Testimonials
           </button>
+          <button
+            className={getTabClass("programs")}
+            onClick={() => setActiveTab("programs")}
+          >
+            Programs
+          </button>
         </div>
-          
 
         {/* TAB CONTENT */}
         <div className="animate-fade-in">
@@ -77,6 +83,7 @@ const Dashboard = () => {
           {activeTab === "education-images" && <EducationImages />}
           {activeTab === "events" && <EventManagement />}
           {activeTab === "testimonials" && <TestimonialsManagement />}
+          {activeTab === "programs" && <ProgramManagement />}
         </div>
       </div>
     </div>

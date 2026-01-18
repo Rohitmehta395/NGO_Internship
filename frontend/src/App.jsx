@@ -17,10 +17,9 @@ import Partners from "./pages/Partners";
 import Testimonial from "./pages/Testimonial";
 import Sulabh from "./pages/Sulabh";
 import Programs from "./pages/Programs";
-import JnanshalaPage from "./pages/JnanshalaPage";
-import SharadaAcademyPage from "./pages/SharadaAcademyPage";
-import ProjectSulabhPage from "./pages/ProjectSulabhPage";
-import OtherProgramsPage from "./pages/OtherProgramsPage";
+// Note: Hardcoded page imports (JnanshalaPage, etc.) are removed
+// because we are now using the dynamic page for everything.
+import DynamicProgram from "./pages/DynamicProgram";
 import Notfound from "./pages/Notfound";
 
 // Admin Pages
@@ -63,14 +62,13 @@ function App() {
             <Route path="/testimonials" element={<Testimonial />} />
             <Route path="/app" element={<Sulabh />} />
 
-            {/* Nested Program Routes */}
-            <Route path="/programs">
-              <Route index element={<Programs />} />
-              <Route path="jnanashala" element={<JnanshalaPage />} />
-              <Route path="sharada-academy" element={<SharadaAcademyPage />} />
-              <Route path="project-sulabh" element={<ProjectSulabhPage />} />
-              <Route path="others" element={<OtherProgramsPage />} />
-            </Route>
+            {/* --- PROGRAM ROUTES --- */}
+            {/* Main list of programs */}
+            <Route path="/programs" element={<Programs />} />
+
+            {/* Dynamic Route for ANY program detail page 
+                (e.g., /programs/sharada-academy, /programs/new-program) */}
+            <Route path="/programs/:slug" element={<DynamicProgram />} />
 
             <Route path="/blog" element={<BlogList />} />
             <Route path="/blog/:slug" element={<BlogDetail />} />
