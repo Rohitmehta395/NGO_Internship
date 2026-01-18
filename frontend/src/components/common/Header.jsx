@@ -24,7 +24,7 @@ export default function Header() {
 
   const moreItems = [
     { name: "Testimonials", path: "/testimonials" },
-    { name: "Blog", path: "/blogs" },
+    { name: "Blog", path: "/blog" },
   ];
 
   return (
