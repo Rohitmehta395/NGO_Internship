@@ -2,17 +2,18 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 const dns = require("node:dns");
 
-// CRITICAL FIX: Force IPv4.
-// Render/Gmail often hang on IPv6 connections, causing ETIMEDOUT.
+// --- CRITICAL FIX: Force Node.js to use IPv4 ---
+// Render often fails to connect to Gmail via IPv6, causing the Timeout.
 try {
   if (dns.setDefaultResultOrder) {
     dns.setDefaultResultOrder("ipv4first");
   }
 } catch (e) {
-  console.log("Could not set IPv4 preference (Node version too old?)");
+  console.log("Could not set IPv4 preference");
 }
 
 const sendEmail = async (options) => {
+  // Use port 465 (SSL) by default as it is more reliable on cloud servers
   const smtpPort = process.env.SMTP_PORT || 465;
 
   console.log(`-> Attempting to send email to: ${options.email}`);
@@ -32,13 +33,11 @@ const sendEmail = async (options) => {
       tls: {
         // Do not fail on invalid certs
         rejectUnauthorized: false,
-        // Force a specific SSL method to avoid handshake hangs
+        // Force SSLv3 to prevent handshake hangs
         ciphers: "SSLv3",
       },
-      // Increase timeout to 30 seconds
+      // Increase timeout
       connectionTimeout: 30000,
-      greetingTimeout: 30000,
-      socketTimeout: 30000,
     });
 
     // Verify connection before sending
