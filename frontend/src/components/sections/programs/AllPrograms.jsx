@@ -24,6 +24,20 @@ export default function AllPrograms() {
     fetchPrograms();
   }, []);
 
+  // ADDED: Helper to convert YouTube URL to Embed URL
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+    // Regular expression to extract Video ID from various YouTube URL formats
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    // If ID found, return embed URL, otherwise return original
+    return match && match[2].length === 11
+      ? `https://www.youtube.com/embed/${match[2]}`
+      : url;
+  };
+
   if (loading)
     return (
       <div className="text-center py-24 text-gray-500">Loading Programs...</div>
@@ -43,10 +57,12 @@ export default function AllPrograms() {
             >
               <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
                 {program.type === "video" ? (
+                  // CHANGED: Use getEmbedUrl helper and allowFullScreen
                   <iframe
-                    src={program.source}
+                    src={getEmbedUrl(program.source)}
                     title={program.title}
                     className="h-full w-full object-cover"
+                    allowFullScreen
                   />
                 ) : (
                   <img
@@ -59,7 +75,10 @@ export default function AllPrograms() {
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                {/* Only show hover overlay for images, not videos (interferes with play button) */}
+                {program.type !== "video" && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                )}
               </div>
 
               <div className="flex flex-1 flex-col p-6 sm:p-8">
@@ -70,8 +89,6 @@ export default function AllPrograms() {
                   {program.description}
                 </p>
 
-                {/* DYNAMIC LINK GENERATION */}
-                {/* Use the slug (e.g. 'sharada-academy') to build the link */}
                 <Link
                   to={
                     program.slug

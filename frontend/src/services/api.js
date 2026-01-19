@@ -78,6 +78,7 @@ export const programsAPI = {
   create: (formData) => api.post("/api/programs", formData),
   update: (id, formData) => api.put(`/api/programs/${id}`, formData),
   delete: (id) => api.delete(`/api/programs/${id}`),
+  reorder: (items) => api.put("/api/programs/reorder", { items }),
 };
 
 export default api;

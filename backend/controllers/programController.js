@@ -5,7 +5,7 @@ const path = require("path");
 // Get all programs
 exports.getPrograms = async (req, res) => {
   try {
-    const programs = await Program.find().sort({ createdAt: -1 });
+    const programs = await Program.find().sort({ order: 1, createdAt: -1 });
     res.status(200).json({ success: true, data: programs });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -30,6 +30,9 @@ exports.createProgram = async (req, res) => {
       source = videoUrl;
     }
 
+    const lastProgram = await Program.findOne({ category }).sort({ order: -1 });
+    const newOrder = lastProgram ? lastProgram.order + 1 : 0;
+
     const newProgram = new Program({
       title,
       description,
@@ -38,6 +41,7 @@ exports.createProgram = async (req, res) => {
       source,
       route,
       slug,
+      order: newOrder,
     });
 
     await newProgram.save();
@@ -110,6 +114,31 @@ exports.deleteProgram = async (req, res) => {
 
     await program.deleteOne();
     res.status(200).json({ success: true, message: "Program deleted" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.reorderPrograms = async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    if (!items || !Array.isArray(items)) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
+    }
+
+    const operations = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await Program.bulkWrite(operations);
+    }
+
+    res.status(200).json({ success: true, message: "Reordered successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { programsAPI } from "../../../services/api";
 import {
   FaEdit,
@@ -7,6 +7,7 @@ import {
   FaLayerGroup,
   FaFileAlt,
   FaExclamationTriangle,
+  FaGripVertical, // Icon for drag handle
 } from "react-icons/fa";
 import { API_BASE_URL } from "../../../utils/constants";
 
@@ -15,7 +16,11 @@ const ProgramManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [mode, setMode] = useState("main"); // 'main' or 'content'
+  const [mode, setMode] = useState("main");
+
+  // Drag and Drop state
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -42,15 +47,32 @@ const ProgramManagement = () => {
     }
   };
 
-  // Filter "Parent" programs for the dropdown
-  // We check for category 'main' AND that a slug exists
+  // Helper: Convert YouTube URL to Embed URL
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11
+      ? `https://www.youtube.com/embed/${match[2]}`
+      : url;
+  };
+
   const existingSections = programs.filter((p) => p.category === "main");
+
+  // Determine which programs to display based on Mode and Selection
+  const filteredPrograms = programs.filter((p) => {
+    if (mode === "main") {
+      return p.category === "main";
+    }
+    // In content mode, filter by the selected category dropdown
+    return p.category === formData.category;
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Auto-generate slug (only when creating a new Main program)
     if (name === "title" && mode === "main" && !isEditing) {
       setFormData((prev) => ({
         ...prev,
@@ -68,7 +90,6 @@ const ProgramManagement = () => {
   };
 
   const resetForm = (targetMode = mode) => {
-    // If switching to content mode, grab the first available section slug
     const defaultCategory =
       targetMode === "main" ? "main" : existingSections[0]?.slug || "";
 
@@ -102,7 +123,7 @@ const ProgramManagement = () => {
       description: program.description,
       type: program.type,
       category: program.category,
-      slug: program.slug || "", // Handle missing slug
+      slug: program.slug || "",
       videoUrl: program.type === "video" ? program.source : "",
       image: null,
     });
@@ -129,7 +150,6 @@ const ProgramManagement = () => {
 
     if (mode === "main") {
       data.append("category", "main");
-      // Fallback: if user didn't type slug, make one from title
       const finalSlug =
         formData.slug || formData.title.toLowerCase().replace(/ /g, "-");
       data.append("slug", finalSlug);
@@ -139,6 +159,7 @@ const ProgramManagement = () => {
     }
 
     if (formData.type === "video") {
+      // Ensure we send the raw URL, but display logic handles embed
       data.append("videoUrl", formData.videoUrl);
     } else if (formData.image) {
       data.append("image", formData.image);
@@ -158,13 +179,65 @@ const ProgramManagement = () => {
     }
   };
 
+  /* --- DRAG AND DROP HANDLERS --- */
+  const handleDragStart = (e, index) => {
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (e, index) => {
+    dragOverItem.current = index;
+  };
+
+  const handleDragEnd = async () => {
+    // Clone the *filtered* list because we are reordering what is visible
+    const _programs = [...filteredPrograms];
+
+    // Remove item from old position
+    const draggedItemContent = _programs.splice(dragItem.current, 1)[0];
+    // Insert at new position
+    _programs.splice(dragOverItem.current, 0, draggedItemContent);
+
+    // Reset refs
+    dragItem.current = null;
+    dragOverItem.current = null;
+
+    // Create a map of ALL programs to update state correctly
+    // We basically replace the subset in the main list
+    const updatedAllPrograms = programs.map((p) => {
+      // Is this item in our reordered list?
+      const found = _programs.find((item) => item._id === p._id);
+      return found || p;
+    });
+
+    // We need to actually update the UI order strictly for the filtered part
+    // But since `programs` state holds everything, we need to construct a new state where the filtered items are in the new order relative to themselves.
+    // Simpler approach: Just update the `order` property locally and refetch.
+
+    // Assign new order indices to the filtered subset
+    const itemsToUpdate = _programs.map((item, index) => ({
+      _id: item._id,
+      order: index,
+    }));
+
+    // Optimistic UI Update (Wait for fetch to realign perfectly)
+    // We can't easily update `programs` state without complex logic because it's a mixed list.
+    // Instead, we just trigger the API call and fetch.
+    try {
+      await programsAPI.reorder(itemsToUpdate);
+      fetchPrograms();
+    } catch (err) {
+      console.error("Reorder failed", err);
+    }
+  };
+
   const renderMedia = (prog) => {
     if (prog.type === "video") {
       return (
         <iframe
-          src={prog.source}
+          src={getEmbedUrl(prog.source)}
           title={prog.title}
           className="w-full h-full object-cover"
+          allowFullScreen
         />
       );
     }
@@ -225,10 +298,6 @@ const ProgramManagement = () => {
                   required
                   className="w-full border border-gray-300 p-2.5 rounded-lg bg-gray-50 font-mono text-sm"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Creates URL: /programs/
-                  <strong>{formData.slug || "..."}</strong>
-                </p>
               </div>
             ) : (
               <div>
@@ -242,20 +311,15 @@ const ProgramManagement = () => {
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="" disabled>
-                      -- Select a Program --
-                    </option>
                     {existingSections.map((sec) => (
                       <option key={sec._id} value={sec.slug || "missing-slug"}>
-                        {sec.title}{" "}
-                        {sec.slug ? `( /${sec.slug} )` : "(Legacy Data)"}
+                        {sec.title}
                       </option>
                     ))}
                   </select>
                 ) : (
                   <div className="p-3 bg-red-50 text-red-600 text-sm rounded border border-red-200">
-                    ⚠️ No "Main" Programs found. Switch tabs to create one
-                    first.
+                    ⚠️ No "Main" Programs found.
                   </div>
                 )}
               </div>
@@ -333,6 +397,7 @@ const ProgramManagement = () => {
                   name="videoUrl"
                   value={formData.videoUrl}
                   onChange={handleInputChange}
+                  placeholder="Paste YouTube link here"
                   className="w-full border border-gray-300 p-2.5 rounded-lg"
                 />
               </div>
@@ -344,11 +409,7 @@ const ProgramManagement = () => {
                 disabled={mode === "content" && existingSections.length === 0}
                 className={`flex-1 text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-50 ${mode === "main" ? "bg-orange-600 hover:bg-orange-700" : "bg-blue-600 hover:bg-blue-700"}`}
               >
-                {isEditing
-                  ? "Update Item"
-                  : mode === "main"
-                    ? "Create Program"
-                    : "Add Content"}
+                {isEditing ? "Update Item" : "Create Item"}
               </button>
               {isEditing && (
                 <button
@@ -367,78 +428,77 @@ const ProgramManagement = () => {
       {/* --- RIGHT: LIST SECTION --- */}
       <div className="lg:w-2/3 w-full">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 pl-1 border-l-4 border-orange-500 ml-2">
-          {mode === "main" ? "Main Programs (Cards)" : "Inner Page Content"}
+          {mode === "main"
+            ? "Main Programs (Cards)"
+            : `Content for: ${formData.category}`}
         </h2>
 
         {loading ? (
           <p className="text-gray-500">Loading...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {programs
-              .filter((p) =>
-                mode === "main" ? p.category === "main" : p.category !== "main",
-              )
-              .map((prog) => (
-                <div
-                  key={prog._id}
-                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 overflow-hidden flex flex-col"
-                >
-                  <div className="h-48 bg-gray-100 relative group">
-                    {renderMedia(prog)}
-
-                    {/* Action Buttons */}
-                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-200">
-                      <button
-                        onClick={() => handleEdit(prog)}
-                        className="bg-white p-2.5 rounded-full text-blue-600 hover:text-blue-800"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(prog._id)}
-                        className="bg-white p-2.5 rounded-full text-red-500 hover:text-red-700"
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-
-                    {/* Badges - SAFE VERSION (Prevents 'undefined') */}
-                    <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
-                      {prog.category === "main" ? (
-                        <span className="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide bg-orange-100 text-orange-800">
-                          {prog.slug ? `/${prog.slug}` : "MISSING SLUG"}
-                        </span>
-                      ) : (
-                        <span className="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide bg-blue-100 text-blue-800">
-                          Page: {prog.category}
-                        </span>
-                      )}
-
-                      {/* Warning for old data */}
-                      {prog.category === "main" && !prog.slug && (
-                        <span className="text-[10px] bg-red-500 text-white px-1 rounded flex items-center gap-1">
-                          <FaExclamationTriangle /> Delete & Re-add
-                        </span>
-                      )}
-                    </div>
+            {filteredPrograms.map((prog, index) => (
+              <div
+                key={prog._id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragEnter={(e) => handleDragEnter(e, index)}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => e.preventDefault()}
+                className="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 overflow-hidden flex flex-col cursor-move"
+              >
+                <div className="h-48 bg-gray-100 relative group">
+                  {/* Drag Handle Icon Visual */}
+                  <div className="absolute top-2 right-2 z-10 bg-black/20 p-1 rounded text-white opacity-50">
+                    <FaGripVertical />
                   </div>
 
-                  <div className="p-4 flex flex-col flex-1">
-                    <h3 className="font-bold text-lg text-gray-800 mb-1">
-                      {prog.title}
-                    </h3>
-                    <p className="text-gray-500 text-sm mb-4 flex-1 line-clamp-3">
-                      {prog.description}
-                    </p>
+                  {renderMedia(prog)}
+
+                  {/* Action Buttons */}
+                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-200">
+                    <button
+                      onClick={() => handleEdit(prog)}
+                      className="bg-white p-2.5 rounded-full text-blue-600 hover:text-blue-800"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(prog._id)}
+                      className="bg-white p-2.5 rounded-full text-red-500 hover:text-red-700"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
+                    {prog.category === "main" ? (
+                      <span className="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide bg-orange-100 text-orange-800">
+                        {prog.slug ? `/${prog.slug}` : "MISSING SLUG"}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide bg-blue-100 text-blue-800">
+                        Page: {prog.category}
+                      </span>
+                    )}
                   </div>
                 </div>
-              ))}
 
-            {programs.filter((p) =>
-              mode === "main" ? p.category === "main" : p.category !== "main",
-            ).length === 0 && (
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-bold text-lg text-gray-800 mb-1">
+                    {prog.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm mb-4 flex-1 line-clamp-3">
+                    {prog.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+            {filteredPrograms.length === 0 && (
               <div className="col-span-full py-12 text-center text-gray-400 bg-white border border-dashed rounded-xl">
-                <p>No {mode === "main" ? "Main Programs" : "Content"} found.</p>
+                <p>No content found for this selection.</p>
               </div>
             )}
           </div>

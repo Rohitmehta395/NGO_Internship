@@ -9,6 +9,7 @@ const programSchema = new mongoose.Schema(
     slug: { type: String, required: false },
     source: { type: String, required: true },
     route: { type: String, required: false },
+    order: { type: Number, default: 0 },
   },
   { timestamps: true },
 );

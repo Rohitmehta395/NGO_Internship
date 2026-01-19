@@ -20,6 +20,13 @@ const upload = multer({ storage });
 // Routes
 router.get("/", programController.getPrograms);
 
+router.put(
+  "/reorder",
+  protect,
+  authorize("admin"),
+  programController.reorderPrograms,
+);
+
 router.post(
   "/",
   protect,
