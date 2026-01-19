@@ -92,29 +92,26 @@ const getMe = async (req, res) => {
 };
 
 // @desc    Forgot Password - Send OTP
-// @route   POST /api/auth/forgotpassword
-// @access  Public
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
+  console.log(`-> Forgot Password requested for: ${email}`);
 
   try {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      console.log("-> User not found in DB");
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
 
-    // Save OTP to database (expires in 10 minutes)
+    // Save OTP
     user.resetPasswordOtp = otp;
     user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
     await user.save({ validateBeforeSave: false });
 
-    // Send Email
     const message = `Your password reset OTP is: ${otp}\n\nThis OTP is valid for 10 minutes.`;
 
     try {
@@ -124,20 +121,24 @@ const forgotPassword = async (req, res) => {
         message,
       });
 
+      console.log("-> OTP Email sent successfully");
       res.status(200).json({ success: true, message: "OTP sent to email" });
     } catch (error) {
+      console.error("-> Email Send Failed. Error:", error.message);
+      
+      // Reset OTP fields if email fails
       user.resetPasswordOtp = undefined;
       user.resetPasswordExpire = undefined;
       await user.save({ validateBeforeSave: false });
 
-      return res
-        .status(500)
-        .json({ success: false, message: "Email could not be sent" });
+      return res.status(500).json({ 
+        success: false, 
+        message: "Email could not be sent. Check server logs." 
+      });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Server Error", error: error.message });
+    console.error("-> Database/Server Error:", error);
+    res.status(500).json({ success: false, message: "Server Error", error: error.message });
   }
 };
 
