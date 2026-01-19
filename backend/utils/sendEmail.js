@@ -1,5 +1,16 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
+const dns = require("node:dns");
+
+// CRITICAL FIX: Force IPv4.
+// Render/Gmail often hang on IPv6 connections, causing ETIMEDOUT.
+try {
+  if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder("ipv4first");
+  }
+} catch (e) {
+  console.log("Could not set IPv4 preference (Node version too old?)");
+}
 
 const sendEmail = async (options) => {
   const smtpPort = process.env.SMTP_PORT || 465;
@@ -12,22 +23,27 @@ const sendEmail = async (options) => {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || "smtp.gmail.com",
       port: smtpPort,
-      secure: smtpPort == 465,
+      // secure: true for 465, false for other ports
+      secure: parseInt(smtpPort) === 465,
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
       },
       tls: {
-        // Helps prevent handshake errors on some networks
-        ciphers: "SSLv3",
+        // Do not fail on invalid certs
         rejectUnauthorized: false,
+        // Force a specific SSL method to avoid handshake hangs
+        ciphers: "SSLv3",
       },
-      connectionTimeout: 10000,
+      // Increase timeout to 30 seconds
+      connectionTimeout: 30000,
+      greetingTimeout: 30000,
+      socketTimeout: 30000,
     });
 
     // Verify connection before sending
     await transporter.verify();
-    console.log("-> SMTP Connection Verified");
+    console.log("-> SMTP Connection Verified Successfully");
 
     const message = {
       from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
