@@ -8,8 +8,8 @@ const path = require("path");
 const generateSlug = (title) => {
   return title
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric chars with hyphens
-    .replace(/^-+|-+$/g, ""); // Trim hyphens from start/end
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 };
 
 // --- Helper: Send Email Notification ---
@@ -52,7 +52,7 @@ const sendNewPostEmail = async (blog) => {
 // @route   GET /api/blogs
 const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find({}).sort({ createdAt: -1 });
+    const blogs = await Blog.find({}).sort({ date: -1 });
     res.json({ success: true, data: blogs });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -68,11 +68,8 @@ const createBlog = async (req, res) => {
       imagePath = req.file.path.replace(/\\/g, "/");
     }
 
-    // --- FIX: Generate Unique Slug ---
     let slug = generateSlug(req.body.title);
 
-    // Ensure slug is unique by appending timestamp if needed
-    // (This prevents crashes if you use the same title twice)
     const existingSlug = await Blog.findOne({ slug });
     if (existingSlug) {
       slug = `${slug}-${Date.now()}`;
@@ -81,7 +78,8 @@ const createBlog = async (req, res) => {
     const blog = await Blog.create({
       ...req.body,
       image: imagePath,
-      slug: slug, // <--- This was missing!
+      slug: slug,
+      date: req.body.date || Date.now(),
     });
 
     // Send Email Notification
@@ -101,25 +99,23 @@ const updateBlog = async (req, res) => {
     let blog = await Blog.findById(req.params.id);
 
     if (!blog) {
-      return res.status(404).json({ success: false, message: "Blog not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
     }
 
     let updateData = { ...req.body };
 
-    // Handle Image Update
     if (req.file) {
-      // 1. Delete old image if it exists
       if (blog.image) {
         const oldImagePath = path.join(__dirname, "..", blog.image);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
-      // 2. Set new image path
       updateData.image = req.file.path.replace(/\\/g, "/");
     }
 
-    // Optional: Update slug if title changes
     if (updateData.title && updateData.title !== blog.title) {
       updateData.slug = generateSlug(updateData.title) + "-" + Date.now();
     }
@@ -131,7 +127,6 @@ const updateBlog = async (req, res) => {
 
     res.json({ success: true, data: blog });
   } catch (error) {
-    // Clean up uploaded file if update fails
     if (req.file) fs.unlinkSync(req.file.path);
     res.status(400).json({ success: false, message: error.message });
   }

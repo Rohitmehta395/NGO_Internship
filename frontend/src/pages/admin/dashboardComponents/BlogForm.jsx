@@ -8,6 +8,7 @@ import {
   AlignLeft,
   FileText,
   Trash2,
+  Calendar,
 } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -18,8 +19,9 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("Admin");
-  const [image, setImage] = useState(null); // File object for new uploads
-  const [preview, setPreview] = useState(null); // URL for preview
+  const [date, setDate] = useState("");
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   // Load initial data for Editing
   useEffect(() => {
@@ -29,7 +31,9 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
       setContent(initialData.content || "");
       setAuthor(initialData.author || "Admin");
 
-      // Handle existing image preview
+      const initialDate = initialData.date || new Date().toISOString();
+      setDate(initialDate.split("T")[0]); // Format YYYY-MM-DD
+
       if (initialData.image) {
         const imgUrl = initialData.image.startsWith("http")
           ? initialData.image
@@ -46,6 +50,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
     setDescription("");
     setContent("");
     setAuthor("Admin");
+    setDate(new Date().toISOString().split("T")[0]);
     setImage(null);
     setPreview(null);
   };
@@ -61,17 +66,12 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
   const handleRemoveImage = () => {
     setImage(null);
     setPreview(null);
-    // Note: If editing, this visually removes it.
-    // You might need a specific flag if you want to force delete it on backend,
-    // but usually uploading a new one or leaving it overrides it.
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Pass data back to parent
-    onSubmit({ title, description, content, author, image });
+    onSubmit({ title, description, content, author, date, image });
 
-    // Only reset if it's a new entry, otherwise keep data until parent closes edit mode
     if (!initialData) {
       resetForm();
     }
@@ -82,7 +82,6 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
     if (onCancel) onCancel();
   };
 
-  // Quill Configuration
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -90,7 +89,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
       [{ list: "ordered" }, { list: "bullet" }],
       ["blockquote", "code-block"],
       [{ align: [] }],
-      ["link", "image"], // Image button allows inserting images into article
+      ["link", "image"],
       ["clean"],
     ],
   };
@@ -134,7 +133,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Title */}
-          <div className="space-y-2">
+          <div className="space-y-2 md:col-span-2">
             <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
               <Type className="w-4 h-4 text-orange-500" /> Article Title
             </label>
@@ -157,6 +156,20 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
               className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
+            />
+          </div>
+
+          {/* ADDED: Date Input */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-orange-500" /> Publish Date
+            </label>
+            <input
+              type="date"
+              className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
             />
           </div>
 
@@ -197,7 +210,6 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
                 </label>
               </div>
 
-              {/* Image Preview & Delete Button */}
               {preview && (
                 <div className="w-32 h-24 relative rounded-lg overflow-hidden border border-gray-200 shadow-sm shrink-0 group">
                   <img
@@ -205,7 +217,6 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
                     alt="Preview"
                     className="w-full h-full object-cover"
                   />
-                  {/* Delete Button */}
                   <button
                     type="button"
                     onClick={handleRemoveImage}
@@ -251,7 +262,6 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
             {initialData ? "Update Article" : "Publish Article"}
           </button>
 
-          {/* Show cancel button if we are editing or if form is dirty */}
           {(onCancel || title || content) && (
             <button
               type="button"

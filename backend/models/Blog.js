@@ -8,8 +8,9 @@ const blogSchema = new mongoose.Schema(
     image: { type: String, required: false },
     author: { type: String, default: "Admin" },
     slug: { type: String, unique: true },
+    date: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Blog", blogSchema);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { videoTestimonialsAPI } from "../../../../services/api"; 
+import { videoTestimonialsAPI } from "../../../../services/api";
 
 const initialForm = {
   name: "",
@@ -21,7 +21,7 @@ const VideoTestimonialAdmin = () => {
       setVideos(res.data || []);
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch videos");
+      alert(err.response?.data?.message || "Failed to fetch videos");
     }
   };
 
@@ -50,7 +50,7 @@ const VideoTestimonialAdmin = () => {
       fetchVideos();
     } catch (err) {
       console.error(err);
-      alert("Error saving video");
+      alert(err.response?.data?.message || "Error saving video");
     } finally {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ const VideoTestimonialAdmin = () => {
       alert("Deleted successfully!");
     } catch (err) {
       console.error(err);
-      alert("Delete failed");
+      alert(err.response?.data?.message || "Delete failed");
     }
   };
 
@@ -124,7 +124,7 @@ const VideoTestimonialAdmin = () => {
 
           <input
             name="ytLink"
-            placeholder="YouTube Embed Link"
+            placeholder="YouTube Link (e.g. https://youtu.be/...)"
             value={form.ytLink}
             onChange={handleChange}
             className="w-full border p-2 rounded"
@@ -167,6 +167,7 @@ const VideoTestimonialAdmin = () => {
                 <p className="text-sm text-gray-700 line-clamp-3">
                   {video.description}
                 </p>
+                <p className="text-xs text-blue-500 truncate">{video.ytLink}</p>
               </div>
 
               <div className="flex gap-2 pt-4">
@@ -196,4 +197,3 @@ const VideoTestimonialAdmin = () => {
 };
 
 export default VideoTestimonialAdmin;
-

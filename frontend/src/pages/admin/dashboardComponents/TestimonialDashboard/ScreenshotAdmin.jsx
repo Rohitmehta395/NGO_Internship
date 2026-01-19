@@ -5,6 +5,7 @@ import { IMAGE_BASE_URL } from "../../../../utils/constants";
 
 const emptyForm = {
   alt: "",
+  date: "",
   image: null,
   preview: null,
 };
@@ -32,7 +33,7 @@ const ScreenshotAdmin = () => {
       setScreenshots(res.data);
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch screenshots");
+      alert(err.response?.data?.message || "Failed to fetch screenshots");
     }
   };
 
@@ -69,6 +70,10 @@ const ScreenshotAdmin = () => {
       const formData = new FormData();
       formData.append("alt", form.alt);
 
+      if (form.date) {
+        formData.append("date", form.date);
+      }
+
       if (form.image) {
         formData.append("image", form.image);
       }
@@ -77,7 +82,7 @@ const ScreenshotAdmin = () => {
         await screenshotsAPI.update(editingId, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Screenshot updated");
+        alert("Updated successfully");
       } else {
         if (!form.image) {
           alert("Image is required");
@@ -86,14 +91,14 @@ const ScreenshotAdmin = () => {
         await screenshotsAPI.create(formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Screenshot created");
+        alert("Created successfully");
       }
 
       resetForm();
       fetchScreenshots();
     } catch (err) {
       console.error(err);
-      alert("Save failed");
+      alert(err.response?.data?.message || "Save failed");
     } finally {
       setLoading(false);
     }
@@ -103,6 +108,7 @@ const ScreenshotAdmin = () => {
   const handleEdit = (s) => {
     setForm({
       alt: s.alt || "",
+      date: s.date ? new Date(s.date).toISOString().split("T")[0] : "",
       image: null,
       preview: getImageUrl(s.image),
     });
@@ -112,13 +118,13 @@ const ScreenshotAdmin = () => {
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this screenshot?")) return;
+    if (!window.confirm("Delete this item?")) return;
     try {
       await screenshotsAPI.delete(id);
       fetchScreenshots();
     } catch (err) {
       console.error(err);
-      alert("Delete failed");
+      alert(err.response?.data?.message || "Delete failed");
     }
   };
 
@@ -134,7 +140,9 @@ const ScreenshotAdmin = () => {
       <div className="bg-white p-6 rounded-lg shadow border-t-4 border-orange-500">
         <div className="flex justify-between mb-4">
           <h2 className="text-xl font-bold">
-            {editingId ? "✏️ Edit Screenshot" : "🖼️ Add Screenshot"}
+            {editingId
+              ? "✏️ Edit Gesture of Appreciation from Celebrities"
+              : "🖼️ Add Gesture of Appreciation from Celebrities"}
           </h2>
           {editingId && (
             <button onClick={resetForm}>
@@ -144,22 +152,37 @@ const ScreenshotAdmin = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="font-semibold">Alt Text</label>
-            <input
-              className="w-full border p-2 rounded mt-1"
-              value={form.alt}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, alt: e.target.value }))
-              }
-              required
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="font-semibold">Alt Text (Description)</label>
+              <input
+                className="w-full border p-2 rounded mt-1"
+                value={form.alt}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, alt: e.target.value }))
+                }
+                required
+                placeholder="e.g. Letter from XYZ"
+              />
+            </div>
+            <div>
+              <label className="font-semibold">Date</label>
+              <input
+                type="date"
+                className="w-full border p-2 rounded mt-1"
+                value={form.date}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, date: e.target.value }))
+                }
+                required
+              />
+            </div>
           </div>
 
           {/* IMAGE UPLOAD */}
           <div>
             <label className="font-semibold flex gap-2 mb-2">
-              <Image className="text-gray-500" /> Screenshot Image
+              <Image className="text-gray-500" /> Image (Letter/Email Scan)
             </label>
 
             {!form.preview ? (
@@ -177,7 +200,7 @@ const ScreenshotAdmin = () => {
               <div className="relative inline-block">
                 <img
                   src={form.preview}
-                  className="h-48 w-full max-w-sm object-cover rounded border"
+                  className="h-48 w-full max-w-sm object-contain rounded border bg-gray-100"
                   alt="Preview"
                 />
                 <button
@@ -217,27 +240,36 @@ const ScreenshotAdmin = () => {
         {screenshots.map((s) => (
           <div
             key={s._id}
-            className="bg-white border rounded shadow-sm overflow-hidden"
+            className="bg-white border rounded shadow-sm overflow-hidden flex flex-col"
           >
-            <img
-              src={getImageUrl(s.image)}
-              alt={s.alt}
-              className="h-40 w-full object-cover"
-            />
+            <div className="h-48 bg-gray-100 flex items-center justify-center p-2">
+              <img
+                src={getImageUrl(s.image)}
+                alt={s.alt}
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
 
-            <div className="p-4">
-              <p className="text-sm text-gray-600">{s.alt}</p>
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <p className="text-sm font-bold text-gray-800">{s.alt}</p>
+                {s.date && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Date: {new Date(s.date).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
 
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => handleEdit(s)}
-                  className="text-blue-600 bg-blue-50 px-3 py-1 rounded text-sm"
+                  className="text-blue-600 bg-blue-50 px-3 py-1 rounded text-sm flex-1"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => handleDelete(s._id)}
-                  className="text-red-600 bg-red-50 px-3 py-1 rounded text-sm"
+                  className="text-red-600 bg-red-50 px-3 py-1 rounded text-sm flex-1"
                 >
                   Delete
                 </button>
@@ -251,4 +283,3 @@ const ScreenshotAdmin = () => {
 };
 
 export default ScreenshotAdmin;
-

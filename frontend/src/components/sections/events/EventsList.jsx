@@ -19,7 +19,7 @@ const EventsList = () => {
       try {
         const response = await eventsAPI.getAll({
           page: currentPage,
-          limit: 4,
+          limit: 8,
         });
         const { data, pagination } = response.data;
 

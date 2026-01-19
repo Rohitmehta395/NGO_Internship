@@ -13,25 +13,33 @@ const getImages = async (req, res) => {
   }
 };
 
-// @desc    Upload new image
+// @desc    Upload new image(s)
 // @route   POST /api/education-images
 const uploadImage = async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.files || req.files.length === 0) {
       return res
         .status(400)
-        .json({ success: false, message: "No image uploaded" });
+        .json({ success: false, message: "No images uploaded" });
     }
 
-    const imagePath = req.file.path.replace(/\\/g, "/");
+    const createdImages = [];
 
-    const newImage = await EducationImage.create({
-      image: imagePath,
-    });
+    for (const file of req.files) {
+      const imagePath = file.path.replace(/\\/g, "/");
+      const newImage = await EducationImage.create({
+        image: imagePath,
+      });
+      createdImages.push(newImage);
+    }
 
-    res.status(201).json({ success: true, data: newImage });
+    res.status(201).json({ success: true, data: createdImages });
   } catch (error) {
-    if (req.file) fs.unlinkSync(req.file.path); // Clean up if error
+    if (req.files) {
+      req.files.forEach((file) => {
+        if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+      });
+    }
     res.status(400).json({ success: false, message: error.message });
   }
 };

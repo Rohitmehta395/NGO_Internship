@@ -1,11 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
-import { screenshotsAPI } from "../../../services/api.js"; // your API
+import { screenshotsAPI } from "../../../services/api.js";
 import { IMAGE_BASE_URL } from "../../../utils/constants";
 
 const ScreenshotCarousel = () => {
   const carouselRef = useRef(null);
   const [screenshots, setScreenshots] = useState([]);
-
 
   useEffect(() => {
     const fetchScreenshots = async () => {
@@ -38,30 +37,28 @@ const ScreenshotCarousel = () => {
   }, [screenshots]);
 
   if (screenshots.length === 0) {
-    return <div className="text-center py-10">No screenshots available.</div>;
+    return <div className="text-center py-10">No letters available.</div>;
   }
 
   return (
     <section className="bg-white px-4 py-12 overflow-x-hidden font-[Poppins]">
       <h2 className="font-[Quicksand] text-[#ED9121] text-2xl md:text-4xl text-center mb-2">
-        Screenshots
+        Testimonial Letters & Emails
       </h2>
       <p className="text-gray-600 text-center mb-8">
-        Snapshots of our real impact
+        Gesture of Appreciation from Celebrities
       </p>
 
       <div className="relative max-w-6xl mx-auto">
-        {/* Left */}
         <button
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 -translate-y-1/2
                      bg-[#ED9121] text-white w-9 h-9 rounded-full
-                     flex items-center justify-center md:left-[-20px]"
+                     flex items-center justify-center md:left-[-20px] z-10"
         >
           &#8249;
         </button>
 
-        {/* Carousel */}
         <div
           ref={carouselRef}
           className="flex gap-5 overflow-x-auto scroll-smooth px-2 scrollbar-hide"
@@ -74,19 +71,23 @@ const ScreenshotCarousel = () => {
             >
               <img
                 src={getFullImageUrl(img.image)}
-                alt={img.alt || "Screenshot"}
+                alt={img.alt || "Testimonial Letter"}
                 className="w-full h-72 object-contain rounded-md"
               />
+              {img.date && (
+                <p className="text-xs text-gray-400 text-center mt-2">
+                  {new Date(img.date).toLocaleDateString()}
+                </p>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Right */}
         <button
           onClick={() => scroll("right")}
           className="absolute right-2 top-1/2 -translate-y-1/2
                      bg-[#ED9121] text-white w-9 h-9 rounded-full
-                     flex items-center justify-center md:right-[-20px]"
+                     flex items-center justify-center md:right-[-20px] z-10"
         >
           &#8250;
         </button>
@@ -96,4 +97,3 @@ const ScreenshotCarousel = () => {
 };
 
 export default ScreenshotCarousel;
-

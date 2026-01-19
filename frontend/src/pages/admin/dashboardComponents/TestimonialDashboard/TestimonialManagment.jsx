@@ -33,7 +33,7 @@ const TestimonialsManagement = () => {
           className={getSubTabClass("screenshots")}
           onClick={() => setActiveSubTab("screenshots")}
         >
-          Screenshots
+          Testimonial Letters & Emails
         </button>
       </div>
 

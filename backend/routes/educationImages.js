@@ -9,7 +9,7 @@ const {
   deleteImage,
 } = require("../controllers/educationImageController");
 
-// --- Multer Config for Specific Folder ---
+// --- Multer Config ---
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = "uploads/educationImages/";
@@ -20,22 +20,47 @@ const storage = multer.diskStorage({
     cb(null, dir);
   },
   filename: (req, file, cb) => {
-    cb(null, `edu-${Date.now()}${path.extname(file.originalname)}`);
+    cb(
+      null,
+      `edu-${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`,
+    );
   },
 });
 
 const upload = multer({
   storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp/;
     const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
+      path.extname(file.originalname).toLowerCase(),
     );
     const mimetype = filetypes.test(file.mimetype);
     if (mimetype && extname) return cb(null, true);
-    cb("Error: Images Only!");
+
+    cb(
+      new Error(
+        `File "${file.originalname}" is not a valid image. Only JPEG, JPG, PNG, and WEBP are allowed.`,
+      ),
+    );
   },
 });
+
+// --- Middleware Wrapper to Catch Upload Errors ---
+const uploadMiddleware = (req, res, next) => {
+  const uploadFunc = upload.array("images", 10);
+
+  uploadFunc(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res
+        .status(400)
+        .json({ success: false, message: `Upload Error: ${err.message}` });
+    } else if (err) {
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    next();
+  });
+};
 
 // Routes
 router.get("/", getImages);
@@ -43,8 +68,8 @@ router.post(
   "/",
   protect,
   authorize("admin"),
-  upload.single("image"),
-  uploadImage
+  uploadMiddleware,
+  uploadImage,
 );
 router.delete("/:id", protect, authorize("admin"), deleteImage);
 

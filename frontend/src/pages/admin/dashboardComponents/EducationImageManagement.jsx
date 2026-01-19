@@ -26,21 +26,24 @@ const EducationImageManagement = () => {
   }, []);
 
   const handleUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     const formData = new FormData();
-    formData.append("image", file);
+    for (let i = 0; i < files.length; i++) {
+      formData.append("images", files[i]);
+    }
 
     setUploading(true);
     try {
       await educationImagesAPI.upload(formData);
-      toast.success("Image uploaded!");
+      toast.success("Images uploaded successfully!");
       fetchImages();
     } catch (error) {
-      toast.error("Upload failed");
+      toast.error(error.response?.data?.message || "Upload failed");
     } finally {
       setUploading(false);
+      e.target.value = "";
     }
   };
 
@@ -71,8 +74,8 @@ const EducationImageManagement = () => {
               <>
                 <Upload className="w-8 h-8 text-gray-400 mb-2" />
                 <p className="text-sm text-gray-500">
-                  <span className="font-semibold">Click to upload</span> a new
-                  image
+                  <span className="font-semibold">Click to upload</span> new
+                  images (Max 10)
                 </p>
               </>
             )}
@@ -81,6 +84,7 @@ const EducationImageManagement = () => {
             type="file"
             className="hidden"
             accept="image/*"
+            multiple
             onChange={handleUpload}
             disabled={uploading}
           />
