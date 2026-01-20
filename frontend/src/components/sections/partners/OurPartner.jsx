@@ -13,9 +13,10 @@ const OurPartners = () => {
       try {
         const res = await partnersAPI.getAll();
 
-        const activePartners = (res.data.data || [])
-          .filter((p) => p.isActive)
-          .sort((a, b) => (a.order || 0) - (b.order || 0));
+        const activePartners = (res.data.data || []).filter((p) => p.isActive);
+
+        // Sort by createdAt descending (newest first)
+        activePartners.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         setPartners(activePartners);
       } catch (err) {
@@ -54,34 +55,33 @@ const OurPartners = () => {
     ? partner.imageUrl
     : `${IMAGE_BASE_URL}/uploads/${partner.imageUrl}`;
 
-  /* ================= RENDER ================= */
+
   return (
     <section className="bg-[#f9fafb] px-5 py-16 text-[#082D50]">
-      <h2 className="mb-2 text-center text-2xl font-bold">Our Partners</h2>
+      
 
-      <p className="mb-10 text-center text-[#ED9121]">
+      <p className="mb-12 text-center text-[#ED9121] font-semibold tracking-wide">
         Collaboration that fuels impact
       </p>
 
       <div className="relative mx-auto max-w-[850px]">
         {/* CARD */}
-        <div className="overflow-hidden rounded-xl bg-white border">
+        <div className="overflow-hidden rounded-2xl bg-white shadow-xl border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
           <img
             src={imageSrc}
             alt={partner.name}
-            className="h-[240px] w-full object-cover md:h-[300px]"
+            className="h-[260px] w-full object-cover md:h-[320px] rounded-t-2xl"
             onError={(e) => {
-              e.target.src =
-                "https://placehold.co/800x400?text=Image+Not+Found";
+              e.target.src = "https://placehold.co/800x400?text=Image+Not+Found";
             }}
           />
 
           <div className="p-6">
-            <h3 className="mb-3 text-lg font-semibold md:text-xl">
+            <h3 className="mb-3 text-xl font-semibold text-gray-900 md:text-xl">
               {partner.name}
             </h3>
 
-            <p className="text-sm leading-relaxed text-gray-700 md:text-base">
+            <p className="text-gray-700 text-sm md:text-base leading-relaxed">
               {partner.description}
             </p>
           </div>
@@ -91,7 +91,7 @@ const OurPartners = () => {
         {partners.length > 1 && (
           <button
             onClick={prevSlide}
-            className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[#ED9121] text-white flex items-center justify-center md:left-[-20px] z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#ED9121] text-white flex items-center justify-center shadow-lg hover:bg-orange-500 transition-colors md:left-[-25px] z-20"
           >
             &#8249;
           </button>
@@ -101,12 +101,27 @@ const OurPartners = () => {
         {partners.length > 1 && (
           <button
             onClick={nextSlide}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[#ED9121] text-white flex items-center justify-center md:right-[-20px] z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#ED9121] text-white flex items-center justify-center shadow-lg hover:bg-orange-500 transition-colors md:right-[-25px] z-20"
           >
             &#8250;
           </button>
         )}
       </div>
+
+      {/* Dots */}
+      {partners.length > 1 && (
+        <div className="mt-6 flex justify-center gap-2">
+          {partners.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrent(idx)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                current === idx ? "bg-[#ED9121] w-4 h-4" : "bg-gray-300"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

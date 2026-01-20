@@ -7,7 +7,9 @@ const PartnerManagement = () => {
   const [partners, setPartners] = useState([]);
   const [editingPartner, setEditingPartner] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
+  // Fetch all partners
   const fetchPartners = async () => {
     try {
       setLoading(true);
@@ -25,9 +27,10 @@ const PartnerManagement = () => {
     fetchPartners();
   }, []);
 
+  // Create / Update Partner
   const handleSubmit = async (data) => {
     const formData = new FormData();
-    ["name", "description", "order", "isActive"].forEach((key) =>
+    ["name", "description", "isActive"].forEach((key) =>
       formData.append(key, data[key])
     );
     if (data.image) formData.append("image", data.image);
@@ -51,14 +54,13 @@ const PartnerManagement = () => {
       fetchPartners();
     } catch (err) {
       console.error(err);
-      if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
-        } else {
-          alert("Upload failed");
-        }
+      const message =
+        err.response?.data?.message || "Partner save failed";
+      alert(message);
     }
   };
 
+  // Delete partner
   const handleDelete = async (id) => {
     if (!confirm("Delete this partner?")) return;
     try {
@@ -70,22 +72,24 @@ const PartnerManagement = () => {
     }
   };
 
+  // Build image URL
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
     if (imagePath.startsWith("http")) return imagePath;
-
-    let cleanPath = imagePath.replace(/^uploads\//, "");
-    if (cleanPath.startsWith("/")) cleanPath = cleanPath.slice(1);
-
+    const cleanPath = imagePath.replace(/^uploads\//, "");
     return `${IMAGE_BASE_URL}/uploads/${cleanPath}`;
   };
 
-  const sortedPartners = [...partners].sort(
-    (a, b) => a.order - b.order || new Date(b.createdAt) - new Date(a.createdAt)
-  );
+  // Sorted partners based on createdAt and sortOrder
+  const sortedPartners = [...partners].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
 
   return (
     <div className="p-6 space-y-6 min-h-screen bg-gray-50">
+      {/* Partner Form */}
       <PartnerForm
         onSubmit={handleSubmit}
         initialData={editingPartner}
@@ -94,6 +98,19 @@ const PartnerManagement = () => {
 
       <hr />
 
+      {/* Sorting Dropdown */}
+      <div className="flex justify-end">
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </div>
+
+      {/* Partners Grid */}
       {loading ? (
         <p className="text-center text-gray-500">Loading partners...</p>
       ) : sortedPartners.length === 0 ? (

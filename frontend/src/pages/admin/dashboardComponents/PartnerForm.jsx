@@ -141,17 +141,6 @@ const PartnerForm = ({ onSubmit, initialData, onCancel }) => {
 
         {/* ORDER + ACTIVE */}
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="font-semibold flex gap-2">
-              <ListOrdered className="text-gray-500" /> Display Order
-            </label>
-            <input
-              type="number"
-              className="w-full border p-2 rounded mt-1"
-              value={form.order}
-              onChange={handleChange("order")}
-            />
-          </div>
 
           <div className="flex items-center gap-3 mt-6">
             <input

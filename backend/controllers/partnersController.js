@@ -14,7 +14,6 @@ const createPartner = async (req, res) => {
     const partner = await Partner.create({
       name: req.body.name,
       description: req.body.description,
-      order: req.body.order || 0,
       isActive: req.body.isActive ?? true,
       imageUrl: `partners/${req.file.filename}`,
     });
@@ -33,22 +32,26 @@ const createPartner = async (req, res) => {
 /* READ – PUBLIC */
 const getPartners = async (req, res) => {
   try {
-    const partners = await Partner.find({ isActive: true }).sort({ order: 1 });
+    const sortOrder = req.query.sort === "oldest" ? 1 : -1; // newest default
+    const partners = await Partner.find({ isActive: true }).sort({ createdAt: sortOrder });
     res.json({ success: true, data: partners });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
 
+
 /* READ – ADMIN */
 const getAllPartners = async (req, res) => {
   try {
-    const partners = await Partner.find().sort({ order: 1 });
+    const sortOrder = req.query.sort === "oldest" ? 1 : -1; // newest default
+    const partners = await Partner.find().sort({ createdAt: sortOrder });
     res.json({ success: true, data: partners });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
 
 /* UPDATE */
 const updatePartner = async (req, res) => {
@@ -71,7 +74,6 @@ const updatePartner = async (req, res) => {
 
     partner.name = req.body.name ?? partner.name;
     partner.description = req.body.description ?? partner.description;
-    partner.order = req.body.order ?? partner.order;
     partner.isActive = req.body.isActive ?? partner.isActive;
 
     await partner.save();
