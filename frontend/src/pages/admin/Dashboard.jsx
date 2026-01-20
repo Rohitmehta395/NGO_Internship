@@ -5,6 +5,8 @@ import EducationImages from "./dashboardComponents/EducationImageManagement";
 import EventManagement from "./dashboardComponents/EventManagement";
 import TestimonialsManagement from "./dashboardComponents/TestimonialDashboard/TestimonialManagment";
 import ProgramManagement from "./dashboardComponents/ProgramManagement"; // Import the new component
+import PartnerManagement from "./dashboardComponents/PartnerManagement";
+
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("members");
@@ -74,6 +76,12 @@ const Dashboard = () => {
           >
             Programs
           </button>
+          <button
+            className={getTabClass("partners")}
+            onClick={() => setActiveTab("partners")}
+          >
+            Partners
+          </button>
         </div>
 
         {/* TAB CONTENT */}
@@ -84,6 +92,8 @@ const Dashboard = () => {
           {activeTab === "events" && <EventManagement />}
           {activeTab === "testimonials" && <TestimonialsManagement />}
           {activeTab === "programs" && <ProgramManagement />}
+          {activeTab === "partners" && <PartnerManagement />}
+
         </div>
       </div>
     </div>

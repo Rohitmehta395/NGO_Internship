@@ -29,6 +29,7 @@ const mediaTestimonialRoutes = require("./routes/mediaTestimonialRoutes");
 const screenshotRoutes = require("./routes/screenshotRouter");
 const videoTestimonialRoutes = require("./routes/videoTestimonialRoute");
 const programRoutes = require("./routes/programRoutes");
+const partnerRoutes = require("./routes/partnerRoute");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -54,6 +55,7 @@ app.use("/api/media", mediaTestimonialRoutes);
 app.use("/api/screenshots", screenshotRoutes);
 app.use("/api/videos", videoTestimonialRoutes);
 app.use("/api/programs", programRoutes);
+app.use("/api/partners", partnerRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {

@@ -1,136 +1,114 @@
 import { useEffect, useState } from "react";
+import { partnersAPI } from "../../../services/api";
+import { IMAGE_BASE_URL } from "../../../utils/constants";
 
 const OurPartners = () => {
-  const partners = [
-    {
-      id: 1,
-      img: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/2nd%20Banner%20image-Final.jpg/:/rs=w:720",
-      name: "Happy World Foundation",
-      desc:
-        "Founded by Shri Santhosh CV in 2013, Happy World Foundation is one of our premier Partners. We have collaborated with them for School Sapling events and Project JnanaShala — an education-based initiative in rural Karnataka.",
-    },
-    {
-      id: 2,
-      img: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/Rajan%20Sir%20centre%20rounded%20Cover%20image.png/:/rs=w:1200",
-      name: "Community Teaching Group - Thane",
-      desc:
-        "Founded by Shri Varadarajan, with the help of 60+ lady volunteers, the NGO teaches over 500 underprivileged students from Thane slums — covering subjects across English, Hindi, and Marathi mediums.",
-    },
-    {
-      id: 3,
-      img: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/_DSC0129.jpg/:/rs=w:1200,h:600",
-      name: "Shubham Karoti Maitreyi Gurukula",
-      desc:
-        "A residential school for girls from remote areas of Karnataka. Founded by Shri Pramod Kamat, it has been empowering education for over 25 years.",
-    },
-    {
-      id: 4,
-      img: "https://img1.wsimg.com/isteam/ip/72ab1d19-9a70-40bf-8977-a857ec90d38d/WhatsApp%20Image%202022-11-03%20at%201.11.55%20-fa14eee.jpeg/:/cr=t:5.56%25,l:0%25,w:100%25,h:88.89%25/rs=w:1200,h:600,cg:true",
-      name: "Punyatma Prabhakar Sharma Seva Mandal",
-      desc:
-        "An 80-year-old trust from Igatpuri (MH) supporting children with disabilities through free education, food, and shelter.",
-    },
-  ];
-
+  const [partners, setPartners] = useState([]);
   const [current, setCurrent] = useState(0);
+  const [loading, setLoading] = useState(true);
 
+  // FETCH PARTNER
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) =>
-        prev === partners.length - 1 ? 0 : prev + 1
-      );
-    }, 4000);
+    const fetchPartners = async () => {
+      try {
+        const res = await partnersAPI.getAll();
 
-    return () => clearInterval(interval);
+        const activePartners = (res.data.data || [])
+          .filter((p) => p.isActive)
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+        setPartners(activePartners);
+      } catch (err) {
+        console.error("Failed to fetch partners", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPartners();
   }, []);
 
-  return (
-    <section className="bg-[#f9fafb] text-center text-[#082D50] px-[20px] py-[60px]">
-      <h2 className="font-[700] mb-[8px] text-[1.6rem] md:text-[2rem]">
-        Our Partners
-      </h2>
+  // slider
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? partners.length - 1 : prev - 1));
+  };
 
-      <p className="text-[#ED9121] text-[1.1rem] tracking-[0.5px] mb-[40px]">
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === partners.length - 1 ? 0 : prev + 1));
+  };
+
+  // STATES
+  if (loading) {
+    return (
+      <section className="py-16 text-center text-gray-500">
+        Loading partners...
+      </section>
+    );
+  }
+
+  if (!partners.length) return null;
+
+  const partner = partners[current];
+
+  const imageSrc = partner.imageUrl?.startsWith("http")
+    ? partner.imageUrl
+    : `${IMAGE_BASE_URL}/uploads/${partner.imageUrl}`;
+
+  /* ================= RENDER ================= */
+  return (
+    <section className="bg-[#f9fafb] px-5 py-16 text-[#082D50]">
+      <h2 className="mb-2 text-center text-2xl font-bold">Our Partners</h2>
+
+      <p className="mb-10 text-center text-[#ED9121]">
         Collaboration that fuels impact
       </p>
 
-      {/* slider */}
-      <div className="relative max-w-[850px] mx-auto overflow-hidden">
-        {partners.map((partner, index) => (
-          <div
-            key={partner.id}
-            className={`
-              top-0 left-0 w-full
-              transition-opacity duration-[1000ms] ease-in-out
-              ${index === current ? "relative opacity-100" : "absolute opacity-0"}
-            `}
-          >
-            <div
-              className="
-                bg-white text-left overflow-hidden
-                rounded-[12px] md:rounded-[16px]
-                shadow-[0_6px_20px_rgba(0,0,0,0.08)]
-                transition-transform duration-300
-                hover:-translate-y-[6px]
-              "
-            >
-              <img
-                src={partner.img}
-                alt={partner.name}
-                className="
-                  w-full object-cover
-                  h-[220px]
-                  md:h-[250px]
-                  lg:h-[350px]
-                "
-              />
-
-              <div className="p-[16px] md:p-[18px] lg:p-[24px]">
-                <h3
-                  className="
-                    font-[700] mb-[10px]
-                    text-[1rem]
-                    md:text-[1.1rem]
-                    lg:text-[1.3rem]
-                  "
-                >
-                  {partner.name}
-                </h3>
-
-                <p
-                  className="
-                    text-[#333] leading-[1.5]
-                    text-[0.9rem]
-                    md:text-[0.95rem]
-                    lg:text-[1rem]
-                  "
-                >
-                  {partner.desc}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* dots */}
-      <div className="mt-[25px]">
-        {partners.map((_, idx) => (
-          <span
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`
-              inline-block cursor-pointer
-              h-[12px] w-[12px] mx-[5px]
-              rounded-full transition-colors duration-300
-              ${idx === current ? "bg-[#ED9121]" : "bg-[#ccc]"}
-            `}
+      <div className="relative mx-auto max-w-[850px]">
+        {/* CARD */}
+        <div className="overflow-hidden rounded-xl bg-white border">
+          <img
+            src={imageSrc}
+            alt={partner.name}
+            className="h-[240px] w-full object-cover md:h-[300px]"
+            onError={(e) => {
+              e.target.src =
+                "https://placehold.co/800x400?text=Image+Not+Found";
+            }}
           />
-        ))}
+
+          <div className="p-6">
+            <h3 className="mb-3 text-lg font-semibold md:text-xl">
+              {partner.name}
+            </h3>
+
+            <p className="text-sm leading-relaxed text-gray-700 md:text-base">
+              {partner.description}
+            </p>
+          </div>
+        </div>
+
+        {/* LEFT BUTTON */}
+        {partners.length > 1 && (
+          <button
+            onClick={prevSlide}
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[#ED9121] text-white flex items-center justify-center md:left-[-20px] z-10"
+          >
+            &#8249;
+          </button>
+        )}
+
+        {/* RIGHT BUTTON */}
+        {partners.length > 1 && (
+          <button
+            onClick={nextSlide}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[#ED9121] text-white flex items-center justify-center md:right-[-20px] z-10"
+          >
+            &#8250;
+          </button>
+        )}
       </div>
     </section>
   );
 };
 
 export default OurPartners;
-

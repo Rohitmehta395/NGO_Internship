@@ -81,4 +81,13 @@ export const programsAPI = {
   reorder: (items) => api.put("/api/programs/reorder", { items }),
 };
 
+export const partnersAPI = {
+  getAll: (params) => api.get("/api/partners", { params }),
+  getById: (id) => api.get(`/api/partners/${id}`),
+  create: (data, config = {}) => api.post("/api/partners", data, config),
+  update: (id, data, config = {}) =>  api.put(`/api/partners/${id}`, data, config),
+  delete: (id) =>  api.delete(`/api/partners/${id}`),
+};
+
+
 export default api;
