@@ -18,6 +18,7 @@ const MediaTestimonialAdmin = () => {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   /* ================= FETCH ================= */
   const fetchMedia = async () => {
@@ -42,6 +43,14 @@ const MediaTestimonialAdmin = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // FILE SIZE CHECK (1MB Limit)
+    if (file.size > 1024 * 1024) {
+      alert("File size exceeds 1MB. Please upload a smaller image.");
+      e.target.value = ""; // Reset input
+      return;
+    }
+
     setForm((prev) => ({
       ...prev,
       image: file,
@@ -91,7 +100,10 @@ const MediaTestimonialAdmin = () => {
       fetchMedia();
     } catch (err) {
       console.error(err);
-      alert("Error saving media testimonial");
+      alert(
+        err.response?.data?.message ||
+          "Error saving media testimonial. Check file size (max 1MB).",
+      );
     } finally {
       setLoading(false);
     }
@@ -132,6 +144,13 @@ const MediaTestimonialAdmin = () => {
     setForm(emptyForm);
     setEditingId(null);
   };
+
+  /* ================= SORTING ================= */
+  const sortedMedia = [...mediaList].sort((a, b) => {
+    const dateA = new Date(a.date || a.createdAt || 0);
+    const dateB = new Date(b.date || b.createdAt || 0);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
 
   /* ================= UI ================= */
   return (
@@ -186,7 +205,7 @@ const MediaTestimonialAdmin = () => {
                 Click to Upload Image
               </span>
               <span className="text-xs text-gray-400 mt-1">
-                JPG, PNG, WebP supported
+                JPG, PNG, WebP supported (Max 1MB)
               </span>
               <input
                 type="file"
@@ -237,69 +256,83 @@ const MediaTestimonialAdmin = () => {
         </form>
       </div>
 
-      {/* LIST */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mediaList.length === 0 && (
-          <p className="text-center text-gray-500 col-span-full">
-            No media testimonials found.
-          </p>
-        )}
-        {mediaList.map((media) => (
-          <div
-            key={media._id}
-            className="bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
+      {/* FILTER & LIST */}
+      <div>
+        {/* Sort Filter */}
+        <div className="flex justify-end mb-4">
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
           >
-            <div className="w-full h-40 overflow-hidden bg-gray-100">
-              {media.image ? (
-                <img
-                  src={getImageUrl(media.image)}
-                  alt={media.title}
-                  className="w-full h-full object-cover"
-                  onError={(e) =>
-                    (e.target.src =
-                      "https://placehold.co/600x400?text=Image+Not+Found")
-                  }
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  No Image
-                </div>
-              )}
-            </div>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
 
-            <div className="p-4 flex flex-col gap-2">
-              <h3 className="font-bold text-lg">{media.title}</h3>
-              <p className="text-sm text-gray-500">{media.source}</p>
-              <p className="text-sm text-gray-400">
-                {new Date(media.date).toLocaleDateString()}
-              </p>
-              {media.link && (
-                <a
-                  href={media.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-orange-500 text-sm underline"
-                >
-                  Read Article
-                </a>
-              )}
-              <div className="flex gap-2 mt-2">
-                <button
-                  onClick={() => handleEdit(media)}
-                  className="text-blue-600 bg-blue-50 px-3 py-1 rounded text-sm"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(media._id)}
-                  className="text-red-600 bg-red-50 px-3 py-1 rounded text-sm"
-                >
-                  Delete
-                </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedMedia.length === 0 && (
+            <p className="text-center text-gray-500 col-span-full">
+              No media testimonials found.
+            </p>
+          )}
+          {sortedMedia.map((media) => (
+            <div
+              key={media._id}
+              className="bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
+            >
+              <div className="w-full h-40 overflow-hidden bg-gray-100">
+                {media.image ? (
+                  <img
+                    src={getImageUrl(media.image)}
+                    alt={media.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) =>
+                      (e.target.src =
+                        "https://placehold.co/600x400?text=Image+Not+Found")
+                    }
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    No Image
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 flex flex-col gap-2">
+                <h3 className="font-bold text-lg">{media.title}</h3>
+                <p className="text-sm text-gray-500">{media.source}</p>
+                <p className="text-sm text-gray-400">
+                  {new Date(media.date).toLocaleDateString()}
+                </p>
+                {media.link && (
+                  <a
+                    href={media.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-500 text-sm underline"
+                  >
+                    Read Article
+                  </a>
+                )}
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => handleEdit(media)}
+                    className="text-blue-600 bg-blue-50 px-3 py-1 rounded text-sm"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(media._id)}
+                    className="text-red-600 bg-red-50 px-3 py-1 rounded text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ const BlogManagement = () => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
   const [editingBlog, setEditingBlog] = useState(null);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
     fetchBlogs();
@@ -48,7 +49,7 @@ const BlogManagement = () => {
       fetchBlogs();
     } catch (error) {
       toast.error(
-        editingBlog ? "Failed to update blog" : "Failed to publish blog"
+        editingBlog ? "Failed to update blog" : "Failed to publish blog",
       );
     }
   };
@@ -74,6 +75,12 @@ const BlogManagement = () => {
     }
   };
 
+  const sortedBlogs = [...blogs].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   return (
     <div className="animate-fade-in space-y-8">
       <div>
@@ -85,10 +92,21 @@ const BlogManagement = () => {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <span className="hidden sm:block w-1.5 h-8 bg-orange-500 rounded-full"></span>
-          Published Articles
-        </h2>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <span className="hidden sm:block w-1.5 h-8 bg-orange-500 rounded-full"></span>
+            Published Articles
+          </h2>
+
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-orange-500 outline-none shadow-sm"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-12 text-gray-500">
@@ -96,7 +114,7 @@ const BlogManagement = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {blogs.length === 0 ? (
+            {sortedBlogs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300 text-gray-500">
                 <p className="font-medium">No articles published yet.</p>
                 <p className="text-sm">
@@ -104,7 +122,7 @@ const BlogManagement = () => {
                 </p>
               </div>
             ) : (
-              blogs.map((blog) => (
+              sortedBlogs.map((blog) => (
                 <div
                   key={blog._id}
                   className={`group bg-white p-4 sm:p-5 rounded-xl shadow-sm border hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-5 items-start sm:items-center ${
@@ -146,7 +164,7 @@ const BlogManagement = () => {
                               year: "numeric",
                               month: "short",
                               day: "numeric",
-                            }
+                            },
                           )}
                         </span>
                       </div>

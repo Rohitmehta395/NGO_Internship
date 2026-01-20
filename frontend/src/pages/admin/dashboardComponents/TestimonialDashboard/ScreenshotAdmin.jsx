@@ -25,6 +25,7 @@ const ScreenshotAdmin = () => {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   /* ================= FETCH ================= */
   const fetchScreenshots = async () => {
@@ -45,6 +46,13 @@ const ScreenshotAdmin = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // FILE SIZE CHECK (1MB Limit)
+    if (file.size > 1024 * 1024) {
+      alert("File size exceeds 1MB. Please upload a smaller image.");
+      e.target.value = "";
+      return;
+    }
 
     setForm((prev) => ({
       ...prev,
@@ -133,6 +141,13 @@ const ScreenshotAdmin = () => {
     setEditingId(null);
   };
 
+  /* ================= SORTING ================= */
+  const sortedScreenshots = [...screenshots].sort((a, b) => {
+    const dateA = new Date(a.date || a.createdAt || 0);
+    const dateB = new Date(b.date || b.createdAt || 0);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   /* ================= UI ================= */
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
@@ -189,6 +204,9 @@ const ScreenshotAdmin = () => {
               <label className="border-2 border-dashed border-gray-300 p-8 flex flex-col items-center rounded-lg cursor-pointer hover:bg-gray-50">
                 <Upload className="text-gray-400 mb-2" size={32} />
                 <span className="text-gray-600">Click to upload image</span>
+                <span className="text-xs text-gray-400 mt-1">
+                  JPG, PNG supported (Max 1MB)
+                </span>
                 <input
                   type="file"
                   hidden
@@ -235,48 +253,67 @@ const ScreenshotAdmin = () => {
         </form>
       </div>
 
-      {/* LIST */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {screenshots.map((s) => (
-          <div
-            key={s._id}
-            className="bg-white border rounded shadow-sm overflow-hidden flex flex-col"
+      {/* FILTER & LIST */}
+      <div>
+        {/* Sort Filter */}
+        <div className="flex justify-end mb-4">
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
           >
-            <div className="h-48 bg-gray-100 flex items-center justify-center p-2">
-              <img
-                src={getImageUrl(s.image)}
-                alt={s.alt}
-                className="max-h-full max-w-full object-contain"
-              />
-            </div>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
 
-            <div className="p-4 flex-1 flex flex-col justify-between">
-              <div>
-                <p className="text-sm font-bold text-gray-800">{s.alt}</p>
-                {s.date && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Date: {new Date(s.date).toLocaleDateString()}
-                  </p>
-                )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {sortedScreenshots.length === 0 && (
+            <p className="col-span-full text-center text-gray-500">
+              No letters or emails found.
+            </p>
+          )}
+          {sortedScreenshots.map((s) => (
+            <div
+              key={s._id}
+              className="bg-white border rounded shadow-sm overflow-hidden flex flex-col hover:shadow-md transition"
+            >
+              <div className="h-48 bg-gray-100 flex items-center justify-center p-2">
+                <img
+                  src={getImageUrl(s.image)}
+                  alt={s.alt}
+                  className="max-h-full max-w-full object-contain"
+                />
               </div>
 
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={() => handleEdit(s)}
-                  className="text-blue-600 bg-blue-50 px-3 py-1 rounded text-sm flex-1"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(s._id)}
-                  className="text-red-600 bg-red-50 px-3 py-1 rounded text-sm flex-1"
-                >
-                  Delete
-                </button>
+              <div className="p-4 flex-1 flex flex-col justify-between">
+                <div>
+                  <p className="text-sm font-bold text-gray-800">{s.alt}</p>
+                  {s.date && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Date: {new Date(s.date).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={() => handleEdit(s)}
+                    className="text-blue-600 bg-blue-50 px-3 py-1 rounded text-sm flex-1"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(s._id)}
+                    className="text-red-600 bg-red-50 px-3 py-1 rounded text-sm flex-1"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

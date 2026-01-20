@@ -7,6 +7,7 @@ const TeamManagement = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   // Form State
   const [name, setName] = useState("");
@@ -101,6 +102,12 @@ const TeamManagement = () => {
     if (fileInput) fileInput.value = "";
   };
 
+  const sortedMembers = [...members].sort((a, b) => {
+    const dateA = new Date(a.createdAt || 0);
+    const dateB = new Date(b.createdAt || 0);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   return (
     <>
       {/* Member Form */}
@@ -185,13 +192,28 @@ const TeamManagement = () => {
         </form>
       </div>
 
+      {/* Filter Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold text-gray-800">Team Members</h2>
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+        >
+          <option value="newest">Newest Added</option>
+          <option value="oldest">Oldest Added</option>
+        </select>
+      </div>
+
       {/* Member List */}
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
         <div className="space-y-8">
           {categories.map((cat) => {
-            const catMembers = members.filter((m) => m.category === cat.id);
+            const catMembers = sortedMembers.filter(
+              (m) => m.category === cat.id,
+            );
             if (catMembers.length === 0) return null;
             return (
               <div key={cat.id} className="bg-white p-6 rounded-lg shadow">

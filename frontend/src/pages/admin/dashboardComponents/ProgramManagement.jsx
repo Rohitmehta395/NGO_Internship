@@ -7,7 +7,7 @@ import {
   FaLayerGroup,
   FaFileAlt,
   FaExclamationTriangle,
-  FaGripVertical, // Icon for drag handle
+  FaGripVertical,
 } from "react-icons/fa";
 import { API_BASE_URL } from "../../../utils/constants";
 
@@ -17,6 +17,7 @@ const ProgramManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
   const [mode, setMode] = useState("main");
+  const [sortOrder, setSortOrder] = useState("manual");
 
   // Drag and Drop state
   const dragItem = useRef(null);
@@ -47,7 +48,6 @@ const ProgramManagement = () => {
     }
   };
 
-  // Helper: Convert YouTube URL to Embed URL
   const getEmbedUrl = (url) => {
     if (!url) return "";
     const regExp =
@@ -61,13 +61,22 @@ const ProgramManagement = () => {
   const existingSections = programs.filter((p) => p.category === "main");
 
   // Determine which programs to display based on Mode and Selection
-  const filteredPrograms = programs.filter((p) => {
-    if (mode === "main") {
-      return p.category === "main";
-    }
-    // In content mode, filter by the selected category dropdown
-    return p.category === formData.category;
-  });
+  const filteredPrograms = programs
+    .filter((p) => {
+      if (mode === "main") {
+        return p.category === "main";
+      }
+      // In content mode, filter by the selected category dropdown
+      return p.category === formData.category;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "manual") {
+        return (a.order || 0) - (b.order || 0);
+      }
+      const dateA = new Date(a.createdAt || 0);
+      const dateB = new Date(b.createdAt || 0);
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -181,20 +190,21 @@ const ProgramManagement = () => {
 
   /* --- DRAG AND DROP HANDLERS --- */
   const handleDragStart = (e, index) => {
+    if (sortOrder !== "manual") return;
     dragItem.current = index;
   };
 
   const handleDragEnter = (e, index) => {
+    if (sortOrder !== "manual") return;
     dragOverItem.current = index;
   };
 
   const handleDragEnd = async () => {
-    // Clone the *filtered* list because we are reordering what is visible
+    if (sortOrder !== "manual") return;
+
     const _programs = [...filteredPrograms];
 
-    // Remove item from old position
     const draggedItemContent = _programs.splice(dragItem.current, 1)[0];
-    // Insert at new position
     _programs.splice(dragOverItem.current, 0, draggedItemContent);
 
     // Reset refs
@@ -262,14 +272,22 @@ const ProgramManagement = () => {
             <button
               type="button"
               onClick={() => handleModeSwitch("main")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition ${mode === "main" ? "bg-white shadow text-orange-600 font-bold" : "text-gray-500 hover:text-gray-700"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition ${
+                mode === "main"
+                  ? "bg-white shadow text-orange-600 font-bold"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
             >
               <FaLayerGroup /> New Page
             </button>
             <button
               type="button"
               onClick={() => handleModeSwitch("content")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition ${mode === "content" ? "bg-white shadow text-blue-600 font-bold" : "text-gray-500 hover:text-gray-700"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md transition ${
+                mode === "content"
+                  ? "bg-white shadow text-blue-600 font-bold"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
             >
               <FaFileAlt /> Page Content
             </button>
@@ -407,7 +425,11 @@ const ProgramManagement = () => {
               <button
                 type="submit"
                 disabled={mode === "content" && existingSections.length === 0}
-                className={`flex-1 text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-50 ${mode === "main" ? "bg-orange-600 hover:bg-orange-700" : "bg-blue-600 hover:bg-blue-700"}`}
+                className={`flex-1 text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-50 ${
+                  mode === "main"
+                    ? "bg-orange-600 hover:bg-orange-700"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
               >
                 {isEditing ? "Update Item" : "Create Item"}
               </button>
@@ -427,11 +449,23 @@ const ProgramManagement = () => {
 
       {/* --- RIGHT: LIST SECTION --- */}
       <div className="lg:w-2/3 w-full">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 pl-1 border-l-4 border-orange-500 ml-2">
-          {mode === "main"
-            ? "Main Programs (Cards)"
-            : `Content for: ${formData.category}`}
-        </h2>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pl-1 border-l-4 border-orange-500 ml-2 gap-4">
+          <h2 className="text-2xl font-bold text-gray-800">
+            {mode === "main"
+              ? "Main Programs (Cards)"
+              : `Content for: ${formData.category}`}
+          </h2>
+
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="manual">Manual Order (Drag)</option>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
 
         {loading ? (
           <p className="text-gray-500">Loading...</p>
@@ -440,18 +474,22 @@ const ProgramManagement = () => {
             {filteredPrograms.map((prog, index) => (
               <div
                 key={prog._id}
-                draggable
+                draggable={sortOrder === "manual"}
                 onDragStart={(e) => handleDragStart(e, index)}
                 onDragEnter={(e) => handleDragEnter(e, index)}
                 onDragEnd={handleDragEnd}
                 onDragOver={(e) => e.preventDefault()}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 overflow-hidden flex flex-col cursor-move"
+                className={`bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100 overflow-hidden flex flex-col ${
+                  sortOrder === "manual" ? "cursor-move" : "cursor-default"
+                }`}
               >
                 <div className="h-48 bg-gray-100 relative group">
-                  {/* Drag Handle Icon Visual */}
-                  <div className="absolute top-2 right-2 z-10 bg-black/20 p-1 rounded text-white opacity-50">
-                    <FaGripVertical />
-                  </div>
+                  {/* Drag Handle Icon Visual - Only show if manual sort */}
+                  {sortOrder === "manual" && (
+                    <div className="absolute top-2 right-2 z-10 bg-black/20 p-1 rounded text-white opacity-50">
+                      <FaGripVertical />
+                    </div>
+                  )}
 
                   {renderMedia(prog)}
 

@@ -9,12 +9,12 @@ connectDB();
 const importData = async () => {
   try {
     // To clear existing admin users
-    // await User.deleteMany();
+    // await User.findOneAndDelete({ email: "arvind@sharadatrust.org" });
 
     const adminUser = {
       name: "Ayush Kumar",
-      email: "aayushgupta1916@gmail.com", // <--- Admin Email
-      password: "ngo_intern@admin", // <--- Admin Password
+      email: "arvind@sharadatrust.org", // <--- Admin Email
+      password: "SharadaTrust@123", // <--- Admin Password
       role: "admin",
       phone: "0000000000",
     };

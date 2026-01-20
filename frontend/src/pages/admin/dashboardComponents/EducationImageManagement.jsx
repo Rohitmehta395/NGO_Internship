@@ -8,6 +8,7 @@ const EducationImageManagement = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   const fetchImages = async () => {
     setLoading(true);
@@ -30,14 +31,30 @@ const EducationImageManagement = () => {
     if (!files || files.length === 0) return;
 
     const formData = new FormData();
+    let hasError = false;
+
+    // FILE SIZE CHECK (1MB Limit)
     for (let i = 0; i < files.length; i++) {
+      if (files[i].size > 1024 * 1024) {
+        toast.error(`File "${files[i].name}" exceeds 1MB limit. Skipped.`);
+        hasError = true;
+        continue;
+      }
       formData.append("images", files[i]);
+    }
+
+    // If all files were too big
+    if (!formData.has("images")) {
+      if (!hasError) toast.info("No files selected");
+      e.target.value = "";
+      return;
     }
 
     setUploading(true);
     try {
       await educationImagesAPI.upload(formData);
       toast.success("Images uploaded successfully!");
+      if (hasError) toast.warn("Some large files were skipped.");
       fetchImages();
     } catch (error) {
       toast.error(error.response?.data?.message || "Upload failed");
@@ -58,11 +75,30 @@ const EducationImageManagement = () => {
     }
   };
 
+  /* ================= SORTING ================= */
+  const sortedImages = [...images].sort((a, b) => {
+    const dateA = new Date(a.createdAt || 0);
+    const dateB = new Date(b.createdAt || 0);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   return (
     <div className="bg-white p-6 rounded-lg shadow border-t-4 border-green-500">
-      <h2 className="text-xl font-bold mb-6 text-gray-800">
-        Education Section Images
-      </h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h2 className="text-xl font-bold text-gray-800">
+          Education Section Images
+        </h2>
+
+        {/* Sort Filter */}
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          <option value="newest">Newest Uploads</option>
+          <option value="oldest">Oldest Uploads</option>
+        </select>
+      </div>
 
       {/* Upload Area */}
       <div className="mb-8">
@@ -75,8 +111,9 @@ const EducationImageManagement = () => {
                 <Upload className="w-8 h-8 text-gray-400 mb-2" />
                 <p className="text-sm text-gray-500">
                   <span className="font-semibold">Click to upload</span> new
-                  images (Max 10)
+                  images
                 </p>
+                <p className="text-xs text-gray-400 mt-1">Max file size: 1MB</p>
               </>
             )}
           </div>
@@ -93,10 +130,10 @@ const EducationImageManagement = () => {
 
       {/* Image Gallery */}
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-center py-4">Loading...</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {images.map((img) => (
+          {sortedImages.map((img) => (
             <div
               key={img._id}
               className="relative group aspect-[3/4] rounded-lg overflow-hidden shadow-sm border"
@@ -115,7 +152,7 @@ const EducationImageManagement = () => {
               </button>
             </div>
           ))}
-          {images.length === 0 && (
+          {sortedImages.length === 0 && (
             <p className="col-span-full text-center text-gray-400 py-4">
               No images uploaded yet.
             </p>

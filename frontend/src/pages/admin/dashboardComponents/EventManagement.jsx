@@ -7,6 +7,7 @@ const EventManagement = () => {
   const [events, setEvents] = useState([]);
   const [editingEvent, setEditingEvent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("newest");
 
   /* ================= FETCH EVENTS ================= */
   const fetchEvents = async () => {
@@ -35,7 +36,7 @@ const EventManagement = () => {
         if (data[key] !== undefined && data[key] !== null) {
           formData.append(key, data[key]);
         }
-      }
+      },
     );
 
     if (data.image) {
@@ -86,7 +87,6 @@ const EventManagement = () => {
 
     if (imagePath.startsWith("http")) return imagePath;
 
-
     let cleanPath = imagePath.replace(/^uploads\//, "");
 
     if (cleanPath.startsWith("/")) cleanPath = cleanPath.slice(1);
@@ -100,6 +100,12 @@ const EventManagement = () => {
     return finalUrl;
   };
 
+  const sortedEvents = [...events].sort((a, b) => {
+    const dateA = new Date(a.createdAt || 0);
+    const dateB = new Date(b.createdAt || 0);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   /* ================= RENDER ================= */
   return (
     <div className="p-6 space-y-6 min-h-screen bg-gray-50">
@@ -111,13 +117,24 @@ const EventManagement = () => {
 
       <hr className="my-6" />
 
+      <div className="flex justify-end">
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </div>
+
       {loading ? (
         <p className="text-center text-gray-500">Loading events...</p>
-      ) : events.length === 0 ? (
+      ) : sortedEvents.length === 0 ? (
         <p className="text-center text-gray-500">No events created yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event) => {
+          {sortedEvents.map((event) => {
             const imageSrc = getImageUrl(event.image || event.imageUrl);
 
             return (
