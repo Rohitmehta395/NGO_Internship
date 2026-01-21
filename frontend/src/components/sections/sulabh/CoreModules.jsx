@@ -1,34 +1,21 @@
-import React from "react";
-// Make sure these paths are correct for your project structure
-import sulabhActivityBasedLearning from "../../../assets/sulabhActivityBasedLearning.jpg";
-import sulabhAPT from "../../../assets/sulabhAPT.jpeg";
-import sulabh1 from "../../../assets/sulabh1.jpg";
+import React, { useEffect, useState } from "react";
+import { sulabhAPI } from "../../../services/api";
+import { API_BASE_URL } from "../../../utils/constants";
 
 const CoreModules = () => {
-  // Data array to keep code clean and maintainable
-  const moduleData = [
-    {
-      id: 1,
-      image: sulabhActivityBasedLearning,
-      title: "Activity-Based Learning module (ABLE)",
-      description:
-        "Engaging students with quizzes that transform learning into a dynamic, hands-on experience.",
-    },
-    {
-      id: 2,
-      image: sulabhAPT,
-      title: "AI-Powered Translator module (APT)",
-      description:
-        "Enabling real-time translation of speech or text from native languages to English.",
-    },
-    {
-      id: 3,
-      image: sulabh1,
-      title: "Sulabh App 1.0",
-      description:
-        "A legacy module focused on helping educators teach the aforementioned subjects to their students.",
-    },
-  ];
+  const [modules, setModules] = useState([]);
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const res = await sulabhAPI.getAll({ category: "core_module" });
+        setModules(res.data);
+      } catch (err) {
+        console.error("Error fetching modules", err);
+      }
+    };
+    fetchModules();
+  }, []);
 
   return (
     <section className="w-full py-16 lg:py-24 px-6 md:px-12 lg:px-20 bg-white">
@@ -43,20 +30,20 @@ const CoreModules = () => {
           </div>
 
           <h2 className="font-roboto font-bold text-2xl md:text-3xl lg:text-4xl leading-tight text-[#0B0B45] max-w-3xl">
-            Sulabh App 2.0 offers 3 core modules:
+            Sulabh App 2.0 offers core modules:
           </h2>
         </div>
 
         {/* Modules Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {moduleData.map((module) => (
+          {modules.map((module) => (
             <div
-              key={module.id}
+              key={module._id}
               className="group relative rounded-2xl overflow-hidden aspect-[4/5] md:aspect-[3/4] lg:aspect-[411/421] cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {/* Background Image with Zoom Effect */}
               <img
-                src={module.image}
+                src={`${API_BASE_URL}${module.image}`}
                 alt={module.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />

@@ -11,7 +11,12 @@ connectDB();
 const app = express();
 
 // --- Create uploads folders if missing ---
-const uploadDirs = ["uploads", "uploads/educationImages", "uploads/programs"];
+const uploadDirs = [
+  "uploads",
+  "uploads/educationImages",
+  "uploads/programs",
+  "uploads/sulabh",
+];
 uploadDirs.forEach((dir) => {
   const dirPath = path.join(__dirname, dir);
   if (!fs.existsSync(dirPath)) {
@@ -30,6 +35,7 @@ const screenshotRoutes = require("./routes/screenshotRouter");
 const videoTestimonialRoutes = require("./routes/videoTestimonialRoute");
 const programRoutes = require("./routes/programRoutes");
 const partnerRoutes = require("./routes/partnerRoute");
+const sulabhRoutes = require("./routes/sulabhRoutes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -56,6 +62,7 @@ app.use("/api/screenshots", screenshotRoutes);
 app.use("/api/videos", videoTestimonialRoutes);
 app.use("/api/programs", programRoutes);
 app.use("/api/partners", partnerRoutes);
+app.use("/api/sulabh", sulabhRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {

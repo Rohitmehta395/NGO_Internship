@@ -85,9 +85,17 @@ export const partnersAPI = {
   getAll: (params) => api.get("/api/partners", { params }),
   getById: (id) => api.get(`/api/partners/${id}`),
   create: (data, config = {}) => api.post("/api/partners", data, config),
-  update: (id, data, config = {}) =>  api.put(`/api/partners/${id}`, data, config),
-  delete: (id) =>  api.delete(`/api/partners/${id}`),
+  update: (id, data, config = {}) =>
+    api.put(`/api/partners/${id}`, data, config),
+  delete: (id) => api.delete(`/api/partners/${id}`),
 };
 
+export const sulabhAPI = {
+  getAll: (params) => api.get("/api/sulabh", { params }),
+  create: (formData) => api.post("/api/sulabh", formData),
+  update: (id, formData) => api.put(`/api/sulabh/${id}`, formData),
+  delete: (id) => api.delete(`/api/sulabh/${id}`),
+  reorder: (items) => api.put("/api/sulabh/reorder", { items }),
+};
 
 export default api;

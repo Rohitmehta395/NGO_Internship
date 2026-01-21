@@ -4,9 +4,9 @@ import BlogManagement from "./dashboardComponents/BlogManagement";
 import EducationImages from "./dashboardComponents/EducationImageManagement";
 import EventManagement from "./dashboardComponents/EventManagement";
 import TestimonialsManagement from "./dashboardComponents/TestimonialDashboard/TestimonialManagment";
-import ProgramManagement from "./dashboardComponents/ProgramManagement"; // Import the new component
+import ProgramManagement from "./dashboardComponents/ProgramManagement";
 import PartnerManagement from "./dashboardComponents/PartnerManagement";
-
+import SulabhManagement from "./dashboardComponents/SulabhManagement";  
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("members");
@@ -82,6 +82,12 @@ const Dashboard = () => {
           >
             Partners
           </button>
+          <button
+            className={getTabClass("sulabh")}
+            onClick={() => setActiveTab("sulabh")}
+          >
+            Sulabh App
+          </button>
         </div>
 
         {/* TAB CONTENT */}
@@ -93,7 +99,7 @@ const Dashboard = () => {
           {activeTab === "testimonials" && <TestimonialsManagement />}
           {activeTab === "programs" && <ProgramManagement />}
           {activeTab === "partners" && <PartnerManagement />}
-
+          {activeTab === "sulabh" && <SulabhManagement />}
         </div>
       </div>
     </div>
