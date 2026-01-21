@@ -123,10 +123,10 @@ const Dashboard = () => {
                   setIsSidebarOpen(false);
                 }}
                 className={`
-                  w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm
+                  w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm cursor-pointer
                   ${
                     isActive
-                      ? "bg-orange-50 text-orange-700 shadow-sm ring-1 ring-orange-100 cursor-pointer"
+                      ? "bg-orange-50 text-orange-700 shadow-sm ring-1 ring-orange-100"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }
                 `}
