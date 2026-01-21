@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { authAPI } from "../../services/api";
 import { toast } from "react-toastify";
+import { ArrowLeft } from "lucide-react";
 
 // Simple Eye Icons as components to avoid external dependencies
 const EyeIcon = () => (
@@ -122,8 +123,17 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
+      {/* GO TO HOME LINK */}
+      <Link
+        to="/"
+        className="absolute top-6 left-6 flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors font-medium"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        Go to Home
+      </Link>
+
+      <div className="bg-white p-8 rounded-lg shadow-md w-96 animate-fade-in">
         <h1 className="text-2xl font-bold mb-6 text-center text-orange-500">
           {isForgotMode
             ? step === 1
@@ -138,7 +148,7 @@ const Login = () => {
             <input
               type="email"
               placeholder="Admin Email"
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -150,7 +160,7 @@ const Login = () => {
               <input
                 type={showLoginPassword ? "text" : "password"}
                 placeholder="Password"
-                className="w-full p-2 border rounded pr-10"
+                className="w-full p-2 border rounded pr-10 focus:ring-2 focus:ring-orange-500 outline-none"
                 value={formData.password}
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
@@ -168,7 +178,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 cursor-pointer"
+              className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition-colors font-medium cursor-pointer"
             >
               Login
             </button>
@@ -194,7 +204,7 @@ const Login = () => {
                 <input
                   type="email"
                   placeholder="Enter your registered email"
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none"
                   value={resetData.email}
                   onChange={(e) =>
                     setResetData({ ...resetData, email: e.target.value })
@@ -203,7 +213,7 @@ const Login = () => {
                 />
                 <button
                   type="submit"
-                  className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 cursor-pointer"
+                  className="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition-colors cursor-pointer"
                 >
                   Send OTP
                 </button>
@@ -214,7 +224,7 @@ const Login = () => {
                 <input
                   type="text"
                   placeholder="Enter OTP"
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded focus:ring-2 focus:ring-orange-500 outline-none"
                   value={resetData.otp}
                   onChange={(e) =>
                     setResetData({ ...resetData, otp: e.target.value })
@@ -227,7 +237,7 @@ const Login = () => {
                   <input
                     type={showNewPassword ? "text" : "password"}
                     placeholder="New Password"
-                    className="w-full p-2 border rounded pr-10"
+                    className="w-full p-2 border rounded pr-10 focus:ring-2 focus:ring-orange-500 outline-none"
                     value={resetData.newPassword}
                     onChange={(e) =>
                       setResetData({
@@ -252,7 +262,7 @@ const Login = () => {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm New Password"
-                    className="w-full p-2 border rounded pr-10"
+                    className="w-full p-2 border rounded pr-10 focus:ring-2 focus:ring-orange-500 outline-none"
                     value={resetData.confirmPassword}
                     onChange={(e) =>
                       setResetData({
@@ -274,7 +284,7 @@ const Login = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 cursor-pointer"
+                  className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors cursor-pointer"
                 >
                   Reset Password
                 </button>

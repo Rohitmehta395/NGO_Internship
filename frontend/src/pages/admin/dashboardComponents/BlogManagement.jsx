@@ -3,11 +3,14 @@ import { blogsAPI } from "../../../services/api.js";
 import { toast } from "react-toastify";
 import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 import BlogForm from "./BlogForm";
+import { Plus, Edit2, Trash2, Calendar, User, X } from "lucide-react";
 
 const BlogManagement = () => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
   const [editingBlog, setEditingBlog] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null); // For custom delete UI
   const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
@@ -20,7 +23,7 @@ const BlogManagement = () => {
       const res = await blogsAPI.getAll();
       setBlogs(res.data.data);
     } catch (err) {
-      toast.error("Failed to load blogs");
+      toast.error("Failed to load blogs.");
     } finally {
       setLoading(false);
     }
@@ -40,38 +43,43 @@ const BlogManagement = () => {
     try {
       if (editingBlog) {
         await blogsAPI.update(editingBlog._id, formData);
-        toast.success("Blog updated successfully!");
+        toast.success("Article updated successfully!");
         setEditingBlog(null);
       } else {
         await blogsAPI.create(formData);
-        toast.success("Blog published successfully!");
+        toast.success("New article published!");
       }
+      setShowForm(false);
       fetchBlogs();
     } catch (error) {
       toast.error(
-        editingBlog ? "Failed to update blog" : "Failed to publish blog",
+        editingBlog
+          ? "Failed to update article."
+          : "Failed to publish article.",
       );
     }
   };
 
   const handleEditBlog = (blog) => {
     setEditingBlog(blog);
+    setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const cancelBlogEdit = () => {
     setEditingBlog(null);
+    setShowForm(false);
   };
 
+  // Modern delete handler (no window.alert)
   const handleBlogDelete = async (id) => {
-    if (window.confirm("Delete this article?")) {
-      try {
-        await blogsAPI.delete(id);
-        toast.success("Blog deleted");
-        fetchBlogs();
-      } catch (error) {
-        toast.error("Delete failed");
-      }
+    try {
+      await blogsAPI.delete(id);
+      toast.success("Article deleted permanently.");
+      setDeleteConfirmId(null);
+      fetchBlogs();
+    } catch (error) {
+      toast.error("Could not delete article.");
     }
   };
 
@@ -82,119 +90,170 @@ const BlogManagement = () => {
   });
 
   return (
-    <div className="animate-fade-in space-y-8">
-      <div>
-        <BlogForm
-          onSubmit={handleBlogSubmit}
-          initialData={editingBlog}
-          onCancel={cancelBlogEdit}
-        />
+    <div className="space-y-6">
+      {/* ACTION BAR */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+        <button
+          onClick={() => {
+            setEditingBlog(null);
+            setShowForm(!showForm);
+          }}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm ${
+            showForm
+              ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              : "bg-orange-500 text-white hover:bg-orange-600 hover:shadow-orange-200 hover:shadow-md"
+          }`}
+        >
+          {showForm ? (
+            <>
+              <X className="w-4 h-4" /> Cancel
+            </>
+          ) : (
+            <>
+              <Plus className="w-4 h-4" /> Create New Article
+            </>
+          )}
+        </button>
+
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="w-full sm:w-auto border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none shadow-sm cursor-pointer"
+        >
+          <option value="newest">Latest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
       </div>
 
-      <div>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <span className="hidden sm:block w-1.5 h-8 bg-orange-500 rounded-full"></span>
-            Published Articles
-          </h2>
-
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-orange-500 outline-none shadow-sm"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
+      {/* FORM SECTION (COLLAPSIBLE) */}
+      <div
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${showForm ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`}
+      >
+        <div className="bg-white border border-orange-100 rounded-2xl shadow-sm p-6 mb-8 ring-4 ring-orange-50/50">
+          <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+            {editingBlog ? "Edit Article" : "Write New Article"}
+          </h3>
+          <BlogForm
+            onSubmit={handleBlogSubmit}
+            initialData={editingBlog}
+            onCancel={cancelBlogEdit}
+          />
         </div>
+      </div>
 
-        {loading ? (
-          <div className="flex justify-center py-12 text-gray-500">
-            Loading articles...
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {sortedBlogs.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300 text-gray-500">
-                <p className="font-medium">No articles published yet.</p>
-                <p className="text-sm">
-                  Use the form above to write your first post.
-                </p>
-              </div>
-            ) : (
-              sortedBlogs.map((blog) => (
-                <div
-                  key={blog._id}
-                  className={`group bg-white p-4 sm:p-5 rounded-xl shadow-sm border hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-5 items-start sm:items-center ${
-                    editingBlog?._id === blog._id
-                      ? "border-blue-400 ring-2 ring-blue-100"
-                      : "border-gray-200"
-                  }`}
-                >
-                  <div className="w-full sm:w-48 h-48 sm:h-32 shrink-0 overflow-hidden rounded-lg bg-gray-100 relative">
-                    <img
-                      src={
-                        blog.image
-                          ? `${IMAGE_BASE_URL}/${blog.image}`
-                          : "https://placehold.co/600x400?text=No+Image"
-                      }
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        e.target.src = "https://placehold.co/150?text=No+Img";
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex-1 min-w-0 w-full">
-                    <div className="flex flex-col gap-1 mb-2">
-                      <h3 className="font-bold text-lg text-gray-900 leading-tight group-hover:text-orange-600 transition-colors line-clamp-2">
-                        {blog.title}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-x-3 text-xs text-gray-500 font-medium uppercase tracking-wide">
-                        <span className="flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
-                          {blog.author || "Admin"}
-                        </span>
-                        <span>•</span>
-                        <span>
-                          {new Date(blog.createdAt).toLocaleDateString(
-                            undefined,
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                    <div
-                      className="text-sm text-gray-600 line-clamp-2 prose prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: blog.content }}
-                    />
-                  </div>
-
-                  <div className="w-full sm:w-auto flex sm:flex-col justify-end sm:items-end gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-gray-100">
-                    <button
-                      onClick={() => handleEditBlog(blog)}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-blue-100"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleBlogDelete(blog._id)}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-red-600 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-red-100"
-                    >
-                      Delete
-                    </button>
+      {/* BLOG GRID */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-24 text-gray-400">
+          <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p>Loading your articles...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedBlogs.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400">
+              <BookOpen className="w-12 h-12 mb-3 opacity-50" />
+              <p className="font-medium">No articles published yet.</p>
+              <button
+                onClick={() => setShowForm(true)}
+                className="text-orange-500 hover:underline mt-2 text-sm font-medium"
+              >
+                Create your first post
+              </button>
+            </div>
+          ) : (
+            sortedBlogs.map((blog) => (
+              <div
+                key={blog._id}
+                className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-200 hover:shadow-lg transition-all duration-300 flex flex-col h-full"
+              >
+                {/* IMAGE */}
+                <div className="h-48 overflow-hidden relative bg-gray-100">
+                  <img
+                    src={
+                      blog.image
+                        ? `${IMAGE_BASE_URL}/${blog.image}`
+                        : "https://placehold.co/600x400?text=No+Image"
+                    }
+                    alt={blog.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://placehold.co/600x400?text=No+Image";
+                    }}
+                  />
+                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-gray-700 shadow-sm">
+                    BLOG
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-        )}
-      </div>
+
+                {/* CONTENT */}
+                <div className="p-5 flex-1 flex flex-col">
+                  <div className="flex items-center gap-4 text-xs text-gray-500 mb-3 font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" />{" "}
+                      {new Date(blog.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5" /> {blog.author || "Admin"}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
+                    {blog.title}
+                  </h3>
+
+                  <div
+                    className="text-gray-600 text-sm line-clamp-3 mb-4 flex-1"
+                    dangerouslySetInnerHTML={{
+                      __html: blog.description || blog.content,
+                    }}
+                  />
+
+                  {/* ACTION FOOTER */}
+                  <div className="pt-4 border-t border-gray-100 flex items-center gap-2 mt-auto">
+                    {deleteConfirmId === blog._id ? (
+                      <div className="flex items-center gap-2 w-full animate-fade-in bg-red-50 p-1 rounded-lg">
+                        <span className="text-xs text-red-600 font-bold ml-2">
+                          Sure?
+                        </span>
+                        <div className="flex ml-auto gap-1">
+                          <button
+                            onClick={() => handleBlogDelete(blog._id)}
+                            className="px-3 py-1 bg-red-600 text-white text-xs rounded-md hover:bg-red-700"
+                          >
+                            Yes
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirmId(null)}
+                            className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-md hover:bg-gray-300"
+                          >
+                            No
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => handleEditBlog(blog)}
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" /> Edit
+                        </button>
+                        <button
+                          onClick={() => setDeleteConfirmId(blog._id)}
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-50 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" /> Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
