@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 import { partnersAPI } from "../../../services/api";
 import { IMAGE_BASE_URL } from "../../../utils/constants";
+import { Handshake, ExternalLink } from "lucide-react";
 
 const OurPartners = () => {
   const [partners, setPartners] = useState([]);
-  const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // FETCH PARTNER
   useEffect(() => {
     const fetchPartners = async () => {
       try {
         const res = await partnersAPI.getAll();
-
         const activePartners = (res.data.data || []).filter((p) => p.isActive);
-
-        // Sort by createdAt descending (newest first)
-        activePartners.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
+        // Sort by newest
+        activePartners.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
         setPartners(activePartners);
       } catch (err) {
         console.error("Failed to fetch partners", err);
@@ -25,103 +23,84 @@ const OurPartners = () => {
         setLoading(false);
       }
     };
-
     fetchPartners();
   }, []);
 
-  // slider
-  const prevSlide = () => {
-    setCurrent((prev) => (prev === 0 ? partners.length - 1 : prev - 1));
-  };
-
-  const nextSlide = () => {
-    setCurrent((prev) => (prev === partners.length - 1 ? 0 : prev + 1));
-  };
-
-  // STATES
   if (loading) {
     return (
-      <section className="py-16 text-center text-gray-500">
-        Loading partners...
-      </section>
+      <div className="flex justify-center items-center min-h-[40vh]">
+        <div className="w-12 h-12 border-4 border-orange-200 border-t-[#ED9121] rounded-full animate-spin"></div>
+      </div>
     );
   }
 
   if (!partners.length) return null;
 
-  const partner = partners[current];
-
-  const imageSrc = partner.imageUrl?.startsWith("http")
-    ? partner.imageUrl
-    : `${IMAGE_BASE_URL}/uploads/${partner.imageUrl}`;
-
-
   return (
-    <section className="bg-[#f9fafb] px-5 py-16 text-[#082D50]">
-      
-
-      <p className="mb-12 text-center text-[#ED9121] font-semibold tracking-wide">
-        Collaboration that fuels impact
-      </p>
-
-      <div className="relative mx-auto max-w-[850px]">
-        {/* CARD */}
-        <div className="overflow-hidden rounded-2xl bg-white shadow-xl border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
-          <img
-            src={imageSrc}
-            alt={partner.name}
-            className="h-[260px] w-full object-cover md:h-[320px] rounded-t-2xl"
-            onError={(e) => {
-              e.target.src = "https://placehold.co/800x400?text=Image+Not+Found";
-            }}
-          />
-
-          <div className="p-6">
-            <h3 className="mb-3 text-xl font-semibold text-gray-900 md:text-xl">
-              {partner.name}
-            </h3>
-
-            <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-              {partner.description}
-            </p>
+    <section className="bg-gradient-to-b from-gray-50 to-white px-5 py-20 font-[Poppins]">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div className="text-center mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-full text-[#ED9121] font-semibold text-sm tracking-wide uppercase">
+            <Handshake className="w-4 h-4" />
+            Our Network
           </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-[#082D50] font-[Quicksand]">
+            Collaboration that Fuels Impact
+          </h2>
+          <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+            We are proud to work with these incredible organizations to make a
+            difference.
+          </p>
         </div>
 
-        {/* LEFT BUTTON */}
-        {partners.length > 1 && (
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#ED9121] text-white flex items-center justify-center shadow-lg hover:bg-orange-500 transition-colors md:left-[-25px] z-20"
-          >
-            &#8249;
-          </button>
-        )}
+        {/* Modern Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {partners.map((partner) => {
+            const imageSrc = partner.imageUrl?.startsWith("http")
+              ? partner.imageUrl
+              : `${IMAGE_BASE_URL}/uploads/${partner.imageUrl}`;
 
-        {/* RIGHT BUTTON */}
-        {partners.length > 1 && (
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#ED9121] text-white flex items-center justify-center shadow-lg hover:bg-orange-500 transition-colors md:right-[-25px] z-20"
-          >
-            &#8250;
-          </button>
-        )}
+            return (
+              <div
+                key={partner._id}
+                className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col h-full"
+              >
+                {/* Image Container with Overlay Effect */}
+                <div className="h-64 overflow-hidden relative bg-gray-100">
+                  <div className="absolute inset-0 bg-[#082D50]/0 group-hover:bg-[#082D50]/10 transition-colors z-10" />
+                  <img
+                    src={imageSrc}
+                    alt={partner.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://placehold.co/800x400?text=Partner";
+                    }}
+                  />
+                  {/* Decorative Line */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#ED9121] to-orange-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-20" />
+                </div>
+
+                {/* Content */}
+                <div className="p-8 flex-1 flex flex-col">
+                  <h3 className="text-xl font-bold text-[#082D50] mb-3 group-hover:text-[#ED9121] transition-colors">
+                    {partner.name}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed text-sm line-clamp-4 mb-6 flex-1">
+                    {partner.description}
+                  </p>
+
+                  {/* <div className="flex items-center text-[#ED9121] font-semibold text-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                    <span>Partner Organization</span>
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </div> */}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-
-      {/* Dots */}
-      {partners.length > 1 && (
-        <div className="mt-6 flex justify-center gap-2">
-          {partners.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrent(idx)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                current === idx ? "bg-[#ED9121] w-4 h-4" : "bg-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-      )}
     </section>
   );
 };

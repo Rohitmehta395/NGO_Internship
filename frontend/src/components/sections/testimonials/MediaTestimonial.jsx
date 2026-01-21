@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
 import { IMAGE_BASE_URL } from "../../../utils/constants";
 import { mediaAPI } from "../../../services/api.js";
+import { Newspaper, Calendar } from "lucide-react";
 
 const MediaTestimonial = () => {
   const [mediaItems, setMediaItems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-const formatDate = (date) =>
-  new Date(date).toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-  /* ================= FETCH MEDIA FROM BACKEND ================= */
   useEffect(() => {
     const fetchMedia = async () => {
-      setLoading(true);
       try {
         const res = await mediaAPI.getAll();
         setMediaItems(res.data || []);
@@ -25,84 +18,89 @@ const formatDate = (date) =>
         setLoading(false);
       }
     };
-
     fetchMedia();
   }, []);
-
-  /* ================= ANIMATION ON SCROLL ================= */
-  useEffect(() => {
-    const cards = document.querySelectorAll(".media-card");
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.remove("opacity-0", "translate-y-8");
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    cards.forEach((c) => observer.observe(c));
-    return () => observer.disconnect();
-  }, [mediaItems]);
-
-  /* ================= UI ================= */
-  if (loading) return <div className="text-center py-20">Loading media...</div>;
-  if (mediaItems.length === 0)
-    return <div className="text-center py-20 text-gray-500">No media found.</div>;
 
   const getFullImageUrl = (imageUrl) =>
     imageUrl
       ? `${IMAGE_BASE_URL}/uploads/${
           imageUrl.startsWith("media/") ? imageUrl : `media/${imageUrl}`
         }`
-      : "https://placehold.co/600x400?text=No+Image";
+      : "https://placehold.co/600x400?text=News+Article";
+
+  if (loading) return null;
+  if (mediaItems.length === 0) return null;
 
   return (
-    <section className="w-full bg-[#fafafa] overflow-x-hidden px-4 py-12 font-[Poppins]">
-      <h2 className="text-center font-[Quicksand] font-bold text-[#ED9121] text-2xl md:text-4xl mb-10">
-        Media Coverage
-      </h2>
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-5">
+        <div className="text-center mb-16">
+          <span className="text-[#ED9121] font-bold tracking-wider uppercase text-sm">
+            In The News
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold text-[#082D50] mt-3 font-[Quicksand]">
+            Media Coverage
+          </h2>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-        {mediaItems.map((item, i) => (
-          <article
-            key={item._id || i}
-            className="media-card bg-white rounded-xl overflow-hidden
-                       shadow-md transition-all duration-300
-                       opacity-0 translate-y-8
-                       hover:-translate-y-1 hover:shadow-xl"
-          >
-            <img
-              src={getFullImageUrl(item.image)}
-              alt={item.title || item.alt}
-              className="w-full aspect-video object-cover"
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {mediaItems.map((item, i) => (
+            <article
+              key={item._id || i}
+              className="group flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300"
+            >
+              {/* Image Side */}
+              <div className="md:w-2/5 relative overflow-hidden h-64 md:h-auto">
+                <div className="absolute top-4 left-4 z-10 bg-[#ED9121] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                  MEDIA
+                </div>
+                <img
+                  src={getFullImageUrl(item.image)}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+              </div>
 
-            <div className="p-5 flex flex-col h-full">
-              <p className="text-sm font-semibold text-[#ED9121] mb-1">
-                {item.source}
-              </p>
+              {/* Content Side */}
+              <div className="md:w-3/5 p-8 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                    <Newspaper className="w-4 h-4" />
+                    <span className="font-semibold text-gray-600 uppercase tracking-wide text-xs">
+                      {item.source}
+                    </span>
+                  </div>
 
-              <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                {item.description}
-              </p>
+                  <h3 className="text-xl font-bold text-[#082D50] mb-3 leading-tight group-hover:text-[#ED9121] transition-colors">
+                    {item.description && item.description.length > 60
+                      ? item.description.slice(0, 60) + "..."
+                      : "Media Feature Story"}
+                  </h3>
 
-              <p className="text-xs text-gray-400 mb-3">{formatDate(item.date)}</p>
+                  <p className="text-gray-500 text-sm leading-relaxed line-clamp-3 mb-4">
+                    {item.description}
+                  </p>
+                </div>
 
-              <a
-                href={item.link || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-auto text-sm font-semibold text-[#ED9121] hover:text-[#c96f11]"
-              >
-                View Article →
-              </a>
-            </div>
-          </article>
-        ))}
+                <div className="flex items-center justify-between pt-6 border-t border-gray-100 mt-auto">
+                  <span className="flex items-center gap-2 text-xs text-gray-400 font-medium">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {new Date(item.date).toLocaleDateString()}
+                  </span>
+
+                  <a
+                    href={item.link || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-bold text-[#ED9121] hover:underline flex items-center gap-1"
+                  >
+                    Read Article &rarr;
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

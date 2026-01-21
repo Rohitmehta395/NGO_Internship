@@ -38,7 +38,7 @@ const BlogDetail = () => {
       <div className="min-h-screen flex flex-col justify-center items-center gap-4 px-4 text-center">
         <h2 className="text-2xl font-bold text-gray-800">Article not found</h2>
         <button
-          onClick={() => navigate("/blogs")}
+          onClick={() => navigate("/blog")}
           className="text-orange-500 font-semibold hover:underline"
         >
           Back to Articles
