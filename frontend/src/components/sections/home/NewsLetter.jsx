@@ -78,8 +78,7 @@ export default function NewsLetter() {
             </div>
             {/* UPDATED HEADER TITLE */}
             <h2 className="text-3xl md:text-4xl font-bold text-[#0B0B45] leading-tight">
-              Read our Blogs & <br />
-              Newsletter
+              Read our Blogs & Newsletter
             </h2>
           </div>
 
