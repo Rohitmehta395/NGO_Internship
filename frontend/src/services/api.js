@@ -98,4 +98,9 @@ export const sulabhAPI = {
   reorder: (items) => api.put("/api/sulabh/reorder", { items }),
 };
 
+export const heroImagesAPI = {
+  get: (page) => api.get(`/api/hero-images/${page}`),
+  update: (page, formData) => api.post(`/api/hero-images/${page}`, formData),
+};
+
 export default api;

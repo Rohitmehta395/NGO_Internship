@@ -16,6 +16,7 @@ const uploadDirs = [
   "uploads/educationImages",
   "uploads/programs",
   "uploads/sulabh",
+  "uploads/hero",
 ];
 uploadDirs.forEach((dir) => {
   const dirPath = path.join(__dirname, dir);
@@ -36,6 +37,7 @@ const videoTestimonialRoutes = require("./routes/videoTestimonialRoute");
 const programRoutes = require("./routes/programRoutes");
 const partnerRoutes = require("./routes/partnerRoute");
 const sulabhRoutes = require("./routes/sulabhRoutes");
+const heroImageRoutes = require("./routes/heroImageRoutes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -63,6 +65,7 @@ app.use("/api/videos", videoTestimonialRoutes);
 app.use("/api/programs", programRoutes);
 app.use("/api/partners", partnerRoutes);
 app.use("/api/sulabh", sulabhRoutes);
+app.use("/api/hero-images", heroImageRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {

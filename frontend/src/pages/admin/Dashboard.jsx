@@ -14,11 +14,11 @@ import {
   X,
   LayoutDashboard,
   Home,
+  Monitor, // Added Monitor
 } from "lucide-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Import your existing components
 import TeamManagement from "./dashboardComponents/TeamManagement";
 import BlogManagement from "./dashboardComponents/BlogManagement";
 import EducationImages from "./dashboardComponents/EducationImageManagement";
@@ -27,6 +27,7 @@ import TestimonialsManagement from "./dashboardComponents/TestimonialDashboard/T
 import ProgramManagement from "./dashboardComponents/ProgramManagement";
 import PartnerManagement from "./dashboardComponents/PartnerManagement";
 import SulabhManagement from "./dashboardComponents/SulabhManagement";
+import HeroImageManagement from "./dashboardComponents/HeroImageManagement"; // Added import
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("members");
@@ -46,6 +47,7 @@ const Dashboard = () => {
     { id: "programs", label: "Programs", icon: Layers },
     { id: "partners", label: "Partners", icon: Handshake },
     { id: "sulabh", label: "Sulabh App", icon: Smartphone },
+    { id: "hero-images", label: "Hero Images", icon: Monitor }, // Added Item
   ];
 
   const renderContent = () => {
@@ -66,17 +68,17 @@ const Dashboard = () => {
         return <PartnerManagement />;
       case "sulabh":
         return <SulabhManagement />;
+      case "hero-images":
+        return <HeroImageManagement />; // Added case
       default:
         return <TeamManagement />;
     }
   };
 
   return (
-    // h-screen and overflow-hidden prevent the whole page from scrolling.
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      {/* MOBILE OVERLAY */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -84,7 +86,6 @@ const Dashboard = () => {
         />
       )}
 
-      {/* SIDEBAR */}
       <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-200 flex flex-col
@@ -92,7 +93,6 @@ const Dashboard = () => {
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
-        {/* Header */}
         <div className="p-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="bg-orange-100 p-2 rounded-lg">
@@ -110,7 +110,6 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Scrollable Nav Links */}
         <nav className="flex-1 overflow-y-auto px-4 space-y-1 py-2 custom-scrollbar">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -124,11 +123,7 @@ const Dashboard = () => {
                 }}
                 className={`
                   w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm cursor-pointer
-                  ${
-                    isActive
-                      ? "bg-orange-50 text-orange-700 shadow-sm ring-1 ring-orange-100"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }
+                  ${isActive ? "bg-orange-50 text-orange-700 shadow-sm ring-1 ring-orange-100" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}
                 `}
               >
                 <Icon
@@ -140,7 +135,6 @@ const Dashboard = () => {
           })}
         </nav>
 
-        {/* Footer Actions (Fixed at bottom of sidebar) */}
         <div className="p-4 border-t border-gray-100 space-y-2 shrink-0 bg-white">
           <Link
             to="/"
@@ -159,9 +153,7 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      {/* MAIN CONTENT WRAPPER */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Mobile Header */}
         <header className="lg:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between shrink-0 z-30">
           <div className="flex items-center gap-3">
             <div className="bg-orange-100 p-1.5 rounded-md">
@@ -177,7 +169,6 @@ const Dashboard = () => {
           </button>
         </header>
 
-        {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50 scroll-smooth">
           <div className="max-w-7xl mx-auto animate-fade-in pb-10">
             <div className="mb-8">
