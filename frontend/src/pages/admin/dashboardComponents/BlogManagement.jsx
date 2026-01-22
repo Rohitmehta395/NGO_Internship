@@ -3,14 +3,23 @@ import { blogsAPI } from "../../../services/api.js";
 import { toast } from "react-toastify";
 import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 import BlogForm from "./BlogForm";
-import { Plus, Edit2, Trash2, Calendar, User, X } from "lucide-react";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Calendar,
+  User,
+  X,
+  BookOpen,
+  Link as LinkIcon,
+} from "lucide-react";
 
 const BlogManagement = () => {
   const [loading, setLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
   const [editingBlog, setEditingBlog] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [deleteConfirmId, setDeleteConfirmId] = useState(null); // For custom delete UI
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
@@ -35,6 +44,8 @@ const BlogManagement = () => {
     formData.append("description", blogData.description);
     formData.append("content", blogData.content);
     formData.append("author", blogData.author);
+    // Append the link field
+    if (blogData.link) formData.append("link", blogData.link);
 
     if (blogData.image) {
       formData.append("image", blogData.image);
@@ -71,7 +82,6 @@ const BlogManagement = () => {
     setShowForm(false);
   };
 
-  // Modern delete handler (no window.alert)
   const handleBlogDelete = async (id) => {
     try {
       await blogsAPI.delete(id);
@@ -125,7 +135,7 @@ const BlogManagement = () => {
         </select>
       </div>
 
-      {/* FORM SECTION (COLLAPSIBLE) */}
+      {/* FORM SECTION */}
       <div
         className={`transition-all duration-500 ease-in-out overflow-hidden ${showForm ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`}
       >
@@ -181,9 +191,11 @@ const BlogManagement = () => {
                         "https://placehold.co/600x400?text=No+Image";
                     }}
                   />
-                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-gray-700 shadow-sm">
-                    BLOG
-                  </div>
+                  {blog.link && (
+                    <div className="absolute top-3 right-3 bg-blue-600/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-white shadow-sm flex items-center gap-1">
+                      <LinkIcon className="w-3 h-3" /> LINK
+                    </div>
+                  )}
                 </div>
 
                 {/* CONTENT */}

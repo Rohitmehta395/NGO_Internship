@@ -24,6 +24,14 @@ const AllBlogs = () => {
     fetchBlogs();
   }, []);
 
+  const handleCardClick = (blog) => {
+    if (blog.link) {
+      window.open(blog.link, "_blank");
+    } else {
+      navigate(`/blog/${blog.slug}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
@@ -49,14 +57,12 @@ const AllBlogs = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogs.map((blog) => {
-              // Parse Date
               const dateObj = new Date(blog.createdAt);
               const date = dateObj.getDate();
               const month = dateObj.toLocaleString("default", {
                 month: "short",
               });
 
-              // Image URL
               const imageUrl = blog.image
                 ? blog.image.startsWith("http")
                   ? blog.image
@@ -67,7 +73,7 @@ const AllBlogs = () => {
                 <div
                   key={blog._id}
                   className="h-full cursor-pointer transition-transform hover:scale-[1.02]"
-                  onClick={() => navigate(`/blog/${blog.slug}`)}
+                  onClick={() => handleCardClick(blog)}
                 >
                   <ArticleCard
                     date={date}
@@ -76,6 +82,7 @@ const AllBlogs = () => {
                     author={blog.author || "Admin"}
                     title={blog.title}
                     desc={blog.description}
+                    onReadMore={() => handleCardClick(blog)}
                   />
                 </div>
               );

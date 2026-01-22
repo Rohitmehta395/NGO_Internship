@@ -9,6 +9,8 @@ import {
   FileText,
   Trash2,
   Calendar,
+  Info,
+  Link as LinkIcon,
 } from "lucide-react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -20,6 +22,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("Admin");
   const [date, setDate] = useState("");
+  const [link, setLink] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -30,6 +33,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
       setDescription(initialData.description || "");
       setContent(initialData.content || "");
       setAuthor(initialData.author || "Admin");
+      setLink(initialData.link || "");
 
       const initialDate = initialData.date || new Date().toISOString();
       setDate(initialDate.split("T")[0]); // Format YYYY-MM-DD
@@ -50,6 +54,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
     setDescription("");
     setContent("");
     setAuthor("Admin");
+    setLink("");
     setDate(new Date().toISOString().split("T")[0]);
     setImage(null);
     setPreview(null);
@@ -70,7 +75,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ title, description, content, author, date, image });
+    onSubmit({ title, description, content, author, date, image, link });
 
     if (!initialData) {
       resetForm();
@@ -146,6 +151,25 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
             />
           </div>
 
+          {/* External Link (New Field) */}
+          <div className="space-y-2 md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <LinkIcon className="w-4 h-4 text-orange-500" /> External Link /
+              Newsletter URL (Optional)
+            </label>
+            <input
+              type="url"
+              placeholder="https://example.com/newsletter.pdf"
+              className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+            />
+            <p className="text-xs text-gray-500">
+              If provided, clicking the card will open this link instead of the
+              blog page. Useful for PDFs.
+            </p>
+          </div>
+
           {/* Author */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -159,7 +183,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
             />
           </div>
 
-          {/* ADDED: Date Input */}
+          {/* Date Input */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-orange-500" /> Publish Date
@@ -192,14 +216,25 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
               <Image className="w-4 h-4 text-orange-500" /> Cover Image
             </label>
 
+            <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-md text-xs border border-blue-100 mb-2">
+              <Info className="w-4 h-4 shrink-0" />
+              <span>
+                Recommended Size: <strong>800 x 600 px</strong> (Aspect Ratio:
+                4:3). Max Size: <strong>5MB</strong>.
+              </span>
+            </div>
+
             <div className="flex items-start gap-4">
               <div className="flex-1">
                 <label className="flex flex-col items-center px-4 py-6 bg-gray-50 text-orange-500 rounded-lg shadow-inner border border-dashed border-gray-300 cursor-pointer hover:bg-orange-50 transition border-orange-200">
                   <Upload className="w-8 h-8 text-orange-400 mb-2" />
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-gray-600 font-medium">
                     {preview
                       ? "Click to replace image"
                       : "Click to upload cover image"}
+                  </span>
+                  <span className="text-xs text-gray-400 mt-1">
+                    Supports: JPG, PNG, WEBP
                   </span>
                   <input
                     type="file"

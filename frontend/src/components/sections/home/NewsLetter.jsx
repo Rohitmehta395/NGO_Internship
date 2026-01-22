@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import ArticleCard from "../../common/cards/ArticleCard";
 import OrangeButton from "../../common/buttons/OrangeButton";
 
@@ -11,14 +11,15 @@ export default function NewsLetter() {
   const [blogs, setBlogs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
-  const navigate = useNavigate(); // Initialize hook
+  const navigate = useNavigate();
 
   // Fetch Blogs from Backend
   useEffect(() => {
     const loadBlogs = async () => {
       try {
         const res = await blogsAPI.getAll();
-        setBlogs(res.data.data);
+        const latestBlogs = res.data.data.slice(0, 4);
+        setBlogs(latestBlogs);
       } catch (error) {
         console.error("Failed to load blogs");
       }
@@ -57,9 +58,12 @@ export default function NewsLetter() {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
   };
 
-  // UPDATED: Now navigates to the blog detail page
-  const handleReadMore = (blogSlug) => {
-    navigate(`/blog/${blogSlug}`);
+  const handleReadMore = (blog) => {
+    if (blog.link) {
+      window.open(blog.link, "_blank");
+    } else {
+      navigate(`/blog/${blog.slug}`);
+    }
   };
 
   return (
@@ -70,12 +74,12 @@ export default function NewsLetter() {
           <div className="flex-1">
             <div className="flex items-center gap-2 text-orange-500 mb-3">
               <Heart className="w-5 h-5 md:w-6 md:h-6 fill-current" />
-              <span className="font-semibold text-lg">Latest Blogs</span>
+              <span className="font-semibold text-lg">Latest Updates</span>
             </div>
+            {/* UPDATED HEADER TITLE */}
             <h2 className="text-3xl md:text-4xl font-bold text-[#0B0B45] leading-tight">
-              Read Our Latest
-              <br />
-              NewsLetter
+              Read our Blogs & <br />
+              Newsletter
             </h2>
           </div>
 
@@ -116,14 +120,12 @@ export default function NewsLetter() {
           >
             {blogs.length > 0 ? (
               blogs.map((blog) => {
-                // Parse Date
                 const dateObj = new Date(blog.createdAt);
                 const date = dateObj.getDate();
                 const month = dateObj.toLocaleString("default", {
                   month: "short",
                 });
 
-                // Handle Image URL
                 const imageUrl = blog.image
                   ? blog.image.startsWith("http")
                     ? blog.image
@@ -142,7 +144,7 @@ export default function NewsLetter() {
                       author={blog.author || "Admin"}
                       title={blog.title}
                       desc={blog.description || "No description available."}
-                      onReadMore={() => handleReadMore(blog.slug)}
+                      onReadMore={() => handleReadMore(blog)}
                     />
                   </div>
                 );

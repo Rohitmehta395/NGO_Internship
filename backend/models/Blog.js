@@ -9,6 +9,7 @@ const blogSchema = new mongoose.Schema(
     author: { type: String, default: "Admin" },
     slug: { type: String, unique: true },
     date: { type: Date, default: Date.now },
+    link: { type: String, required: false },
   },
   { timestamps: true },
 );
