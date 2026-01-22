@@ -46,10 +46,12 @@ const Footer = () => {
 
   const quickLinks = [
     { label: "Our Programs", path: "/programs" },
-    { label: "Our Partners", path: "/partners" },
     { label: "Sulabh App", path: "/app" },
-    { label: "Events", path: "/events" },
     { label: "About Us", path: "/about" },
+    { label: "Our Partners", path: "/partners" },
+    { label: "Events", path: "/events" },
+    { label: "Testimonials", path: "/testimonials" },
+    { label: "Blogs", path: "/blog" },
   ];
 
   const socialLinks = [

@@ -26,7 +26,7 @@ const EducationForAll = () => {
           <h1 className="text-2xl sm:text-2xl md:text-4xl font-bold text-orange-500 mb-4 sm:mb-6 tracking-widest">
             #EDUCATIONFORALL
           </h1>
-          <DonationButton work="Make a Donation" path="#donation" />
+          {/* <DonationButton work="Make a Donation" path="#donation" /> */}
         </div>
 
         {/* Cards Section (Full width) */}

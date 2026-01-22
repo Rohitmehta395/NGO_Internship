@@ -45,11 +45,11 @@ export default function VolunteerComponent() {
               </span> */}
 
               <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold text-[#0B0B45] leading-tight mb-4">
-                Why We Need You Become a Volunteer
+                Why we need You to Volunteer with Us
               </h1>
 
               <p className=" text-base sm:text-md leading-relaxed text-[#0B0B45]">
-                We need more volunteers like these inspiring youngsters — eager
+                We need more Volunteers like these inspiring youngsters, eager
                 to create real change in the world!
                 <br />
                 <span className="font-semibold md:text-1xl text-[#0B0B45]">
@@ -88,45 +88,9 @@ export default function VolunteerComponent() {
                 {expandedSection === "recognition" && (
                   <div className="px-4 sm:px-5 pb-5 pt-2">
                     <p className="text-gray-700 leading-relaxed">
-                      We need more passionate change-makers — young minds ready
-                      to shape a more inclusive and empowered future for
+                      We need more passionate change-makers and young minds
+                      ready to shape a more inclusive and empowered future for
                       education in India.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Why Join */}
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => toggleSection("why-join")}
-                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-gray-50 transition-colors"
-                >
-                  <span
-                    className={`text-lg sm:text-xl font-semibold ${
-                      expandedSection === "why-join"
-                        ? "text-orange-500"
-                        : "text-[#0B0B45]"
-                    }`}
-                  >
-                    Why Join Us as a Volunteer?
-                  </span>
-
-                  <ChevronDown
-                    className={`w-5 h-5 transition-transform ${
-                      expandedSection === "why-join"
-                        ? "rotate-180 text-orange-500"
-                        : "text-[#0B0B45]"
-                    }`}
-                  />
-                </button>
-
-                {expandedSection === "why-join" && (
-                  <div className="px-4 sm:px-5 pb-5 pt-2">
-                    <p className="text-gray-700 leading-relaxed">
-                      Make a tangible impact on education, develop leadership
-                      skills, connect with like-minded changemakers, and be part
-                      of a movement transforming communities across India.
                     </p>
                   </div>
                 )}
@@ -160,9 +124,44 @@ export default function VolunteerComponent() {
                 {expandedSection === "community" && (
                   <div className="px-4 sm:px-5 pb-5 pt-2">
                     <p className="text-gray-700 leading-relaxed">
-                      Join a vibrant network of volunteers who share your
+                      Join a vibrant network of Volunteers who share your
                       passion for education and social change, creating lasting
                       impact together.
+                    </p>
+                  </div>
+                )}
+              </div>
+              {/* Why Join */}
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => toggleSection("why-join")}
+                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span
+                    className={`text-lg sm:text-xl font-semibold ${
+                      expandedSection === "why-join"
+                        ? "text-orange-500"
+                        : "text-[#0B0B45]"
+                    }`}
+                  >
+                    Why Join Us as a Volunteer?
+                  </span>
+
+                  <ChevronDown
+                    className={`w-5 h-5 transition-transform ${
+                      expandedSection === "why-join"
+                        ? "rotate-180 text-orange-500"
+                        : "text-[#0B0B45]"
+                    }`}
+                  />
+                </button>
+
+                {expandedSection === "why-join" && (
+                  <div className="px-4 sm:px-5 pb-5 pt-2">
+                    <p className="text-gray-700 leading-relaxed">
+                      Make a tangible impact on education, develop leadership
+                      skills, connect with like-minded change makers, and be
+                      part of a movement transforming communities across India.
                     </p>
                   </div>
                 )}

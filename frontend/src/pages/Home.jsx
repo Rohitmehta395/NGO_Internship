@@ -19,9 +19,9 @@ const Home = () => {
       {/* <Programs />   */}
       <EducationForAll />
       <FlagshipPrograms />
+      <NewsLetter />
       <VolunteerSection />
       <DonationSection />
-      <NewsLetter />
     </motion.div>
   );
 };
