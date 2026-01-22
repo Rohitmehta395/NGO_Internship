@@ -243,4 +243,6 @@
       display: none !important;
     }
   }
+}body {
+  zoom: 90%;
 }

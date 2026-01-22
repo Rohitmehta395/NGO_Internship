@@ -8,92 +8,95 @@ export default function DonationSection() {
     "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://sharadaeducationaltrust.org";
 
   return (
-    <div id="donation" className="w-full px-4 py-6 sm:py-8 md:py-12">
+    <div id="donation" className="w-full px-4 py-6 md:py-8 bg-[#F3F4F6]">
+      {/* Changed max-w-6xl to max-w-7xl for wider layout */}
       <div className="max-w-7xl mx-auto">
-        {/* <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-yellow-600 rounded-3xl shadow-2xl overflow-hidden"> */}
-        <div className="rounded-3xl shadow-2xl overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-            {/* Left side - QR Code */}
-            <div className="p-6 sm:p-8 md:p-12 flex items-center justify-center">
-              <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="rounded-3xl shadow-xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            {/* Left side - QR Code AND Note */}
+            <div className="bg-white p-6 md:p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-100">
+              {/* QR Image */}
+              <div className="bg-white rounded-xl p-2 shadow-sm border border-gray-100 mb-6">
                 <img
                   src={qrImage}
                   alt="Donation QR Code"
-                  className="w-full h-auto max-w-xs sm:max-w-sm md:max-w-md"
+                  className="w-full h-auto max-w-[200px] sm:max-w-[220px]"
                 />
+              </div>
+
+              {/* Note Section */}
+              <div className="text-center text-[#0B0B45] w-full max-w-sm">
+                <p className="font-bold text-sm mb-2 border-b border-gray-200 pb-1 inline-block">
+                  Note:
+                </p>
+                <p className="leading-snug text-xs sm:text-sm mb-2">
+                  UPI Id:{" "}
+                  <span className="font-bold select-all bg-gray-50 px-1 rounded">
+                    sharadaeducationaltrust.ibz@icici
+                  </span>
+                </p>
+                <p className="leading-snug text-xs text-gray-600">
+                  After transfer, please email details (Name, PAN, Address) to{" "}
+                  <span className="font-semibold text-[#0B0B45]">
+                    info@sharadatrust.org
+                  </span>{" "}
+                  or WhatsApp{" "}
+                  <span className="font-semibold text-[#0B0B45]">
+                    +91 9019911804
+                  </span>
+                  .
+                </p>
               </div>
             </div>
 
             {/* Right side - Content */}
-            <div className="p-6 sm:p-8 md:p-12 flex flex-col justify-center text-[#0B0B45] bg-[#FFB76B] ">
+            <div className="p-6 md:p-10 flex flex-col justify-center text-[#0B0B45] bg-[#F9E2D0]">
               {/* Header */}
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <Heart className="w-6 h-6 sm:w-7 sm:h-7 fill-current" />
-                  <span className="font-semibold text-lg sm:text-xl">
+              <div className="mb-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <Heart className="w-5 h-5 fill-current text-[#0B0B45]" />
+                  <span className="font-semibold text-base uppercase tracking-wide">
                     Donate now
                   </span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold leading-snug sm:leading-tight mb-4 sm:mb-6 text-[#0B0B45]">
+
+                <h2 className="text-2xl md:text-4xl font-bold leading-tight mb-4 text-[#0B0B45]">
                   Together Let's Change The World
                 </h2>
 
-                <div className="space-y-2 text-sm sm:text-base text-[#0B0B45]">
-                  <p className="italic leading-relaxed">
+                <div className="space-y-3 text-sm md:text-base text-[#0B0B45]">
+                  <p className="italic leading-snug opacity-90">
                     "Donating for an Educational cause is an extremely noble act
                     since the impact lasts a lifetime".
                   </p>
-                  <p className="font-medium text-[#0B0B45]">
+                  <p className="font-semibold text-sm">
                     Please scan the QR code to donate generously.
                   </p>
                 </div>
               </div>
 
               {/* Bullet Points */}
-              <div className="space-y-2 mb-3 text-[#0B0B45]">
-                <div className="flex items-start gap-2 sm:gap-3">
-                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current shrink-0 mt-1" />
-                  <p className="leading-relaxed text-sm sm:text-base">
-                    <span className="font-semibold">
-                      Sharada Educational Trust
-                    </span>{" "}
+              <div className="space-y-3 text-[#0B0B45]">
+                <div className="flex items-start gap-2">
+                  <Star className="w-4 h-4 fill-current shrink-0 mt-0.5" />
+                  <p className="leading-snug text-xs sm:text-sm">
+                    <span className="font-bold">Sharada Educational Trust</span>{" "}
                     is registered as a Public Charitable Trust.
                   </p>
                 </div>
-                <div className="flex items-start gap-2 sm:gap-3">
-                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current flex-shrink-0 mt-1" />
-                  <p className="leading-relaxed text-sm sm:text-base">
+                <div className="flex items-start gap-2">
+                  <Star className="w-4 h-4 fill-current flex-shrink-0 mt-0.5" />
+                  <p className="leading-snug text-xs sm:text-sm">
                     The Trust is registered for undertaking CSR activities.
                   </p>
                 </div>
-                <div className="flex items-start gap-2 sm:gap-3">
-                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current flex-shrink-0 mt-1" />
-                  <p className="leading-relaxed text-sm sm:text-base">
+                <div className="flex items-start gap-2">
+                  <Star className="w-4 h-4 fill-current flex-shrink-0 mt-0.5" />
+                  <p className="leading-snug text-xs sm:text-sm">
                     Donations are eligible for exemption u/s 80G of Income Tax
                     Act 1961.
                   </p>
                 </div>
-              </div>
-
-              {/* Note Section */}
-              <div className="border-t border-white/30 pt-3 text-[#0B0B45]">
-                <p className="font-bold text-lg sm:text-xl mb-2 sm:mb-3">
-                  Note:
-                </p>
-                <p className="leading-relaxed text-sm sm:text-base">
-                  UPI Id:{" "}
-                  <span className="font-bold">
-                    sharadaeducationaltrust.ibz@icici
-                  </span>{" "}
-                  to transfer funds directly.
-                </p>
-                <p className="leading-relaxed mt-2 text-sm sm:text-base">
-                  Once the bank transfer is completed, please send an email to{" "}
-                  <span className="font-semibold">info@sharadatrust.org</span>{" "}
-                  or WhatsApp us on{" "}
-                  <span className="font-semibold">+91 9019911804</span> sharing
-                  the following details: Full Name, PAN and Address.
-                </p>
               </div>
             </div>
           </div>
