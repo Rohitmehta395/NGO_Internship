@@ -269,7 +269,7 @@ const BlogForm = ({ onSubmit, initialData = null, onCancel }) => {
         {/* Content Editor */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2">
-            <AlignLeft className="w-4 h-4 text-orange-500" /> Full Content
+            <AlignLeft className="w-4 h-4 text-orange-500" /> Full Content (Optional for NewsLetter)
           </label>
           <div className="bg-white">
             <ReactQuill
