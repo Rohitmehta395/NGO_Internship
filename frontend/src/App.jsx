@@ -17,8 +17,6 @@ import Partners from "./pages/Partners";
 import Testimonial from "./pages/Testimonial";
 import Sulabh from "./pages/Sulabh";
 import Programs from "./pages/Programs";
-// Note: Hardcoded page imports (JnanshalaPage, etc.) are removed
-// because we are now using the dynamic page for everything.
 import DynamicProgram from "./pages/DynamicProgram";
 import Notfound from "./pages/Notfound";
 
@@ -29,11 +27,12 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BlogList from "./pages/BlogList";
 import BlogDetail from "./pages/BlogDetail";
 import ScrollToTop from "./components/common/ScrollToTop";
+import TawkToChat from "./components/common/TawkToChat";
 
-// Wrapper to apply the main Layout (Header/Footer) to public routes
 const PublicLayout = () => {
   return (
     <Layout>
+      <TawkToChat />
       <Outlet />
     </Layout>
   );
@@ -45,7 +44,7 @@ function App() {
       <ScrollToTop />
       <div className="App">
         <Routes>
-          {/* --- ADMIN ROUTES (No Header/Footer) --- */}
+          {/* --- ADMIN ROUTES --- */}
           <Route path="/admin/login" element={<Login />} />
 
           {/* Protected Admin Routes */}
@@ -53,7 +52,7 @@ function App() {
             <Route path="/admin/dashboard" element={<Dashboard />} />
           </Route>
 
-          {/* --- PUBLIC ROUTES (With Header/Footer) --- */}
+          {/* --- PUBLIC ROUTES --- */}
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/events" element={<Event />} />
@@ -63,11 +62,7 @@ function App() {
             <Route path="/app" element={<Sulabh />} />
 
             {/* --- PROGRAM ROUTES --- */}
-            {/* Main list of programs */}
             <Route path="/programs" element={<Programs />} />
-
-            {/* Dynamic Route for ANY program detail page 
-                (e.g., /programs/sharada-academy, /programs/new-program) */}
             <Route path="/programs/:slug" element={<DynamicProgram />} />
 
             <Route path="/blog" element={<BlogList />} />

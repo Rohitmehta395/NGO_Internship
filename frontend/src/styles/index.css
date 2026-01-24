@@ -246,3 +246,13 @@
 }body {
   zoom: 90%;
 }
+/* Force Tawk.to to the front */
+div[class^="widget-visible"] {
+    z-index: 2147483647 !important;
+}
+iframe[title="chat widget"] {
+    z-index: 2147483647 !important;
+}
+div[class^="widget-visible"] {
+    z-index: 9999 !important;
+}
