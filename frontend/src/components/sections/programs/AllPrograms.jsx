@@ -24,15 +24,11 @@ export default function AllPrograms() {
     fetchPrograms();
   }, []);
 
-  // ADDED: Helper to convert YouTube URL to Embed URL
   const getEmbedUrl = (url) => {
     if (!url) return "";
-    // Regular expression to extract Video ID from various YouTube URL formats
     const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
     const match = url.match(regExp);
-
-    // If ID found, return embed URL, otherwise return original
     return match && match[2].length === 11
       ? `https://www.youtube.com/embed/${match[2]}`
       : url;
