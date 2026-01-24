@@ -1,8 +1,12 @@
 const MediaTestimonial = require("../models/MediaTestimonial");
 
- const getAllMedia = async (req, res) => {
+const getAllMedia = async (req, res) => {
   try {
-    const media = await MediaTestimonial.find().sort({ createdAt: -1 });
+    // Sort by Order ASC, then Created DESC
+    const media = await MediaTestimonial.find().sort({
+      order: 1,
+      createdAt: -1,
+    });
     res.status(200).json(media);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -10,7 +14,7 @@ const MediaTestimonial = require("../models/MediaTestimonial");
 };
 
 // GET by ID
- const getMediaById = async (req, res) => {
+const getMediaById = async (req, res) => {
   try {
     const media = await MediaTestimonial.findById(req.params.id);
     if (!media) return res.status(404).json({ message: "Not found" });
@@ -21,11 +25,12 @@ const MediaTestimonial = require("../models/MediaTestimonial");
 };
 
 // CREATE
- const createMedia = async (req, res) => {
+const createMedia = async (req, res) => {
   try {
     const media = new MediaTestimonial({
       ...req.body,
       image: req.file ? req.file.filename : null,
+      order: 0,
     });
     await media.save();
     res.status(201).json(media);
@@ -35,7 +40,7 @@ const MediaTestimonial = require("../models/MediaTestimonial");
 };
 
 // UPDATE
- const updateMedia = async (req, res) => {
+const updateMedia = async (req, res) => {
   try {
     const updatedData = { ...req.body };
     if (req.file) updatedData.image = req.file.filename;
@@ -43,7 +48,7 @@ const MediaTestimonial = require("../models/MediaTestimonial");
     const updatedMedia = await MediaTestimonial.findByIdAndUpdate(
       req.params.id,
       updatedData,
-      { new: true }
+      { new: true },
     );
 
     if (!updatedMedia) return res.status(404).json({ message: "Not found" });
@@ -54,11 +59,38 @@ const MediaTestimonial = require("../models/MediaTestimonial");
 };
 
 // DELETE
- const deleteMedia = async (req, res) => {
+const deleteMedia = async (req, res) => {
   try {
-    const deletedMedia = await MediaTestimonial.findByIdAndDelete(req.params.id);
+    const deletedMedia = await MediaTestimonial.findByIdAndDelete(
+      req.params.id,
+    );
     if (!deletedMedia) return res.status(404).json({ message: "Not found" });
     res.status(200).json({ message: "Deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// REORDER
+const reorderMedia = async (req, res) => {
+  try {
+    const { items } = req.body;
+    if (!items || !Array.isArray(items)) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+
+    const operations = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await MediaTestimonial.bulkWrite(operations);
+    }
+
+    res.status(200).json({ message: "Reordered successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -70,4 +102,5 @@ module.exports = {
   createMedia,
   updateMedia,
   deleteMedia,
+  reorderMedia,
 };

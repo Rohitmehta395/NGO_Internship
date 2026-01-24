@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Image, Upload, Trash2 } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
+import { Image, Upload, Trash2, GripVertical } from "lucide-react";
+import { toast } from "react-toastify"; // <--- Import Toast
 import { mediaAPI } from "../../../../services/api";
 import { IMAGE_BASE_URL } from "../../../../utils/constants";
 
@@ -18,7 +19,10 @@ const MediaTestimonialAdmin = () => {
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortOrder, setSortOrder] = useState("manual");
+
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
 
   /* ================= FETCH ================= */
   const fetchMedia = async () => {
@@ -27,13 +31,49 @@ const MediaTestimonialAdmin = () => {
       setMediaList(res.data);
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch media testimonials");
+      toast.error("Failed to fetch media testimonials");
     }
   };
 
   useEffect(() => {
     fetchMedia();
   }, []);
+
+  /* ================= DRAG & DROP ================= */
+  const handleDragStart = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragOverItem.current = index;
+  };
+
+  const handleDragEnd = async () => {
+    if (sortOrder !== "manual") return;
+    const _mediaList = [...mediaList];
+    const draggedItemContent = _mediaList.splice(dragItem.current, 1)[0];
+    _mediaList.splice(dragOverItem.current, 0, draggedItemContent);
+
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setMediaList(_mediaList);
+
+    const itemsToUpdate = _mediaList.map((item, index) => ({
+      _id: item._id,
+      order: index,
+    }));
+
+    try {
+      await mediaAPI.reorder(itemsToUpdate);
+      toast.success("Order updated!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update order");
+      fetchMedia();
+    }
+  };
 
   /* ================= HANDLERS ================= */
   const handleChange = (key) => (e) => {
@@ -44,10 +84,9 @@ const MediaTestimonialAdmin = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // FILE SIZE CHECK (1MB Limit)
     if (file.size > 1024 * 1024) {
-      alert("File size exceeds 1MB. Please upload a smaller image.");
-      e.target.value = ""; // Reset input
+      toast.error("File size exceeds 1MB. Please upload a smaller image.");
+      e.target.value = "";
       return;
     }
 
@@ -85,31 +124,27 @@ const MediaTestimonialAdmin = () => {
 
       if (editingId) {
         await mediaAPI.update(editingId, formData);
-        alert("Updated successfully!");
+        toast.success("Updated successfully!");
       } else {
         if (!form.image) {
-          alert("Image is required");
+          toast.error("Image is required");
           setLoading(false);
           return;
         }
         await mediaAPI.create(formData);
-        alert("Created successfully!");
+        toast.success("Created successfully!");
       }
 
       resetForm();
       fetchMedia();
     } catch (err) {
       console.error(err);
-      alert(
-        err.response?.data?.message ||
-          "Error saving media testimonial. Check file size (max 1MB).",
-      );
+      toast.error(err.response?.data?.message || "Error saving testimonial");
     } finally {
       setLoading(false);
     }
   };
 
-  /* ================= EDIT ================= */
   const handleEdit = (media) => {
     let previewUrl = media.image ? getImageUrl(media.image) : null;
 
@@ -127,16 +162,16 @@ const MediaTestimonialAdmin = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  /* ================= DELETE ================= */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this testimonial?")) return;
 
     try {
       await mediaAPI.delete(id);
       fetchMedia();
+      toast.success("Deleted successfully!");
     } catch (err) {
       console.error(err);
-      alert("Error deleting testimonial");
+      toast.error("Error deleting testimonial");
     }
   };
 
@@ -146,16 +181,17 @@ const MediaTestimonialAdmin = () => {
   };
 
   /* ================= SORTING ================= */
-  const sortedMedia = [...mediaList].sort((a, b) => {
-    const dateA = new Date(a.date || a.createdAt || 0);
-    const dateB = new Date(b.date || b.createdAt || 0);
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-  });
+  const sortedMedia =
+    sortOrder === "manual"
+      ? mediaList
+      : [...mediaList].sort((a, b) => {
+          const dateA = new Date(a.date || a.createdAt || 0);
+          const dateB = new Date(b.date || b.createdAt || 0);
+          return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+        });
 
-  /* ================= UI ================= */
   return (
     <div className="p-6 space-y-6 min-h-screen bg-gray-50">
-      {/* FORM */}
       <div className="bg-white p-6 rounded-lg shadow border-t-4 border-orange-500">
         <h2 className="text-xl font-bold mb-4">
           {editingId ? "✏️ Edit Media Testimonial" : "➕ Add Media Testimonial"}
@@ -197,15 +233,15 @@ const MediaTestimonialAdmin = () => {
             onChange={handleChange("link")}
           />
 
-          {/* IMAGE UPLOAD */}
           {!form.preview ? (
             <label className="border-2 border-dashed border-gray-300 p-8 flex flex-col items-center justify-center rounded-lg cursor-pointer hover:bg-gray-50 transition">
               <Upload className="text-gray-400 mb-2" size={32} />
               <span className="text-gray-600 font-medium">
                 Click to Upload Image
               </span>
+              {/* 👇 ADDED RECOMMENDED SIZE TEXT HERE */}
               <span className="text-xs text-gray-400 mt-1">
-                JPG, PNG, WebP supported (Max 1MB)
+                Recommended Size: 800x600px (Max 1MB)
               </span>
               <input
                 type="file"
@@ -220,10 +256,6 @@ const MediaTestimonialAdmin = () => {
                 src={form.preview}
                 alt="Preview"
                 className="rounded-lg object-cover w-full max-w-sm h-48 border shadow-sm"
-                onError={(e) => {
-                  e.target.src =
-                    "https://placehold.co/400x300?text=Preview+Error";
-                }}
               />
               <button
                 type="button"
@@ -256,15 +288,14 @@ const MediaTestimonialAdmin = () => {
         </form>
       </div>
 
-      {/* FILTER & LIST */}
       <div>
-        {/* Sort Filter */}
         <div className="flex justify-end mb-4">
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             className="border border-gray-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
           >
+            <option value="manual">Manual Order (Drag & Drop)</option>
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
           </select>
@@ -276,27 +307,31 @@ const MediaTestimonialAdmin = () => {
               No media testimonials found.
             </p>
           )}
-          {sortedMedia.map((media) => (
+          {sortedMedia.map((media, index) => (
             <div
               key={media._id}
-              className="bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition"
+              draggable={sortOrder === "manual"}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnter={(e) => handleDragEnter(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => e.preventDefault()}
+              className={`bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition relative ${sortOrder === "manual" ? "cursor-move" : ""}`}
             >
+              {sortOrder === "manual" && (
+                <div className="absolute top-2 right-2 z-10 bg-black/30 p-1 rounded text-white">
+                  <GripVertical size={16} />
+                </div>
+              )}
               <div className="w-full h-40 overflow-hidden bg-gray-100">
-                {media.image ? (
-                  <img
-                    src={getImageUrl(media.image)}
-                    alt={media.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) =>
-                      (e.target.src =
-                        "https://placehold.co/600x400?text=Image+Not+Found")
-                    }
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    No Image
-                  </div>
-                )}
+                <img
+                  src={
+                    media.image
+                      ? getImageUrl(media.image)
+                      : "https://placehold.co/600x400?text=No+Image"
+                  }
+                  alt={media.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               <div className="p-4 flex flex-col gap-2">

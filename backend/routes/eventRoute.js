@@ -5,7 +5,9 @@ const {
   getEventById,
   updateEvent,
   deleteEvent,
+  reorderEvents,
 } = require("../controllers/eventController");
+const { protect, authorize } = require("../middleware/auth");
 
 const router = express.Router();
 const multer = require("multer");
@@ -43,9 +45,10 @@ const upload = multer({
 
 router.get("/", getEvents);
 router.get("/:id", getEventById);
+router.put("/reorder", protect, authorize("admin"), reorderEvents);
 // Create Event with image upload
 router.post("/", upload.single("image"), (req, res, next) => {
-  console.log("File received by backend:", req.file); // <--- ADD THIS
+  console.log("File received by backend:", req.file);
   createEvent(req, res, next);
 });
 // Update Event with image upload

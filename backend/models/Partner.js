@@ -2,29 +2,12 @@ const mongoose = require("mongoose");
 
 const partnerSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    description: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    imageUrl: {
-      type: String,
-      required: true,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
+    name: { type: String, required: true, trim: true },
+    description: { type: String, required: true, trim: true },
+    imageUrl: { type: String, required: true },
+    order: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Partner", partnerSchema);

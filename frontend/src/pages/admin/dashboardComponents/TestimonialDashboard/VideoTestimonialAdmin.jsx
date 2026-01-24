@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { videoTestimonialsAPI } from "../../../../services/api";
+import { GripVertical } from "lucide-react";
+import { toast } from "react-toastify"; // <--- Import Toast
 
 const initialForm = {
   name: "",
@@ -14,7 +16,10 @@ const VideoTestimonialAdmin = () => {
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortOrder, setSortOrder] = useState("manual");
+
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
 
   /* ================= FETCH ================= */
   const fetchVideos = async () => {
@@ -23,13 +28,48 @@ const VideoTestimonialAdmin = () => {
       setVideos(res.data || []);
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Failed to fetch videos");
+      toast.error("Failed to fetch videos");
     }
   };
 
   useEffect(() => {
     fetchVideos();
   }, []);
+
+  /* ================= DRAG & DROP ================= */
+  const handleDragStart = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragOverItem.current = index;
+  };
+
+  const handleDragEnd = async () => {
+    if (sortOrder !== "manual") return;
+    const _videos = [...videos];
+    const draggedItemContent = _videos.splice(dragItem.current, 1)[0];
+    _videos.splice(dragOverItem.current, 0, draggedItemContent);
+
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setVideos(_videos);
+
+    const itemsToUpdate = _videos.map((item, index) => ({
+      _id: item._id,
+      order: index,
+    }));
+
+    try {
+      await videoTestimonialsAPI.reorder(itemsToUpdate);
+      toast.success("Order updated!");
+    } catch (err) {
+      toast.error("Failed to reorder");
+      fetchVideos();
+    }
+  };
 
   /* ================= HELPERS ================= */
   const getThumbnail = (url) => {
@@ -54,16 +94,16 @@ const VideoTestimonialAdmin = () => {
     try {
       if (editingId) {
         await videoTestimonialsAPI.update(editingId, form);
-        alert("Updated successfully!");
+        toast.success("Updated successfully!");
       } else {
         await videoTestimonialsAPI.create(form);
-        alert("Created successfully!");
+        toast.success("Created successfully!");
       }
       resetForm();
       fetchVideos();
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Error saving video");
+      toast.error(err.response?.data?.message || "Error saving video");
     } finally {
       setLoading(false);
     }
@@ -86,10 +126,9 @@ const VideoTestimonialAdmin = () => {
     try {
       await videoTestimonialsAPI.delete(id);
       fetchVideos();
-      alert("Deleted successfully!");
+      toast.success("Deleted successfully!");
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Delete failed");
+      toast.error("Delete failed");
     }
   };
 
@@ -99,16 +138,17 @@ const VideoTestimonialAdmin = () => {
   };
 
   /* ================= SORTING ================= */
-  const sortedVideos = [...videos].sort((a, b) => {
-    const dateA = new Date(a.date || a.createdAt || 0);
-    const dateB = new Date(b.date || b.createdAt || 0);
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-  });
+  const sortedVideos =
+    sortOrder === "manual"
+      ? videos
+      : [...videos].sort((a, b) => {
+          const dateA = new Date(a.date || a.createdAt || 0);
+          const dateB = new Date(b.date || b.createdAt || 0);
+          return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+        });
 
-  /* ================= UI ================= */
   return (
     <div className="p-6 bg-gray-50 min-h-screen space-y-6">
-      {/* FORM */}
       <div className="bg-white p-6 rounded-lg shadow border-t-4 border-orange-500">
         <h2 className="text-xl font-bold mb-4">
           {editingId ? "✏️ Edit Video Testimonial" : "🎬 Add Video Testimonial"}
@@ -145,7 +185,7 @@ const VideoTestimonialAdmin = () => {
             />
             <input
               name="ytLink"
-              placeholder="YouTube Link (e.g. https://youtu.be/...)"
+              placeholder="YouTube Link"
               value={form.ytLink}
               onChange={handleChange}
               className="w-full border p-2 rounded"
@@ -153,7 +193,6 @@ const VideoTestimonialAdmin = () => {
             />
           </div>
 
-          {/* Thumbnail Preview in Form */}
           {form.ytLink && getThumbnail(form.ytLink) && (
             <div className="mt-2">
               <p className="text-xs text-gray-500 mb-1">Thumbnail Preview:</p>
@@ -167,7 +206,7 @@ const VideoTestimonialAdmin = () => {
 
           <textarea
             name="description"
-            placeholder="Testimonial Description"
+            placeholder="Description"
             value={form.description}
             onChange={handleChange}
             rows={4}
@@ -183,7 +222,6 @@ const VideoTestimonialAdmin = () => {
             >
               {editingId ? "Update" : "Create"}
             </button>
-
             {editingId && (
               <button
                 type="button"
@@ -197,15 +235,14 @@ const VideoTestimonialAdmin = () => {
         </form>
       </div>
 
-      {/* FILTER & LIST */}
       <div>
-        {/* Sort Filter */}
         <div className="flex justify-end mb-4">
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             className="border border-gray-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
           >
+            <option value="manual">Manual Order (Drag & Drop)</option>
             <option value="newest">Newest Date First</option>
             <option value="oldest">Oldest Date First</option>
           </select>
@@ -213,35 +250,37 @@ const VideoTestimonialAdmin = () => {
 
         <div className="bg-white p-4 rounded shadow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedVideos.length > 0 ? (
-            sortedVideos.map((video) => {
+            sortedVideos.map((video, index) => {
               const thumbnail = getThumbnail(video.ytLink);
               return (
                 <div
                   key={video._id}
-                  className="bg-white rounded-lg shadow border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition"
+                  draggable={sortOrder === "manual"}
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragEnter={(e) => handleDragEnter(e, index)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => e.preventDefault()}
+                  className={`bg-white rounded-lg shadow border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition relative ${sortOrder === "manual" ? "cursor-move" : ""}`}
                 >
-                  {/* Thumbnail Area */}
+                  {sortOrder === "manual" && (
+                    <div className="absolute top-2 right-2 z-10 bg-black/30 p-1 rounded text-white">
+                      <GripVertical size={16} />
+                    </div>
+                  )}
                   <div className="relative w-full h-48 bg-black">
                     {thumbnail ? (
-                      <a
-                        href={video.ytLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="group block w-full h-full relative"
-                      >
+                      <div className="w-full h-full relative">
                         <img
                           src={thumbnail}
                           alt={video.name}
-                          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition"
+                          className="w-full h-full object-cover opacity-90"
                         />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center group-hover:bg-white transition">
-                            <span className="text-red-600 text-xl font-bold">
-                              ▶
-                            </span>
+                          <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center text-red-600 text-xl font-bold">
+                            ▶
                           </div>
                         </div>
-                      </a>
+                      </div>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500">
                         Invalid Link
@@ -249,7 +288,6 @@ const VideoTestimonialAdmin = () => {
                     )}
                   </div>
 
-                  {/* Content Area */}
                   <div className="p-4 flex flex-col flex-1">
                     <div className="flex justify-between items-start mb-2">
                       <div>
@@ -266,21 +304,19 @@ const VideoTestimonialAdmin = () => {
                         </span>
                       )}
                     </div>
-
                     <p className="text-sm text-gray-700 line-clamp-3 mb-4 flex-1">
                       {video.description}
                     </p>
-
                     <div className="flex gap-2 mt-auto pt-3 border-t border-gray-50">
                       <button
                         onClick={() => handleEdit(video)}
-                        className="flex-1 text-blue-600 bg-blue-50 px-3 py-2 rounded text-sm font-medium hover:bg-blue-100 transition"
+                        className="flex-1 text-blue-600 bg-blue-50 px-3 py-2 rounded text-sm font-medium"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(video._id)}
-                        className="flex-1 text-red-600 bg-red-50 px-3 py-2 rounded text-sm font-medium hover:bg-red-100 transition"
+                        className="flex-1 text-red-600 bg-red-50 px-3 py-2 rounded text-sm font-medium"
                       >
                         Delete
                       </button>

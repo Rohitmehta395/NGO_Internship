@@ -10,71 +10,45 @@ const createPartner = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Image is required" });
     }
-
     const partner = await Partner.create({
       name: req.body.name,
       description: req.body.description,
-      isActive: req.body.isActive ?? true,
       imageUrl: `partners/${req.file.filename}`,
+      order: 0,
     });
-
     res.status(201).json({ success: true, data: partner });
   } catch (err) {
-    console.error("CREATE PARTNER ERROR:", err);
-    res.status(500).json({
-    success: false,
-    message: err.message,
-    stack: err.stack,
-  });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-/* READ – PUBLIC */
+/* READ */
 const getPartners = async (req, res) => {
   try {
-    const sortOrder = req.query.sort === "oldest" ? 1 : -1; // newest default
-    const partners = await Partner.find({ isActive: true }).sort({ createdAt: sortOrder });
+    const partners = await Partner.find().sort({ order: 1, createdAt: -1 });
     res.json({ success: true, data: partners });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
-
-
-/* READ – ADMIN */
-const getAllPartners = async (req, res) => {
-  try {
-    const sortOrder = req.query.sort === "oldest" ? 1 : -1; // newest default
-    const partners = await Partner.find().sort({ createdAt: sortOrder });
-    res.json({ success: true, data: partners });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-
 
 /* UPDATE */
 const updatePartner = async (req, res) => {
   try {
     const partner = await Partner.findById(req.params.id);
-    if (!partner) {
+    if (!partner)
       return res
         .status(404)
         .json({ success: false, message: "Partner not found" });
-    }
 
     if (req.file && partner.imageUrl) {
       const oldPath = path.join(__dirname, "..", "uploads", partner.imageUrl);
-      fs.unlink(oldPath, (err) => {
-        if (err) console.error("Image delete failed:", err);
-      });
-
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       partner.imageUrl = `partners/${req.file.filename}`;
     }
 
     partner.name = req.body.name ?? partner.name;
     partner.description = req.body.description ?? partner.description;
-    partner.isActive = req.body.isActive ?? partner.isActive;
 
     await partner.save();
     res.json({ success: true, data: partner });
@@ -87,17 +61,14 @@ const updatePartner = async (req, res) => {
 const deletePartner = async (req, res) => {
   try {
     const partner = await Partner.findById(req.params.id);
-    if (!partner) {
+    if (!partner)
       return res
         .status(404)
         .json({ success: false, message: "Partner not found" });
-    }
 
     if (partner.imageUrl) {
       const imagePath = path.join(__dirname, "..", "uploads", partner.imageUrl);
-      fs.unlink(imagePath, (err) => {
-        if (err) console.error("Failed to delete image:", err);
-      });
+      if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
     }
 
     await Partner.findByIdAndDelete(req.params.id);
@@ -107,10 +78,35 @@ const deletePartner = async (req, res) => {
   }
 };
 
+/* REORDER */
+const reorderPartners = async (req, res) => {
+  try {
+    const { items } = req.body;
+    if (!items || !Array.isArray(items)) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
+    }
+
+    const operations = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await Partner.bulkWrite(operations);
+    }
+
+    res.status(200).json({ success: true, message: "Reordered successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   createPartner,
   getPartners,
-  getAllPartners,
   updatePartner,
   deletePartner,
+  reorderPartners,
 };

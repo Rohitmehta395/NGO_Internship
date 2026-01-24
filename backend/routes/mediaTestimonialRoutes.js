@@ -8,10 +8,11 @@ const {
   createMedia,
   updateMedia,
   deleteMedia,
+  reorderMedia,
 } = require("../controllers/mediaTestController");
 const router = express.Router();
 
-// Multer storage for media testimonials
+// Multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = "uploads/media/";
@@ -28,7 +29,9 @@ const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
     const mimetype = filetypes.test(file.mimetype);
     if (mimetype && extname) return cb(null, true);
     cb(new Error("Only images are allowed"));
@@ -36,6 +39,8 @@ const upload = multer({
 });
 
 router.get("/", getAllMedia);
+router.put("/reorder", reorderMedia);
+
 router.get("/:id", getMediaById);
 router.post("/", upload.single("image"), createMedia);
 router.put("/:id", upload.single("image"), updateMedia);

@@ -5,7 +5,8 @@ const path = require("path");
 /* ========= GET ALL ========= */
 const getAllScreenshots = async (req, res) => {
   try {
-    const screenshots = await Screenshot.find().sort({ date: -1 });
+    // Sort by Order ASC, then Date DESC
+    const screenshots = await Screenshot.find().sort({ order: 1, date: -1 });
     res.status(200).json(screenshots);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -23,6 +24,7 @@ const createScreenshot = async (req, res) => {
       alt: req.body.alt,
       image: req.file.path.replace(/\\/g, "/"),
       date: req.body.date || Date.now(),
+      order: 0,
     });
 
     res.status(201).json(screenshot);
@@ -85,9 +87,35 @@ const deleteScreenshot = async (req, res) => {
   }
 };
 
+/* ========= REORDER ========= */
+const reorderScreenshots = async (req, res) => {
+  try {
+    const { items } = req.body;
+    if (!items || !Array.isArray(items)) {
+      return res.status(400).json({ message: "Invalid data" });
+    }
+
+    const operations = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await Screenshot.bulkWrite(operations);
+    }
+
+    res.status(200).json({ message: "Reordered successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getAllScreenshots,
   createScreenshot,
   updateScreenshot,
   deleteScreenshot,
+  reorderScreenshots,
 };

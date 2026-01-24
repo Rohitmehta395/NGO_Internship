@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Image, Upload, X, Trash2, Type, ListOrdered } from "lucide-react";
+import { Image, Upload, X, Trash2, Type } from "lucide-react";
 import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 
 const emptyForm = {
   name: "",
   description: "",
   order: 0,
-  isActive: true,
   image: null,
   preview: null,
 };
@@ -37,61 +36,46 @@ const PartnerForm = ({ onSubmit, initialData, onCancel }) => {
       name: initialData.name || "",
       description: initialData.description || "",
       order: initialData.order ?? 0,
-      isActive: initialData.isActive ?? true,
       image: null,
       preview: previewUrl,
     });
   }, [initialData]);
 
   const handleChange = (key) => (e) => {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-
-    setForm((prev) => ({ ...prev, [key]: value }));
+    setForm((prev) => ({ ...prev, [key]: e.target.value }));
   };
 
   const handleImageChange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  //  Client-side size validation
-  if (file.size > 1 * 1024 * 1024) {
-    alert("Image size must be less than 1 MB");
-    e.target.value = ""; // reset file input
-    return;
-  }
-
-  setForm((prev) => ({
-    ...prev,
-    image: file,
-    preview: URL.createObjectURL(file),
-  }));
-};
-
-  const removeImage = () => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 1 * 1024 * 1024) {
+      alert("Image size must be less than 1 MB");
+      e.target.value = "";
+      return;
+    }
     setForm((prev) => ({
       ...prev,
-      image: null,
-      preview: null,
+      image: file,
+      preview: URL.createObjectURL(file),
     }));
+  };
+
+  const removeImage = () => {
+    setForm((prev) => ({ ...prev, image: null, preview: null }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-      if (form.image && form.image.size > 1 * 1024 * 1024) {
-        alert("Image size must be less than 1 MB");
-        return;
-      }
-
+    if (form.image && form.image.size > 1 * 1024 * 1024) {
+      alert("Image size must be less than 1 MB");
+      return;
+    }
     onSubmit({
       name: form.name,
       description: form.description,
       order: Number(form.order),
-      isActive: form.isActive,
       image: form.image,
     });
-
     if (!initialData) setForm(emptyForm);
   };
 
@@ -114,7 +98,6 @@ const PartnerForm = ({ onSubmit, initialData, onCancel }) => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* NAME */}
         <div>
           <label className="font-semibold flex gap-2">
             <Type className="text-gray-500" /> Partner Name
@@ -127,7 +110,6 @@ const PartnerForm = ({ onSubmit, initialData, onCancel }) => {
           />
         </div>
 
-        {/* DESCRIPTION */}
         <div>
           <label className="font-semibold">Description</label>
           <textarea
@@ -139,26 +121,10 @@ const PartnerForm = ({ onSubmit, initialData, onCancel }) => {
           />
         </div>
 
-        {/* ORDER + ACTIVE */}
-        <div className="grid grid-cols-2 gap-4">
-
-          <div className="flex items-center gap-3 mt-6">
-            <input
-              type="checkbox"
-              checked={form.isActive}
-              onChange={handleChange("isActive")}
-              className="w-4 h-4"
-            />
-            <span className="font-medium">Active</span>
-          </div>
-        </div>
-
-        {/* IMAGE */}
         <div>
           <label className="font-semibold flex gap-2 mb-2">
             <Image className="text-gray-500" /> Partner Image
           </label>
-
           {!form.preview ? (
             <label className="border-2 border-dashed border-gray-300 p-8 flex flex-col items-center justify-center rounded-lg cursor-pointer hover:bg-gray-50">
               <Upload className="text-gray-400 mb-2" size={32} />
@@ -190,7 +156,6 @@ const PartnerForm = ({ onSubmit, initialData, onCancel }) => {
           )}
         </div>
 
-        {/* ACTIONS */}
         <div className="flex gap-3">
           <button
             type="submit"

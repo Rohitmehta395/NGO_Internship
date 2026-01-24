@@ -7,6 +7,7 @@ const videoTestimonialSchema = new mongoose.Schema(
     description: { type: String, required: true },
     ytLink: { type: String, required: true },
     date: { type: Date, required: true },
+    order: { type: Number, default: 0 },
   },
   { timestamps: true },
 );

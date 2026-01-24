@@ -75,6 +75,7 @@ export const screenshotsAPI = {
   update: (id, data, config = {}) =>
     api.put(`/api/screenshots/${id}`, data, config),
   delete: (id) => api.delete(`/api/screenshots/${id}`),
+  reorder: (items) => api.put("/api/screenshots/reorder", { items }),
 };
 
 export const programsAPI = {

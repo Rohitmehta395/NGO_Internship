@@ -8,10 +8,14 @@ const mediaTestimonialSchema = new mongoose.Schema(
     image: { type: String, required: true },
     date: { type: Date, required: true },
     link: { type: String },
+    order: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const MediaTestimonial = mongoose.model("MediaTestimonial", mediaTestimonialSchema);
+const MediaTestimonial = mongoose.model(
+  "MediaTestimonial",
+  mediaTestimonialSchema,
+);
 
 module.exports = MediaTestimonial;
