@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { blogsAPI } from "../../../services/api.js";
 import { toast } from "react-toastify";
 import { IMAGE_BASE_URL } from "../../../utils/constants.js";
@@ -12,6 +12,7 @@ import {
   X,
   BookOpen,
   Link as LinkIcon,
+  GripVertical,
 } from "lucide-react";
 
 const BlogManagement = () => {
@@ -20,7 +21,11 @@ const BlogManagement = () => {
   const [editingBlog, setEditingBlog] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
-  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortOrder, setSortOrder] = useState("manual");
+
+  // Drag and Drop Refs
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
 
   useEffect(() => {
     fetchBlogs();
@@ -38,18 +43,49 @@ const BlogManagement = () => {
     }
   };
 
+  /* --- DRAG AND DROP HANDLERS --- */
+  const handleDragStart = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragOverItem.current = index;
+  };
+
+  const handleDragEnd = async () => {
+    if (sortOrder !== "manual") return;
+    const _blogs = [...blogs];
+    const draggedItemContent = _blogs.splice(dragItem.current, 1)[0];
+    _blogs.splice(dragOverItem.current, 0, draggedItemContent);
+
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setBlogs(_blogs);
+
+    const itemsToUpdate = _blogs.map((item, index) => ({
+      _id: item._id,
+      order: index,
+    }));
+
+    try {
+      await blogsAPI.reorder(itemsToUpdate);
+      toast.success("Order updated!");
+    } catch (err) {
+      toast.error("Failed to save order");
+      fetchBlogs();
+    }
+  };
+
   const handleBlogSubmit = async (blogData) => {
     const formData = new FormData();
     formData.append("title", blogData.title);
     formData.append("description", blogData.description);
     formData.append("content", blogData.content);
     formData.append("author", blogData.author);
-    // Append the link field
     if (blogData.link) formData.append("link", blogData.link);
-
-    if (blogData.image) {
-      formData.append("image", blogData.image);
-    }
+    if (blogData.image) formData.append("image", blogData.image);
 
     try {
       if (editingBlog) {
@@ -63,11 +99,7 @@ const BlogManagement = () => {
       setShowForm(false);
       fetchBlogs();
     } catch (error) {
-      toast.error(
-        editingBlog
-          ? "Failed to update article."
-          : "Failed to publish article.",
-      );
+      toast.error(editingBlog ? "Failed to update." : "Failed to publish.");
     }
   };
 
@@ -93,11 +125,15 @@ const BlogManagement = () => {
     }
   };
 
-  const sortedBlogs = [...blogs].sort((a, b) => {
-    const dateA = new Date(a.createdAt);
-    const dateB = new Date(b.createdAt);
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-  });
+  // Sort logic based on selection
+  const sortedBlogs =
+    sortOrder === "manual"
+      ? blogs
+      : [...blogs].sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+        });
 
   return (
     <div className="space-y-6">
@@ -111,7 +147,7 @@ const BlogManagement = () => {
           className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm ${
             showForm
               ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              : "bg-orange-500 text-white hover:bg-orange-600 hover:shadow-orange-200 hover:shadow-md"
+              : "bg-orange-500 text-white hover:bg-orange-600"
           }`}
         >
           {showForm ? (
@@ -128,8 +164,9 @@ const BlogManagement = () => {
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          className="w-full sm:w-auto border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none shadow-sm cursor-pointer"
+          className="w-full sm:w-auto border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-orange-500/20"
         >
+          <option value="manual">Manual Order (Drag & Drop)</option>
           <option value="newest">Latest First</option>
           <option value="oldest">Oldest First</option>
         </select>
@@ -154,7 +191,6 @@ const BlogManagement = () => {
       {/* BLOG GRID */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24 text-gray-400">
-          <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
           <p>Loading your articles...</p>
         </div>
       ) : (
@@ -163,21 +199,25 @@ const BlogManagement = () => {
             <div className="col-span-full flex flex-col items-center justify-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400">
               <BookOpen className="w-12 h-12 mb-3 opacity-50" />
               <p className="font-medium">No articles published yet.</p>
-              <button
-                onClick={() => setShowForm(true)}
-                className="text-orange-500 hover:underline mt-2 text-sm font-medium"
-              >
-                Create your first post
-              </button>
             </div>
           ) : (
-            sortedBlogs.map((blog) => (
+            sortedBlogs.map((blog, index) => (
               <div
                 key={blog._id}
-                className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-200 hover:shadow-lg transition-all duration-300 flex flex-col h-full"
+                draggable={sortOrder === "manual"}
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragEnter={(e) => handleDragEnter(e, index)}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => e.preventDefault()}
+                className={`group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-orange-200 hover:shadow-lg transition-all duration-300 flex flex-col h-full ${sortOrder === "manual" ? "cursor-move" : ""}`}
               >
                 {/* IMAGE */}
                 <div className="h-48 overflow-hidden relative bg-gray-100">
+                  {sortOrder === "manual" && (
+                    <div className="absolute top-2 right-2 z-10 bg-black/30 p-1.5 rounded text-white backdrop-blur-sm">
+                      <GripVertical size={16} />
+                    </div>
+                  )}
                   <img
                     src={
                       blog.image
@@ -192,7 +232,7 @@ const BlogManagement = () => {
                     }}
                   />
                   {blog.link && (
-                    <div className="absolute top-3 right-3 bg-blue-600/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-white shadow-sm flex items-center gap-1">
+                    <div className="absolute top-3 left-3 bg-blue-600/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-white flex items-center gap-1">
                       <LinkIcon className="w-3 h-3" /> LINK
                     </div>
                   )}
@@ -210,7 +250,7 @@ const BlogManagement = () => {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
+                  <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2 leading-tight group-hover:text-orange-600">
                     {blog.title}
                   </h3>
 
@@ -224,20 +264,20 @@ const BlogManagement = () => {
                   {/* ACTION FOOTER */}
                   <div className="pt-4 border-t border-gray-100 flex items-center gap-2 mt-auto">
                     {deleteConfirmId === blog._id ? (
-                      <div className="flex items-center gap-2 w-full animate-fade-in bg-red-50 p-1 rounded-lg">
+                      <div className="flex items-center gap-2 w-full bg-red-50 p-1 rounded-lg">
                         <span className="text-xs text-red-600 font-bold ml-2">
                           Sure?
                         </span>
                         <div className="flex ml-auto gap-1">
                           <button
                             onClick={() => handleBlogDelete(blog._id)}
-                            className="px-3 py-1 bg-red-600 text-white text-xs rounded-md hover:bg-red-700"
+                            className="px-3 py-1 bg-red-600 text-white text-xs rounded-md"
                           >
                             Yes
                           </button>
                           <button
                             onClick={() => setDeleteConfirmId(null)}
-                            className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-md hover:bg-gray-300"
+                            className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-md"
                           >
                             No
                           </button>
@@ -247,13 +287,13 @@ const BlogManagement = () => {
                       <>
                         <button
                           onClick={() => handleEditBlog(blog)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-600"
                         >
                           <Edit2 className="w-4 h-4" /> Edit
                         </button>
                         <button
                           onClick={() => setDeleteConfirmId(blog._id)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-50 hover:bg-red-50 hover:text-red-600 transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium text-gray-700 bg-gray-50 hover:bg-red-50 hover:text-red-600"
                         >
                           <Trash2 className="w-4 h-4" /> Delete
                         </button>

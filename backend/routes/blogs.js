@@ -8,6 +8,7 @@ const {
   updateBlog,
   deleteBlog,
   subscribe,
+  reorderBlogs,
 } = require("../controllers/blogController");
 const { protect, authorize } = require("../middleware/auth");
 
@@ -27,7 +28,7 @@ const upload = multer({
   fileFilter: function (req, file, cb) {
     const filetypes = /jpeg|jpg|png|webp/;
     const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
+      path.extname(file.originalname).toLowerCase(),
     );
     const mimetype = filetypes.test(file.mimetype);
     if (mimetype && extname) return cb(null, true);
@@ -45,15 +46,15 @@ router.post(
   protect,
   authorize("admin"),
   upload.single("image"),
-  createBlog
+  createBlog,
 );
-
+router.put("/reorder", protect, authorize("admin"), reorderBlogs);
 router.put(
   "/:id",
   protect,
   authorize("admin"),
   upload.single("image"),
-  updateBlog
+  updateBlog,
 );
 router.delete("/:id", protect, authorize("admin"), deleteBlog);
 

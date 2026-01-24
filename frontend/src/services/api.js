@@ -32,6 +32,7 @@ export const blogsAPI = {
   update: (id, formData) => api.put(`/api/blogs/${id}`, formData),
   delete: (id) => api.delete(`/api/blogs/${id}`),
   subscribe: (email) => api.post("/api/blogs/subscribe", { email }),
+  reorder: (items) => api.put("/api/blogs/reorder", { items }),
 };
 
 export const educationImagesAPI = {
@@ -46,6 +47,7 @@ export const eventsAPI = {
   create: (data, config = {}) => api.post("/api/events", data, config),
   update: (id, data, config = {}) => api.put(`/api/events/${id}`, data, config),
   delete: (id) => api.delete(`/api/events/${id}`),
+  reorder: (items) => api.put("/api/events/reorder", { items }),
 };
 
 export const mediaAPI = {
@@ -54,6 +56,7 @@ export const mediaAPI = {
   create: (data, config = {}) => api.post("/api/media", data, config),
   update: (id, data, config = {}) => api.put(`/api/media/${id}`, data, config),
   delete: (id) => api.delete(`/api/media/${id}`),
+  reorder: (items) => api.put("/api/media/reorder", { items }),
 };
 
 export const videoTestimonialsAPI = {
@@ -62,6 +65,7 @@ export const videoTestimonialsAPI = {
   create: (data) => api.post("/api/videos", data),
   update: (id, data) => api.put(`/api/videos/${id}`, data),
   delete: (id) => api.delete(`/api/videos/${id}`),
+  reorder: (items) => api.put("/api/videos/reorder", { items }),
 };
 
 export const screenshotsAPI = {
@@ -88,6 +92,7 @@ export const partnersAPI = {
   update: (id, data, config = {}) =>
     api.put(`/api/partners/${id}`, data, config),
   delete: (id) => api.delete(`/api/partners/${id}`),
+  reorder: (items) => api.put("/api/partners/reorder", { items }),
 };
 
 export const sulabhAPI = {

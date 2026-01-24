@@ -52,7 +52,7 @@ const sendNewPostEmail = async (blog) => {
 // @route   GET /api/blogs
 const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find({}).sort({ date: -1 });
+    const blogs = await Blog.find({}).sort({ order: 1, date: -1 });
     res.json({ success: true, data: blogs });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -172,4 +172,35 @@ const subscribe = async (req, res) => {
   }
 };
 
-module.exports = { getBlogs, createBlog, updateBlog, deleteBlog, subscribe };
+const reorderBlogs = async (req, res) => {
+  try {
+    const { items } = req.body;
+    if (!items || !Array.isArray(items)) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
+    }
+
+    const operations = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await Blog.bulkWrite(operations);
+    }
+
+    res.status(200).json({ success: true, message: "Reordered successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = {
+  getBlogs,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  subscribe,
+  reorderBlogs,
+};

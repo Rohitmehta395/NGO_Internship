@@ -10,6 +10,7 @@ const blogSchema = new mongoose.Schema(
     slug: { type: String, unique: true },
     date: { type: Date, default: Date.now },
     link: { type: String, required: false },
+    order: { type: Number, default: 0 },
   },
   { timestamps: true },
 );
