@@ -10,9 +10,9 @@ const ArticleCard = ({
   onReadMore,
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-[520px]">
       {/* Image Section with Date Badge */}
-      <div className="relative h-64 shrink-0">
+      <div className="relative h-56 shrink-0">
         <img src={image} alt={title} className="w-full h-full object-cover" />
         {/* Date Badge */}
         <div className="absolute top-4 left-4 bg-orange-500 text-white rounded-lg px-4 py-2 text-center shadow-sm">
@@ -24,7 +24,7 @@ const ArticleCard = ({
       {/* Content Section */}
       <div className="p-6 flex flex-col flex-1">
         {/* Author */}
-        <div className="flex items-center gap-2 text-gray-600 mb-4 pb-4 border-b border-gray-100">
+        <div className="flex items-center gap-2 text-gray-600 mb-3 pb-3 border-b border-gray-100">
           <div className="w-5 h-5 text-orange-500">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -34,12 +34,12 @@ const ArticleCard = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">
+        <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight line-clamp-2">
           {title}
         </h3>
 
         {/* Description (New) */}
-        <p className="text-gray-600 text-sm mb-6 line-clamp-3 flex-1">{desc}</p>
+        <p className="text-gray-600 text-sm mb-6 line-clamp-4 flex-1">{desc}</p>
 
         {/* Read More Button */}
         <div className="mt-auto">
