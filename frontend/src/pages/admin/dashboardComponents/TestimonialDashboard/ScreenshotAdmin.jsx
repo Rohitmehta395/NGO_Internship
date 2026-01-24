@@ -156,8 +156,8 @@ const ScreenshotAdmin = () => {
         <div className="flex justify-between mb-4">
           <h2 className="text-xl font-bold">
             {editingId
-              ? "✏️ Edit Gesture of Appreciation from Celebrities"
-              : "🖼️ Add Gesture of Appreciation from Celebrities"}
+              ? "✏️ Gesture of Appreciation from Celebrities"
+              : "🖼️ Gesture of Appreciation from Celebrities"}
           </h2>
           {editingId && (
             <button onClick={resetForm}>

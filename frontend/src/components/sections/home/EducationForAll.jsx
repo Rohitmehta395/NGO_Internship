@@ -1,7 +1,7 @@
 import React from "react";
 import ImageCard from "../../common/cards/ImageCard";
 import DonationButton from "../../common/buttons/OrangeButton";
-import BackGroundImage from "../../../assets/Background_Image_EducationForAll.webp";
+import BackGroundImage from "../../../assets/Background_Image_EducationForAll.jpg";
 
 const EducationForAll = () => {
   return (

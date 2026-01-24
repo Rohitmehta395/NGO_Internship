@@ -5,7 +5,7 @@ import {
   FaLinkedinIn,
   FaYoutube,
 } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import logo from "/Logo.webp";
 import { blogsAPI } from "../../services/api";
@@ -14,7 +14,7 @@ import { IMAGE_BASE_URL } from "../../utils/constants";
 const Footer = () => {
   const [recentPosts, setRecentPosts] = useState([]);
   const [email, setEmail] = useState("");
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   // Fetch recent blogs
   useEffect(() => {
@@ -217,7 +217,7 @@ const Footer = () => {
                 </a>
 
                 {/* Subscription field */}
-                <div className="pt-2">
+                {/* <div className="pt-2">
                   <p className="text-sm text-gray-300 mb-2">
                     Subscribe to our newsletter
                   </p>
@@ -236,7 +236,7 @@ const Footer = () => {
                       →
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
