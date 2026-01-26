@@ -48,10 +48,15 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // CORS Configuration
 app.use(
   cors({
-    origin: ["http://localhost:5173", process.env.FRONTEND_URL],
+    origin: [
+      "https://sharadatrust.in",
+      "https://www.sharadatrust.in",
+      "http://localhost:5173",
+    ],
     credentials: true,
   }),
 );
+
 
 // Routes
 app.use("/api/auth", auth);
