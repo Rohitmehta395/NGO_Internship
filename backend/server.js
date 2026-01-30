@@ -52,6 +52,7 @@ app.use(
       "https://sharadatrust.in",
       "https://www.sharadatrust.in",
       "http://localhost:5173",
+      "https://ngo-internship.vercel.app",
     ],
     credentials: true,
   }),
