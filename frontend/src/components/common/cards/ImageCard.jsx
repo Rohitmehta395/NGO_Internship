@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { educationImagesAPI } from "../../../services/api"; // Adjust path
+import { educationImagesAPI } from "../../../services/api";
 import { IMAGE_BASE_URL } from "../../../utils/constants";
 
 const ImageCard = () => {
@@ -10,15 +10,20 @@ const ImageCard = () => {
     const fetchImages = async () => {
       try {
         const res = await educationImagesAPI.getAll();
-        setImages(res.data.data);
+        if (res.data && Array.isArray(res.data.data)) {
+          setImages(res.data.data);
+        } else {
+          console.error(
+            "Invalid data format received from Education Images API",
+          );
+        }
       } catch (error) {
-        console.error("Failed to load education images");
+        console.error("Failed to load education images", error);
       }
     };
     fetchImages();
   }, []);
 
-  // Use placeholder if no images uploaded yet
   const displayImages =
     images.length > 0
       ? images
@@ -26,6 +31,14 @@ const ImageCard = () => {
           { image: "https://placehold.co/600x400?text=Upload+Images" },
           { image: "https://placehold.co/600x400?text=Via+Dashboard" },
         ];
+
+  // CONSTANT SPEED LOGIC:
+  // Calculate duration based on the number of images.
+  // "3" represents the seconds allocated per image card width.
+  // Increase this number to scroll slower, decrease to scroll faster.
+  const speedPerImage = 3;
+  const calculatedDuration = displayImages.length * speedPerImage;
+  const animationDuration = `${Math.max(calculatedDuration, 10)}s`;
 
   return (
     <>
@@ -36,6 +49,8 @@ const ImageCard = () => {
         }
         @keyframes marqueeScroll {
           from { transform: translateX(0); }
+          /* Move by -33.33% because we have 3 sets of images. 
+             This shifts exactly one full set, creating a seamless loop. */
           to { transform: translateX(calc(-100% / 3)); }
         }
       `}</style>
@@ -50,13 +65,13 @@ const ImageCard = () => {
             className="marquee-inner flex gap-6 w-max"
             style={{
               animationPlayState: stopScroll ? "paused" : "running",
-              animationDuration: "25s", // Slower for better view
+              animationDuration: animationDuration,
             }}
           >
             {/* Repeat 3 times for smooth infinite scroll */}
             {[...displayImages, ...displayImages, ...displayImages].map(
               (item, index) => {
-                const imgUrl = item.image.startsWith("http")
+                const imgUrl = item?.image?.startsWith("http")
                   ? item.image
                   : `${IMAGE_BASE_URL}/${item.image}`;
 
@@ -76,7 +91,7 @@ const ImageCard = () => {
                     />
                   </div>
                 );
-              }
+              },
             )}
           </div>
         </div>
