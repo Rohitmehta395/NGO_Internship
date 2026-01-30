@@ -46,7 +46,7 @@ const Footer = () => {
 
   const quickLinks = [
     { label: "Our Programs", path: "/programs" },
-    { label: "Sulabh App", path: "/app" },
+    { label: "Sulabh App", path: "/sulabh" },
     { label: "About Us", path: "/about" },
     { label: "Our Partners", path: "/partners" },
     { label: "Events", path: "/events" },
@@ -153,13 +153,13 @@ const Footer = () => {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      }
+                      },
                     );
 
                     return (
                       <div
                         key={post._id}
-                        onClick={() => navigate(`/blog/${post.slug}`)} // Navigate on click
+                        onClick={() => navigate(`/blog/${post.slug}`)}
                         className="flex gap-3 group cursor-pointer"
                       >
                         <img
@@ -215,28 +215,6 @@ const Footer = () => {
                   <FaEnvelope className="w-5 h-5 text-orange-400 flex-shrink-0" />
                   <span className="text-sm">info@sharadatrust.org</span>
                 </a>
-
-                {/* Subscription field */}
-                {/* <div className="pt-2">
-                  <p className="text-sm text-gray-300 mb-2">
-                    Subscribe to our newsletter
-                  </p>
-                  <div className="flex">
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-2 rounded-l bg-white/10 border border-gray-600 text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-400"
-                    />
-                    <button
-                      onClick={handleSubscribe}
-                      className="bg-orange-400 hover:bg-orange-500 px-4 py-2 rounded-r transition-colors text-[#0a2540] font-bold"
-                    >
-                      →
-                    </button>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>

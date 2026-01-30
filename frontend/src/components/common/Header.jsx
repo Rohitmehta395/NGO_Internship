@@ -16,7 +16,7 @@ export default function Header() {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Our Programs", path: "/programs" },
-    { name: "Sulabh App", path: "/app" },
+    { name: "Sulabh App", path: "/sulabh" },
     { name: "About Us", path: "/about" },
     { name: "Our Partners", path: "/partners" },
     { name: "Events", path: "/events" },
@@ -60,7 +60,7 @@ export default function Header() {
                 <Link
                   key={index}
                   to={item.path}
-                  onClick={handleNavClick} // Added Scroll Click
+                  onClick={handleNavClick}
                   className="text-white text-[14px] xl:text-[16px] 2xl:text-[17px] font-medium hover:text-orange-100 transition-colors whitespace-nowrap"
                 >
                   {item.name}
@@ -168,7 +168,7 @@ export default function Header() {
                 key={index}
                 to={item.path}
                 className="text-white text-lg font-semibold hover:bg-orange-500 px-4 py-3 rounded-xl transition-all active:scale-95"
-                onClick={handleNavClick} // Added Scroll Click & Close Menu
+                onClick={handleNavClick}
               >
                 {item.name}
               </Link>
@@ -183,7 +183,7 @@ export default function Header() {
                   key={index}
                   to={item.path}
                   className="text-orange-100 text-base font-medium hover:bg-orange-500 px-4 py-2 rounded-xl transition-all"
-                  onClick={handleNavClick} // Added Scroll Click & Close Menu
+                  onClick={handleNavClick}
                 >
                   {item.name}
                 </Link>
