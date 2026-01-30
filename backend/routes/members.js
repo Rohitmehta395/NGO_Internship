@@ -7,41 +7,27 @@ const {
   addMember,
   updateMember,
   deleteMember,
+  reorderMembers,
 } = require("../controllers/memberController");
 const { protect, authorize } = require("../middleware/auth");
 
-// --- Multer Configuration ---
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save to 'backend/uploads'
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    // Rename file: member-TIMESTAMP.ext
     cb(null, `member-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
-const upload = multer({
-  storage,
-  fileFilter: function (req, file, cb) {
-    const filetypes = /jpeg|jpg|png|webp/;
-    const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
-    );
-    const mimetype = filetypes.test(file.mimetype);
+const upload = multer({ storage });
 
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb("Error: Images Only!");
-    }
-  },
-});
+// Public
+router.get("/", getMembers);
+router.put("/reorder", protect, authorize("admin"), reorderMembers);
 
-// --- Routes ---
 router
   .route("/")
-  .get(getMembers)
   .post(protect, authorize("admin"), upload.single("image"), addMember);
 
 router

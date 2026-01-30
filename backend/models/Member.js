@@ -1,3 +1,4 @@
+// backend/models/Member.js
 const mongoose = require("mongoose");
 
 const memberSchema = new mongoose.Schema(
@@ -7,7 +8,6 @@ const memberSchema = new mongoose.Schema(
       required: [true, "Please add a name"],
       trim: true,
     },
-    // This category matches your About Us sections
     category: {
       type: String,
       required: [true, "Please select a category"],
@@ -21,11 +21,11 @@ const memberSchema = new mongoose.Schema(
       ],
     },
     role: {
-      type: String, // e.g. "Managing Trustee"
+      type: String,
       required: false,
     },
     image: {
-      type: String, // Will store "uploads/filename.jpg"
+      type: String,
       required: false,
     },
     description: {
@@ -43,7 +43,7 @@ const memberSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Member", memberSchema);

@@ -24,6 +24,7 @@ export const membersAPI = {
   create: (formData) => api.post("/api/members", formData),
   update: (id, formData) => api.put(`/api/members/${id}`, formData),
   delete: (id) => api.delete(`/api/members/${id}`),
+  reorder: (items) => api.put("/api/members/reorder", { items }),
 };
 
 export const blogsAPI = {

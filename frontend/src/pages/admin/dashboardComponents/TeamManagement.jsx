@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+// frontend/src/pages/admin/dashboardComponents/TeamManagement.jsx
+import React, { useEffect, useState, useRef } from "react";
 import { membersAPI } from "../../../services/api.js";
 import { toast } from "react-toastify";
 import { IMAGE_BASE_URL } from "../../../utils/constants.js";
+import { GripVertical } from "lucide-react";
 
 const TeamManagement = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortOrder, setSortOrder] = useState("manual"); // Default to manual for drag-drop reordering
 
   // Form State
   const [name, setName] = useState("");
@@ -17,6 +19,9 @@ const TeamManagement = () => {
   const [description, setDescription] = useState("");
   const [linkedin, setLinkedin] = useState("");
 
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
+
   const categories = [
     { id: "guiding-spirit", label: "Guiding Spirit" },
     { id: "trustee", label: "Trustees (Karyakartas)" },
@@ -25,7 +30,6 @@ const TeamManagement = () => {
     { id: "volunteer", label: "Volunteers" },
   ];
 
-  // Fetch on mount
   useEffect(() => {
     fetchMembers();
   }, []);
@@ -40,6 +44,55 @@ const TeamManagement = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDragStart = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragOverItem.current = index;
+  };
+
+  const handleDragEnd = async (categoryId) => {
+    if (sortOrder !== "manual") return;
+
+    // 1. Get current members for this specific category
+    const catMembers = members.filter((m) => m.category === categoryId);
+    const otherMembers = members.filter((m) => m.category !== categoryId);
+
+    // 2. Perform the swap in a new array
+    const newCatOrder = [...catMembers];
+    const draggedItemContent = newCatOrder.splice(dragItem.current, 1)[0];
+    newCatOrder.splice(dragOverItem.current, 0, draggedItemContent);
+
+    // 3. Combine back and update the order property locally for immediate UI feedback
+    const updatedFullList = [...otherMembers, ...newCatOrder].map(
+      (item, index) => ({
+        ...item,
+        order: index,
+      }),
+    );
+
+    setMembers(updatedFullList); // This forces the frontend to update immediately
+
+    // 4. Update the backend
+    const itemsToUpdate = updatedFullList.map((item) => ({
+      _id: item._id,
+      order: item.order,
+    }));
+
+    try {
+      await membersAPI.reorder(itemsToUpdate);
+      toast.success("Order updated!");
+    } catch (err) {
+      toast.error("Failed to save order");
+      fetchMembers(); // Revert on failure
+    }
+    dragItem.current = null;
+    dragOverItem.current = null;
   };
 
   const handleMemberSubmit = async (e) => {
@@ -102,15 +155,18 @@ const TeamManagement = () => {
     if (fileInput) fileInput.value = "";
   };
 
-  const sortedMembers = [...members].sort((a, b) => {
-    const dateA = new Date(a.createdAt || 0);
-    const dateB = new Date(b.createdAt || 0);
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-  });
+  // Logic to handle multiple sort types
+  const sortedMembers =
+    sortOrder === "manual"
+      ? [...members].sort((a, b) => (a.order || 0) - (b.order || 0))
+      : [...members].sort((a, b) => {
+          const dateA = new Date(a.createdAt || 0);
+          const dateB = new Date(b.createdAt || 0);
+          return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+        });
 
   return (
     <>
-      {/* Member Form */}
       <div className="bg-white p-6 rounded-lg shadow mb-8 border-t-4 border-orange-500">
         <h2 className="text-xl font-bold mb-4">
           {editingId ? "Edit Member" : "Add New Member"}
@@ -138,7 +194,7 @@ const TeamManagement = () => {
             </select>
             <input
               type="text"
-              placeholder="Role (e.g. Managing Trustee)"
+              placeholder="Role"
               className="border p-2 rounded"
               value={role}
               onChange={(e) => setRole(e.target.value)}
@@ -151,22 +207,17 @@ const TeamManagement = () => {
                 onChange={(e) => setImage(e.target.files[0])}
                 className="border p-1 rounded text-sm"
               />
-              {editingId && !image && (
-                <span className="text-xs text-gray-500 mt-1">
-                  Leave empty to keep current
-                </span>
-              )}
             </div>
             <input
               type="text"
-              placeholder="Social Link (Optional)"
+              placeholder="Social Link"
               className="border p-2 rounded md:col-span-2"
               value={linkedin}
               onChange={(e) => setLinkedin(e.target.value)}
             />
           </div>
           <textarea
-            placeholder="Description (Optional)"
+            placeholder="Description"
             className="w-full border p-2 rounded"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -183,7 +234,7 @@ const TeamManagement = () => {
               <button
                 type="button"
                 onClick={cancelMemberEdit}
-                className="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400 transition"
+                className="bg-gray-300 text-gray-700 px-6 py-2 rounded"
               >
                 Cancel
               </button>
@@ -192,20 +243,19 @@ const TeamManagement = () => {
         </form>
       </div>
 
-      {/* Filter Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-gray-800">Team Members</h2>
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
         >
+          <option value="manual">Manual Order (Drag & Drop)</option>
           <option value="newest">Newest Added</option>
           <option value="oldest">Oldest Added</option>
         </select>
       </div>
 
-      {/* Member List */}
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
@@ -224,11 +274,22 @@ const TeamManagement = () => {
                   </span>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {catMembers.map((member) => (
+                  {catMembers.map((member, index) => (
                     <div
                       key={member._id}
-                      className="border rounded p-4 flex gap-4 items-start hover:shadow-md transition"
+                      draggable={sortOrder === "manual"}
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragEnter={(e) => handleDragEnter(e, index)}
+                      onDragEnd={() => handleDragEnd(cat.id)}
+                      onDragOver={(e) => e.preventDefault()}
+                      className={`border rounded p-4 flex gap-4 items-start hover:shadow-md transition bg-white ${sortOrder === "manual" ? "cursor-move" : ""}`}
                     >
+                      {sortOrder === "manual" && (
+                        <GripVertical
+                          size={16}
+                          className="text-gray-400 mt-1"
+                        />
+                      )}
                       <img
                         src={
                           member.image
@@ -248,13 +309,13 @@ const TeamManagement = () => {
                         <div className="flex gap-2 mt-2">
                           <button
                             onClick={() => handleEditMember(member)}
-                            className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded hover:bg-blue-100"
+                            className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => handleMemberDelete(member._id)}
-                            className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded hover:bg-red-100"
+                            className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded"
                           >
                             Delete
                           </button>

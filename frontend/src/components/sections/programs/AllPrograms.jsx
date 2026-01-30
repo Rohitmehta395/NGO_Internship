@@ -11,7 +11,6 @@ export default function AllPrograms() {
     const fetchPrograms = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/programs`);
-        // Filter ONLY programs meant for the Main Page
         const mainPrograms = res.data.data.filter((p) => p.category === "main");
         setPrograms(mainPrograms);
       } catch (error) {
@@ -20,7 +19,6 @@ export default function AllPrograms() {
         setLoading(false);
       }
     };
-
     fetchPrograms();
   }, []);
 
@@ -30,7 +28,7 @@ export default function AllPrograms() {
       /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
     const match = url.match(regExp);
     return match && match[2].length === 11
-      ? `https://www.youtube.com/embed/${match[2]}`
+      ? `https://www.youtube.com/embed/${match[2]}?rel=0`
       : url;
   };
 
@@ -51,13 +49,13 @@ export default function AllPrograms() {
               key={program._id}
               className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72">
+              <div className="relative h-56 overflow-hidden sm:h-64 lg:h-72 bg-black">
                 {program.type === "video" ? (
-                  // CHANGED: Use getEmbedUrl helper and allowFullScreen
                   <iframe
                     src={getEmbedUrl(program.source)}
                     title={program.title}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
                 ) : (
@@ -71,17 +69,13 @@ export default function AllPrograms() {
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 )}
-                {/* Only show hover overlay for images, not videos (interferes with play button) */}
-                {program.type !== "video" && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                )}
               </div>
 
               <div className="flex flex-1 flex-col p-6 sm:p-8">
-                <h3 className="mb-3 text-2xl font-bold leading-tight text-[#0B0B45] font-sans">
+                <h3 className="mb-3 text-2xl font-bold leading-tight text-[#0B0B45]">
                   {program.title}
                 </h3>
-                <p className="mb-6 flex-grow text-base leading-relaxed text-gray-600 font-sans">
+                <p className="mb-6 flex-grow text-base leading-relaxed text-gray-600">
                   {program.description}
                 </p>
 
@@ -91,24 +85,9 @@ export default function AllPrograms() {
                       ? `/programs/${program.slug}`
                       : program.route || "#"
                   }
-                  className="mt-auto block w-full"
                 >
-                  <button className="group/btn flex w-full items-center justify-center gap-2 rounded-xl bg-orange-400 px-6 py-4 font-bold uppercase text-white transition-all hover:bg-orange-500 active:scale-95 cursor-pointer">
+                  <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-400 px-6 py-4 font-bold uppercase text-white hover:bg-orange-500 transition-all active:scale-95">
                     View Details
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2.5}
-                      stroke="currentColor"
-                      className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                      />
-                    </svg>
                   </button>
                 </Link>
               </div>

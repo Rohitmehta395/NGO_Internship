@@ -46,11 +46,10 @@ const ScreenshotCarousel = () => {
         <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
           <Mail className="w-8 h-8 md:w-10 md:h-10 text-[#ED9121] mx-auto mb-4" />
           <h2 className="text-3xl md:text-5xl font-bold text-[#082D50] mb-4 font-[Quicksand] leading-tight">
-            Letters of Appreciation
+            Testimonial Letters & Emails
           </h2>
           <p className="text-gray-500 text-base md:text-lg px-4">
-            Words of encouragement and gratitude from our community and
-            supporters.
+            Gesture of Appreciation from Celebrities
           </p>
         </div>
 
