@@ -9,7 +9,7 @@ const TeamManagement = () => {
   const [loading, setLoading] = useState(true);
   const [members, setMembers] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [sortOrder, setSortOrder] = useState("manual"); // Default to manual for drag-drop reordering
+  const [sortOrder, setSortOrder] = useState("manual");
 
   // Form State
   const [name, setName] = useState("");
@@ -22,12 +22,15 @@ const TeamManagement = () => {
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
 
+  // UPDATED CATEGORIES LIST
   const categories = [
     { id: "guiding-spirit", label: "Guiding Spirit" },
     { id: "trustee", label: "Trustees (Karyakartas)" },
     { id: "advisor", label: "Advisory Board (MargaDarshaks)" },
     { id: "patron", label: "Patrons" },
     { id: "volunteer", label: "Volunteers" },
+    { id: "guest-speaker", label: "MargaDarshak Program - Guest Speakers" },
+    { id: "storyteller", label: "Our passionate Storytellers" },
   ];
 
   useEffect(() => {
@@ -59,16 +62,13 @@ const TeamManagement = () => {
   const handleDragEnd = async (categoryId) => {
     if (sortOrder !== "manual") return;
 
-    // 1. Get current members for this specific category
     const catMembers = members.filter((m) => m.category === categoryId);
     const otherMembers = members.filter((m) => m.category !== categoryId);
 
-    // 2. Perform the swap in a new array
     const newCatOrder = [...catMembers];
     const draggedItemContent = newCatOrder.splice(dragItem.current, 1)[0];
     newCatOrder.splice(dragOverItem.current, 0, draggedItemContent);
 
-    // 3. Combine back and update the order property locally for immediate UI feedback
     const updatedFullList = [...otherMembers, ...newCatOrder].map(
       (item, index) => ({
         ...item,
@@ -76,9 +76,8 @@ const TeamManagement = () => {
       }),
     );
 
-    setMembers(updatedFullList); // This forces the frontend to update immediately
+    setMembers(updatedFullList);
 
-    // 4. Update the backend
     const itemsToUpdate = updatedFullList.map((item) => ({
       _id: item._id,
       order: item.order,
@@ -89,7 +88,7 @@ const TeamManagement = () => {
       toast.success("Order updated!");
     } catch (err) {
       toast.error("Failed to save order");
-      fetchMembers(); // Revert on failure
+      fetchMembers();
     }
     dragItem.current = null;
     dragOverItem.current = null;
@@ -155,7 +154,6 @@ const TeamManagement = () => {
     if (fileInput) fileInput.value = "";
   };
 
-  // Logic to handle multiple sort types
   const sortedMembers =
     sortOrder === "manual"
       ? [...members].sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -194,7 +192,7 @@ const TeamManagement = () => {
             </select>
             <input
               type="text"
-              placeholder="Role"
+              placeholder="Role / Title"
               className="border p-2 rounded"
               value={role}
               onChange={(e) => setRole(e.target.value)}

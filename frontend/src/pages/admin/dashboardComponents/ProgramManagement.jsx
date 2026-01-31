@@ -6,7 +6,6 @@ import {
   FaCloudUploadAlt,
   FaLayerGroup,
   FaFileAlt,
-  FaExclamationTriangle,
   FaGripVertical,
 } from "react-icons/fa";
 import { API_BASE_URL } from "../../../utils/constants";
@@ -98,9 +97,25 @@ const ProgramManagement = () => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
-  const resetForm = (targetMode = mode) => {
-    const defaultCategory =
-      targetMode === "main" ? "main" : existingSections[0]?.slug || "";
+  // ResetForm accepts a preserveCategory flag
+  const resetForm = (targetMode = mode, preserveCategory = false) => {
+    let defaultCategory;
+
+    if (targetMode === "main") {
+      defaultCategory = "main";
+    } else {
+      // If we want to preserve the category and we have one selected, use it.
+      // Otherwise, fall back to the first available section.
+      if (
+        preserveCategory &&
+        formData.category &&
+        formData.category !== "main"
+      ) {
+        defaultCategory = formData.category;
+      } else {
+        defaultCategory = existingSections[0]?.slug || "";
+      }
+    }
 
     setFormData({
       title: "",
@@ -117,7 +132,8 @@ const ProgramManagement = () => {
 
   const handleModeSwitch = (newMode) => {
     setMode(newMode);
-    resetForm(newMode);
+    // Don't preserve category when switching modes entirely
+    resetForm(newMode, false);
   };
 
   const handleEdit = (program) => {
@@ -168,7 +184,6 @@ const ProgramManagement = () => {
     }
 
     if (formData.type === "video") {
-      // Ensure we send the raw URL, but display logic handles embed
       data.append("videoUrl", formData.videoUrl);
     } else if (formData.image) {
       data.append("image", formData.image);
@@ -181,7 +196,7 @@ const ProgramManagement = () => {
         await programsAPI.create(data);
       }
       fetchPrograms();
-      resetForm();
+      resetForm(mode, mode === "content");
     } catch (error) {
       console.error(error);
       alert("Error saving program");
@@ -207,31 +222,14 @@ const ProgramManagement = () => {
     const draggedItemContent = _programs.splice(dragItem.current, 1)[0];
     _programs.splice(dragOverItem.current, 0, draggedItemContent);
 
-    // Reset refs
     dragItem.current = null;
     dragOverItem.current = null;
 
-    // Create a map of ALL programs to update state correctly
-    // We basically replace the subset in the main list
-    const updatedAllPrograms = programs.map((p) => {
-      // Is this item in our reordered list?
-      const found = _programs.find((item) => item._id === p._id);
-      return found || p;
-    });
-
-    // We need to actually update the UI order strictly for the filtered part
-    // But since `programs` state holds everything, we need to construct a new state where the filtered items are in the new order relative to themselves.
-    // Simpler approach: Just update the `order` property locally and refetch.
-
-    // Assign new order indices to the filtered subset
     const itemsToUpdate = _programs.map((item, index) => ({
       _id: item._id,
       order: index,
     }));
 
-    // Optimistic UI Update (Wait for fetch to realign perfectly)
-    // We can't easily update `programs` state without complex logic because it's a mixed list.
-    // Instead, we just trigger the API call and fetch.
     try {
       await programsAPI.reorder(itemsToUpdate);
       fetchPrograms();
@@ -436,7 +434,8 @@ const ProgramManagement = () => {
               {isEditing && (
                 <button
                   type="button"
-                  onClick={() => resetForm()}
+                  // UPDATED: Preserve category even when cancelling edit
+                  onClick={() => resetForm(mode, mode === "content")}
                   className="bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-lg hover:bg-gray-300"
                 >
                   Cancel

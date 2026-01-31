@@ -18,6 +18,8 @@ const memberSchema = new mongoose.Schema(
         "patron",
         "volunteer",
         "team",
+        "guest-speaker",
+        "storyteller",
       ],
     },
     role: {
