@@ -47,7 +47,7 @@ export default function Patrons({ patrons }) {
         {/* Header with Navigation */}
         <div className="flex justify-between items-center mb-16 md:mb-20">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B0B45]">
-            Our Lifeline
+            Patrons & Donors - Our Lifeline
           </h1>
 
           {/* Navigation Buttons */}
