@@ -7,6 +7,7 @@ const {
   getImages,
   uploadImage,
   deleteImage,
+  reorderImages,
 } = require("../controllers/educationImageController");
 
 // --- Multer Config ---
@@ -64,13 +65,8 @@ const uploadMiddleware = (req, res, next) => {
 
 // Routes
 router.get("/", getImages);
-router.post(
-  "/",
-  protect,
-  authorize("admin"),
-  uploadMiddleware,
-  uploadImage,
-);
+router.put("/reorder", protect, authorize("admin"), reorderImages);
+router.post("/", protect, authorize("admin"), uploadMiddleware, uploadImage);
 router.delete("/:id", protect, authorize("admin"), deleteImage);
 
 module.exports = router;

@@ -29,7 +29,7 @@ export default function Volunteers({ volunteers, backgroundImage }) {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-16 md:mb-20 text-[#0B0B45]">
-            Volunteers are our Strength
+            Volunteers & Interns - Our Strength
           </h1>
 
           {/* Scrolling Container */}

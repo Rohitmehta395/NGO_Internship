@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { educationImagesAPI } from "../../../services/api.js";
 import { IMAGE_BASE_URL } from "../../../utils/constants.js";
 import { toast } from "react-toastify";
-import { Upload, X, Trash2 } from "lucide-react";
+import { Upload, X, Trash2, GripVertical } from "lucide-react";
 
 const EducationImageManagement = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("newest");
+  const [sortOrder, setSortOrder] = useState("manual");
+
+  const dragItem = useRef(null);
+  const dragOverItem = useRef(null);
 
   const fetchImages = async () => {
     setLoading(true);
@@ -75,12 +78,57 @@ const EducationImageManagement = () => {
     }
   };
 
+  /* ================= DRAG AND DROP ================= */
+  const handleDragStart = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragItem.current = index;
+  };
+
+  const handleDragEnter = (e, index) => {
+    if (sortOrder !== "manual") return;
+    dragOverItem.current = index;
+  };
+
+  const handleDragEnd = async () => {
+    if (sortOrder !== "manual") return;
+    const _images = [...images];
+
+    // Remove dragged item
+    const draggedItemContent = _images.splice(dragItem.current, 1)[0];
+
+    // Insert at new position
+    _images.splice(dragOverItem.current, 0, draggedItemContent);
+
+    dragItem.current = null;
+    dragOverItem.current = null;
+    setImages(_images); // Optimistic UI update
+
+    const itemsToUpdate = _images.map((item, index) => ({
+      _id: item._id,
+      order: index,
+    }));
+
+    try {
+      await educationImagesAPI.reorder(itemsToUpdate);
+    } catch (err) {
+      console.error("Reorder failed", err);
+      toast.error("Failed to save new order");
+      fetchImages(); // Revert on error
+    }
+  };
+
   /* ================= SORTING ================= */
-  const sortedImages = [...images].sort((a, b) => {
-    const dateA = new Date(a.createdAt || 0);
-    const dateB = new Date(b.createdAt || 0);
-    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-  });
+  const getSortedImages = () => {
+    if (sortOrder === "manual") return images;
+
+    return [...images].sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0);
+      const dateB = new Date(b.createdAt || 0);
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+  };
+
+  const sortedImages = getSortedImages();
 
   return (
     <div className="bg-white p-6 rounded-lg shadow border-t-4 border-green-500">
@@ -95,6 +143,7 @@ const EducationImageManagement = () => {
           onChange={(e) => setSortOrder(e.target.value)}
           className="border border-gray-300 rounded px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
         >
+          <option value="manual">Manual Order (Drag & Drop)</option>
           <option value="newest">Newest Uploads</option>
           <option value="oldest">Oldest Uploads</option>
         </select>
@@ -102,8 +151,8 @@ const EducationImageManagement = () => {
 
       {/* Upload Area */}
       <div className="mb-8">
-        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition relative">
+          <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
             {uploading ? (
               <p className="text-sm text-gray-500">Uploading...</p>
             ) : (
@@ -113,7 +162,9 @@ const EducationImageManagement = () => {
                   <span className="font-semibold">Click to upload</span> new
                   images
                 </p>
-                <p className="text-xs text-gray-400 mt-1">Max file size: 1MB</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Recommended Size: 600x800px (Portrait)
+                </p>
               </>
             )}
           </div>
@@ -133,11 +184,24 @@ const EducationImageManagement = () => {
         <p className="text-center py-4">Loading...</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {sortedImages.map((img) => (
+          {sortedImages.map((img, index) => (
             <div
               key={img._id}
-              className="relative group aspect-[3/4] rounded-lg overflow-hidden shadow-sm border"
+              draggable={sortOrder === "manual"}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnter={(e) => handleDragEnter(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => e.preventDefault()}
+              className={`relative group aspect-[3/4] rounded-lg overflow-hidden shadow-sm border ${
+                sortOrder === "manual" ? "cursor-move" : ""
+              }`}
             >
+              {sortOrder === "manual" && (
+                <div className="absolute top-2 left-2 z-10 bg-black/40 p-1 rounded text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <GripVertical size={14} />
+                </div>
+              )}
+
               <img
                 src={`${IMAGE_BASE_URL}/${img.image}`}
                 alt="Education"

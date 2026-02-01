@@ -40,6 +40,7 @@ export const educationImagesAPI = {
   getAll: () => api.get("/api/education-images"),
   upload: (formData) => api.post("/api/education-images", formData),
   delete: (id) => api.delete(`/api/education-images/${id}`),
+  reorder: (items) => api.put("/api/education-images/reorder", { items }),
 };
 
 export const eventsAPI = {

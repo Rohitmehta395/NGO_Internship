@@ -64,7 +64,7 @@ export default function AdvisoryBoard({ members, backgroundImage }) {
                 Advisory Board Members
               </h1>
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-normal text-[#0B0B45]">
-                (MargaDarshaks)
+                (Our MargaDarshaks)
               </h2>
             </div>
 

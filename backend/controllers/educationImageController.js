@@ -6,7 +6,11 @@ const path = require("path");
 // @route   GET /api/education-images
 const getImages = async (req, res) => {
   try {
-    const images = await EducationImage.find({}).sort({ createdAt: -1 });
+    // Sort by order (ascending) first, then by newest (descending)
+    const images = await EducationImage.find({}).sort({
+      order: 1,
+      createdAt: -1,
+    });
     res.json({ success: true, data: images });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -65,4 +69,30 @@ const deleteImage = async (req, res) => {
   }
 };
 
-module.exports = { getImages, uploadImage, deleteImage };
+// @desc    Reorder images
+// @route   PUT /api/education-images/reorder
+const reorderImages = async (req, res) => {
+  try {
+    const { items } = req.body;
+    if (!items || !Array.isArray(items)) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
+    }
+
+    const operations = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    if (operations.length > 0) {
+      await EducationImage.bulkWrite(operations);
+    }
+
+    res.status(200).json({ success: true, message: "Reordered successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = { getImages, uploadImage, deleteImage, reorderImages };

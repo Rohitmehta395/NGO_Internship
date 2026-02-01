@@ -1,4 +1,3 @@
-// frontend/src/pages/About.jsx
 import React, { useState, useEffect } from "react";
 import { membersAPI } from "../services/api";
 import { API_BASE_URL, IMAGE_BASE_URL } from "../utils/constants";
@@ -11,7 +10,7 @@ import AdvisoryBoard from "../components/sections/about/AdvisoryBoard";
 import Patrons from "../components/sections/about/Patrons";
 import Volunteers from "../components/sections/about/Volunteers";
 import Arvind from "../components/sections/about/Arvind";
-import MemberCarouselSection from "../components/sections/about/MemberCarouselSection"; // Updated Component
+import MemberCarouselSection from "../components/sections/about/MemberCarouselSection";
 
 //Background Image in Advisory board component
 import AdvisoryBgImage from "../assets/advisoryboardmembersbackgroundimage.webp";
@@ -67,7 +66,6 @@ const About = () => {
     .filter((m) => m.category === "patron")
     .map((m) => ({
       ...mapMemberData(m),
-      isCircular: true,
     }));
 
   const volunteersData = members
@@ -103,15 +101,13 @@ const About = () => {
         backgroundImage={VolunteerBgImage}
       />
 
-      {/* 1. MargaDarshak Program - Guest Speakers */}
       <MemberCarouselSection
-        title="MargaDarshak Program - Guest Speakers"
+        title="Guest Speakers - Stars of our MargaDarshak Program"
         members={guestSpeakersData}
       />
 
-      {/* 2. Our passionate Storytellers */}
       <MemberCarouselSection
-        title="Our passionate Storytellers"
+        title="Storytellers - Our passionate change-makers"
         members={storytellersData}
       />
 

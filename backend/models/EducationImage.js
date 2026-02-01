@@ -7,8 +7,12 @@ const educationImageSchema = new mongoose.Schema(
       required: true,
     },
     title: { type: String },
+    order: {
+      type: Number,
+      default: 0,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("EducationImage", educationImageSchema);
