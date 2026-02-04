@@ -49,6 +49,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(
   cors({
     origin: [
+      "https://sharadatrust.org",
+      "https://www.sharadatrust.org",
       "https://sharadatrust.in",
       "https://www.sharadatrust.in",
       "http://localhost:5173",
@@ -57,7 +59,6 @@ app.use(
     credentials: true,
   }),
 );
-
 
 // Routes
 app.use("/api/auth", auth);
