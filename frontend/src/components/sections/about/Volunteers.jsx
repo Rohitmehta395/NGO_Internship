@@ -1,9 +1,6 @@
-import { useState } from "react";
 import VolunteerCard from "../../common/cards/VolunteerCard";
 
 export default function Volunteers({ volunteers, backgroundImage }) {
-  const [isPaused, setIsPaused] = useState(false);
-
   // Duplicate volunteers array for seamless loop
   const duplicatedVolunteers = [...volunteers, ...volunteers];
 
@@ -34,13 +31,9 @@ export default function Volunteers({ volunteers, backgroundImage }) {
 
           {/* Scrolling Container */}
           <div className="relative">
-            <div
-              className="overflow-hidden"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
+            <div className="overflow-hidden">
               <div
-                className={`flex gap-6 ${isPaused ? "" : "animate-scroll"}`}
+                className="flex gap-6 animate-scroll"
                 style={{
                   width: `${duplicatedVolunteers.length * 336}px`, // 320px card + 16px gap
                 }}
@@ -78,6 +71,7 @@ export default function Volunteers({ volunteers, backgroundImage }) {
           animation: scroll 30s linear infinite;
         }
 
+        /* FIX: This pauses the animation in place instead of resetting it */
         .animate-scroll:hover {
           animation-play-state: paused;
         }

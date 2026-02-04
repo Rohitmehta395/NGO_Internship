@@ -20,7 +20,7 @@ export default function PatronCard({ image, name, link }) {
 
       {/* Name Badge */}
       <div className="px-4 pb-4 flex-grow flex items-center justify-center bg-white">
-        <div className="bg-orange-500 rounded-full px-6 py-2 w-full text-center shadow-sm">
+        <div className="bg-orange-400 rounded-full px-6 py-2 w-full text-center shadow-sm">
           <h2 className="text-lg font-bold text-white tracking-wide">{name}</h2>
         </div>
       </div>

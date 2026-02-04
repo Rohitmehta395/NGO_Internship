@@ -4,7 +4,8 @@ import PatronCard from "../../common/cards/PatronCard";
 export default function Patrons({ patrons }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const itemsPerPage = 3;
+  // CHANGED: Display 4 items per page instead of 3
+  const itemsPerPage = 4;
 
   const totalPages = Math.ceil(patrons.length / itemsPerPage);
 
@@ -96,7 +97,7 @@ export default function Patrons({ patrons }) {
 
         {/* Patrons Grid */}
         <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
