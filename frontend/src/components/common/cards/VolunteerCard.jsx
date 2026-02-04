@@ -1,6 +1,10 @@
-export default function VolunteerCard({ image, name, link }) {
+export default function VolunteerCard({ image, name, link, className }) {
+  const widthClass = className || "w-80";
+
   return (
-    <div className="bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex-shrink-0 w-80">
+    <div
+      className={`bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex-shrink-0 ${widthClass}`}
+    >
       {/* Image Container */}
       <div className="p-4 pb-6">
         <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100">

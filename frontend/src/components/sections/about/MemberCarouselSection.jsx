@@ -20,7 +20,7 @@ const MemberCarouselSection = ({ title, members, backgroundImage }) => {
       if (container.scrollLeft >= maxScroll - 10) {
         container.scrollTo({ left: 0, behavior: "smooth" });
       } else {
-        // Otherwise scroll forward
+        // Otherwise scroll forward by one full view width
         container.scrollBy({ left: scrollAmount, behavior: "smooth" });
       }
     };
@@ -90,11 +90,16 @@ const MemberCarouselSection = ({ title, members, backgroundImage }) => {
               }}
             >
               {members.map((member, index) => (
-                <div key={index} className="snap-start flex-shrink-0">
+                // Wrapper defines the width of the slot: 100% (mobile), 50% (tablet), 25% (desktop)
+                <div
+                  key={index}
+                  className="snap-start flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
+                >
                   <VolunteerCard
                     image={member.image}
                     name={member.name}
                     link={member.link}
+                    className="w-full"
                   />
                 </div>
               ))}
