@@ -1,0 +1,15 @@
+{
+  "short_name": "Sharada Trust",
+  "name": "Sharada Trust - Education for All",
+  "icons": [
+    {
+      "src": "/Logo.webp",
+      "sizes": "192x192 512x512",
+      "type": "image/webp"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f2711a",
+  "background_color": "#ffffff"
+}
